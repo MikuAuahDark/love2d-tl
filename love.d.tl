@@ -164,6 +164,7 @@ local love = record
 	-- Modules --
 	-------------
 
+	-- Provides of audio interface for playback/recording sound.
 	audio = record
 		-- The different distance models.
 		DistanceModel = enum
@@ -193,6 +194,14 @@ local love = record
 			"queue"
 		end
 
+		-- Units that represent time.
+		TimeUnit = enum
+			-- Regular seconds.
+			"seconds"
+			-- Audio samples.
+			"samples"
+		end
+
 		-- Represents an audio input device capable of recording sounds.
 		RecordingDevice = record
 			-- Gets the number of bits per sample in the data currently being recorded.
@@ -200,7 +209,7 @@ local love = record
 			-- Gets the number of channels currently being recorded (mono or stereo). 	Added since
 			getChannelCount: function(self: RecordingDevice): number
 			-- Gets all recorded audio SoundData stored in the device's internal ring buffer.
-			getData: function(self: RecordingDevice): love.sound.SoundData
+			getData: function(self: RecordingDevice): sound.SoundData
 			-- Gets the name of the recording device.
 			getName: function(self: RecordingDevice): string
 			-- Gets the number of currently recorded samples.
@@ -212,7 +221,7 @@ local love = record
 			-- Begins recording audio using this device.
 			start: function(self: RecordingDevice, samplecount: number, samplerate: number, bitdepth: number, channels: number): boolean
 			-- Stops recording audio from this device.
-			stop: function(self: RecordingDevice): love.sound.SoundData
+			stop: function(self: RecordingDevice): sound.SoundData
 		end
 
 		-- Source represents audio you can play back.
@@ -223,10 +232,48 @@ local love = record
 			getActiveEffects: function(self: Source): {string}
 			-- Gets the amount of air absorption applied to the Source.
 			getAirAbsorption: function(self: Source): number
-
+			-- Gets the duration of the Source.
+			getDuration: function(self: Source, unit: TimeUnit): number
+			-- Gets the type of the Source.
+			getType: function(self: Source): SourceType
+			-- Gets the current volume of the Source.
+			getVolume: function(self: Source): number
+			-- Returns whether the Source will loop.
+			isLooping: function(self: Source): boolean
+			-- Returns whether the Source is playing.
+			isPlaying: function(self: Source): boolean
+			-- Pauses a source.
+			pause: function(self: Source)
+			-- Plays a source.
+			play: function(self: Source)
+			-- Queues SoundData for playback in a queueable Source.
+			queue: function(self: Source, sounddata: sound.SoundData, length: number): boolean
+			queue: function(self: Source, sounddata: sound.SoundData, offset: number, length: number): boolean
+			-- Sets the currently playing position of the Source.
+			seek: function(self: Source, offset: number, unit: TimeUnit)
+			-- Sets the amount of air absorption applied to the Source.
+			setAirAbsorption: function(self: Source, amount: number)
+			-- Sets whether the Source should loop.
+			setLooping: function(self: Source, loop: boolean)
+			-- Sets the current volume of the Source.
+			setVolume: function(self: Source, volume: number)
+			-- Stops a source.
+			stop: function(self: Source)
+			-- Gets the currently playing position of the Source.
+			tell: function(self: Source, unit: TimeUnit): number
 		end
+
+		-- Gets whether audio effects are supported in the system.
+		isEffectsSupported: function(): boolean
+		-- Creates a new Source usable for real-time generated sound playback with Source:queue.
+		newQueueableSource: function(samplerate: number, bitdepth: number, channels: number, buffercount: number): Source
+		-- Creates a new Source from a file, SoundData, or Decoder.
+		newSource: function(file: string|filesystem.File, type: SourceType): Source
+		newSource: function(file: filesystem.FileData, type: SourceType): Source
+		newSource: function(data: sound.SoundData): Source
 	end
 
+	-- Provides functionality for creating and transforming data.
 	data = record
 		-- Compressed data formats.
 		CompressedDataFormat = enum
@@ -309,12 +356,44 @@ local love = record
 		unpack: function(format: string, data: Data|string, pos: number): any...
 	end
 
+	-- Provides an interface to the user's filesystem.
+	filesystem = record
+		-- Represents a file on the filesystem.
+		File = record
+		end
+
+		-- Data representing the contents of a file.
+		FileData = record
+		end
+	end
+
+	-- Responsible of drawing of lines, shapes, text, Images and other Drawable objects onto the screen.
 	graphics = record
 		-- Draws text on screen.
 		print: function(text: string, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
 	end
 
+	-- This module is responsible for decoding sound files.
 	sound = record
+		-- An object which can gradually decode a sound file.
+		Decoder = record
+			-- Create new copy of existing decoder.
+			clone: function(self: Decoder): Decoder
+			-- Decodes a chunk of audio data to a SoundData.
+			decode: function(self: Decoder): SoundData
+			-- Returns the number of bits per sample.
+			getBitDepth: function(self: Decoder): number
+			-- Returns the number of channels in the stream.
+			getChannelCount: function(self: Decoder): number
+			-- Gets the duration of the sound file.
+			getDuration: function(self: Decoder): number
+			-- Returns the sample rate of the Decoder.
+			getSampleRate: function(self: Decoder): number
+			-- Sets the currently playing position of the Decoder.
+			seek: function(self: Decoder, offset: number)
+		end
+
+		-- Contains raw audio samples.
 		SoundData = record
 			-- Returns the number of bits per sample.
 			getBitDepth: function(self: SoundData): number
