@@ -318,7 +318,7 @@ local love = record
 	end
 	event = record
 		clear: function()
-		poll: function(): function(): any...
+		poll: function(): function(): string, any...
 		pump: function()
 		push: function(n: string, ...: any)
 		quit: function(exitstatus: number|string)

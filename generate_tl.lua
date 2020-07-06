@@ -244,6 +244,7 @@ api.modules[5].functions[49].variants[1].arguments[2].typename = "ImageSetting"
 assert(api.modules[5].functions[50].name == "newCanvas")
 api.modules[5].functions[50].variants[3].arguments[3].typename = "CanvasSetting"
 api.modules[5].functions[50].variants[4].arguments[4].typename = "CanvasSetting"
+overrides["graphics.newCanvas[5]"] = ""
 api.modules[5].functions[50].variants[6].arguments[3].type = "PixelFormat"
 
 -- Define love.graphics.newCubeImage table type argument
@@ -342,7 +343,7 @@ overrides["data.unpack[1]"] = "unpack: function(format: string, data: string|lov
 overrides["data.unpack[2]"] = ""
 
 -- Override love.event.poll
-overrides["event.poll[1]"] = "poll: function(): function(): any..."
+overrides["event.poll[1]"] = "poll: function(): function(): string, any..."
 
 -- Remove love.event.Event enum
 assert(api.modules[3].name == "event")
