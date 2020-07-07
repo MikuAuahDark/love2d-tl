@@ -1,7 +1,7 @@
 -- generated with generate_tl.lua
 -- LÖVE 11.3
 
-local love = record
+global love = record
 	Data = record
 		clone: function(self: Data): Data
 		getFFIPointer: function(self: Data): any

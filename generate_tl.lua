@@ -1063,7 +1063,7 @@ end
 io.write(
 	"-- generated with generate_tl.lua\n",
 	"-- LÖVE ", api.version, "\n\n",
-	"local "
+	"global "
 )
 
 local function writeFunction(data, level, module, object)
