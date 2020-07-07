@@ -259,8 +259,8 @@ api.modules[5].functions[53].variants[4].arguments[2].typename = "ImageSetting"
 api.modules[5].functions[53].variants[5].arguments[2].type = "PixelFormat"
 
 -- Override love.graphics.newMesh 1st, 3rd & 4th variant
-overrides["graphics.newMesh[1]"] = "newMesh: function(vertices: {number}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
-overrides["graphics.newMesh[3]"] = "newMesh: function(vertexformat: {{number|string}}, vertices: {number}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
+overrides["graphics.newMesh[1]"] = "newMesh: function(vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
+overrides["graphics.newMesh[3]"] = "newMesh: function(vertexformat: {{number|string}}, vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
 overrides["graphics.newMesh[4]"] = "newMesh: function(vertexformat: {{number|string}}, vertexcount: number, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
 
 -- Define love.graphics.newVideo table type argument

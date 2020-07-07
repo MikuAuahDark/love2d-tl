@@ -984,9 +984,9 @@ local love = record
 		newImageFont: function(filename: string, glyphs: string): Font
 		newImageFont: function(imageData: image.ImageData, glyphs: string): Font
 		newImageFont: function(filename: string, glyphs: string, extraspacing: number): Font
-		newMesh: function(vertices: {number}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
+		newMesh: function(vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
 		newMesh: function(vertexcount: number, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
-		newMesh: function(vertexformat: {{number|string}}, vertices: {number}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
+		newMesh: function(vertexformat: {{number|string}}, vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
 		newMesh: function(vertexformat: {{number|string}}, vertexcount: number, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
 		newMesh: function(vertexcount: number, texture: Texture, mode: MeshDrawMode): Mesh
 		newParticleSystem: function(image: Image, buffer: number): ParticleSystem
