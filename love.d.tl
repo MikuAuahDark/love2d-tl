@@ -103,7 +103,7 @@ local love = record
 	mousereleased: function(x: number, y: number, button: number, istouch: boolean, presses: number)
 	quit: function(): boolean
 	resize: function(w: number, h: number)
-	run: function(): function()
+	run: function(): function(): string|number
 	textedited: function(text: string, start: number, length: number)
 	textinput: function(text: string)
 	threaderror: function(thread: love.thread.Thread, errorstr: string)

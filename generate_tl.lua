@@ -184,7 +184,7 @@ api.types[1].functions = {
 }
 
 -- Override love.run
-overrides["love.run[1]"] = "run: function(): function()"
+overrides["love.run[1]"] = "run: function(): function(): string|number"
 
 -- love.load table type arguments is string
 assert(api.callbacks[19].name == "load")
