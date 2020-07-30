@@ -584,14 +584,8 @@ api.modules[5].functions[15].variants[1].returns[1].valuetype = "boolean"
 api.modules[5].functions[15].variants[2].returns[1].keytype = "PixelFormat"
 api.modules[5].functions[15].variants[2].returns[1].valuetype = "boolean"
 
--- Define VertexWinding enum
-api.modules[5].enums[#api.modules[5].enums + 1] = {
-	name = "VertexWinding",
-	constants = {
-		{name = "cw"},
-		{name = "ccw"}
-	}
-}
+-- Load existing VertexWinding enum
+api.modules[5].enums[#api.modules[5].enums + 1] = require("love-api.modules.graphics.enums.VertexWinding")
 
 -- love.graphics.getImageFormats variant table return type
 assert(api.modules[5].functions[25].name == "getImageFormats")
@@ -616,19 +610,8 @@ api.modules[5].functions[40].variants[1].returns[1].valuetype = "boolean"
 
 -- love.graphics.getTextureTypes return table type
 assert(api.modules[5].functions[41].name == "getTextureTypes")
-api.modules[5].functions[41].variants[1].returns[1].keytype = "TextureTypes"
+api.modules[5].functions[41].variants[1].returns[1].keytype = "TextureType"
 api.modules[5].functions[41].variants[1].returns[1].valuetype = "boolean"
-
--- Define TextureTypes enum
-api.modules[5].enums[#api.modules[5].enums + 1] = {
-	name = "TextureTypes",
-	constants = {
-		{name = "2d"},
-		{name = "array"},
-		{name = "cube"},
-		{name = "volume"}
-	}
-}
 
 -- love.graphics.line 2nd variant argument table type
 assert(api.modules[5].functions[48].name == "line")

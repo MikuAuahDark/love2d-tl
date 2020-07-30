@@ -617,13 +617,6 @@ global love = record
 			"ccw"
 		end
 
-		TextureTypes = enum
-			"2d"
-			"array"
-			"cube"
-			"volume"
-		end
-
 		Drawable = record
 		end
 
@@ -955,7 +948,7 @@ global love = record
 		getStencilTest: function(): CompareMode, number
 		getSupported: function(): {GraphicsFeature:boolean}
 		getSystemLimits: function(): {GraphicsLimit:boolean}
-		getTextureTypes: function(): {TextureTypes:boolean}
+		getTextureTypes: function(): {TextureType:boolean}
 		getWidth: function(): number
 		intersectScissor: function(x: number, y: number, width: number, height: number)
 		inverseTransformPoint: function(screenX: number, screenY: number): number, number
