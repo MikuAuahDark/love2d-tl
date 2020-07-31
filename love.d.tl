@@ -33,7 +33,7 @@ global love = record
 			title: string
 			icon: string
 			width: number
-			height: string
+			height: number
 			borderless: boolean
 			resizable: boolean
 			minwidth: number
@@ -267,6 +267,13 @@ global love = record
 
 	end
 	data = record
+		CompressedDataFormat = enum
+			"lz4"
+			"zlib"
+			"gzip"
+			"deflate"
+		end
+
 		ContainerType = enum
 			"data"
 			"string"
@@ -284,13 +291,6 @@ global love = record
 			"sha256"
 			"sha384"
 			"sha512"
-		end
-
-		CompressedDataFormat = enum
-			"lz4"
-			"zlib"
-			"gzip"
-			"deflate"
 		end
 
 		ByteData = record
@@ -429,6 +429,54 @@ global love = record
 		write: function(name: string, data: love.Data, size: number): boolean, string
 
 	end
+	font = record
+		HintingMode = enum
+			"normal"
+			"light"
+			"mono"
+			"none"
+		end
+
+		GlyphData = record
+			getAdvance: function(self: GlyphData): number
+			getBearing: function(self: GlyphData): number, number
+			getBoundingBox: function(self: GlyphData): number, number, number, number
+			getDimensions: function(self: GlyphData): number, number
+			getFormat: function(self: GlyphData): image.PixelFormat
+			getGlyph: function(self: GlyphData): number
+			getGlyphString: function(self: GlyphData): string
+			getHeight: function(self: GlyphData): number
+			getWidth: function(self: GlyphData): number
+		end
+
+		Rasterizer = record
+			getAdvance: function(self: Rasterizer): number
+			getAscent: function(self: Rasterizer): number
+			getDescent: function(self: Rasterizer): number
+			getGlyphCount: function(self: Rasterizer): number
+			getGlyphData: function(self: Rasterizer, glyph: string): GlyphData
+			getGlyphData: function(self: Rasterizer, glyphNumber: number): GlyphData
+			getHeight: function(self: Rasterizer): number
+			getLineHeight: function(self: Rasterizer): number
+			hasGlyphs: function(self: Rasterizer, ...: number|string): boolean
+		end
+
+		newBMFontRasterizer: function(imageData: image.ImageData, glyphs: string, dpiscale: number): Rasterizer
+		newBMFontRasterizer: function(fileName: string, glyphs: string, dpiscale: number): Rasterizer
+		newGlyphData: function(rasterizer: Rasterizer, glyph: number)
+		newImageRasterizer: function(imageData: image.ImageData, glyphs: string, extraSpacing: number, dpiscale: number): Rasterizer
+		newRasterizer: function(filename: string): Rasterizer
+		newRasterizer: function(data: filesystem.FileData): Rasterizer
+		newRasterizer: function(size: number, hinting: HintingMode, dpiscale: number): Rasterizer
+		newRasterizer: function(fileName: string, size: number, hinting: HintingMode, dpiscale: number): Rasterizer
+		newRasterizer: function(fileData: filesystem.FileData, size: number, hinting: HintingMode, dpiscale: number): Rasterizer
+		newRasterizer: function(imageData: image.ImageData, glyphs: string, dpiscale: number): Rasterizer
+		newRasterizer: function(fileName: string, glyphs: string, dpiscale: number): Rasterizer
+		newTrueTypeRasterizer: function(size: number, hinting: HintingMode, dpiscale: number): Rasterizer
+		newTrueTypeRasterizer: function(fileName: string, size: number, hinting: HintingMode, dpiscale: number): Rasterizer
+		newTrueTypeRasterizer: function(fileData: filesystem.FileData, size: number, hinting: HintingMode, dpiscale: number): Rasterizer
+
+	end
 	graphics = record
 		AlignMode = enum
 			"center"
@@ -472,13 +520,13 @@ global love = record
 			"premultiplied"
 		end
 
-		CanvasMipmapMode = enum
-			"none"
-			"auto"
-			"manual"
-		end
-
 		CompareMode = enum
+			"equal"
+			"notequal"
+			"less"
+			"lequal"
+			"gequal"
+			"greater"
 			"never"
 			"always"
 		end
@@ -508,17 +556,6 @@ global love = record
 			"fullnpot"
 			"pixelshaderhighp"
 			"shaderderivatives"
-			"canvas"
-			"npot"
-			"subtractive"
-			"shader"
-			"hdrcanvas"
-			"multicanvas"
-			"mipmap"
-			"dxt"
-			"bc5"
-			"srgb"
-			"pixeleffect"
 		end
 
 		GraphicsLimit = enum
@@ -530,7 +567,11 @@ global love = record
 			"volumetexturesize"
 			"cubetexturesize"
 			"anisotropy"
-			"canvasfsaa"
+		end
+
+		IndexDataType = enum
+			"uint16"
+			"uint32"
 		end
 
 		LineJoin = enum
@@ -549,6 +590,12 @@ global love = record
 			"strip"
 			"triangles"
 			"points"
+		end
+
+		MipmapMode = enum
+			"none"
+			"auto"
+			"manual"
 		end
 
 		ParticleInsertMode = enum
@@ -584,32 +631,9 @@ global love = record
 			"volume"
 		end
 
-		WrapMode = enum
-			"clamp"
-			"repeat"
-			"mirroredrepeat"
-			"clampzero"
-		end
-
-		MipmapMode = enum
-			"none"
-			"manual"
-			"auto"
-		end
-
-		ImageFlag = enum
-			"linear"
-			"mipmaps"
-		end
-
 		VertexAttributeStep = enum
 			"pervertex"
 			"perinstance"
-		end
-
-		IndexDataType = enum
-			"uint16"
-			"uint32"
 		end
 
 		VertexWinding = enum
@@ -617,25 +641,28 @@ global love = record
 			"ccw"
 		end
 
-		Drawable = record
+		WrapMode = enum
+			"clamp"
+			"repeat"
+			"mirroredrepeat"
+			"clampzero"
+		end
+
+		ImageFlag = enum
+			"linear"
+			"mipmaps"
 		end
 
 		Canvas = record
 			generateMipmaps: function(self: Canvas)
-			getDimensions: function(self: Canvas): number, number
-			getFilter: function(self: Canvas): FilterMode, FilterMode
-			getFilter: function(self: Canvas): FilterMode, FilterMode, number
-			getHeight: function(self: Canvas): number
 			getMSAA: function(self: Canvas): number
 			getMipmapMode: function(self: Canvas): MipmapMode
-			getWidth: function(self: Canvas): number
-			getWrap: function(self: Canvas): WrapMode, WrapMode
 			newImageData: function(self: Canvas): image.ImageData
 			newImageData: function(self: Canvas, slice: number, mipmap: number, x: number, y: number, width: number, height: number): image.ImageData
 			renderTo: function(func: function())
-			setFilter: function(self: Canvas, min: FilterMode, mag: FilterMode)
-			setFilter: function(self: Canvas, min: FilterMode, mag: FilterMode, anisotropy: number)
-			setWrap: function(self: Canvas, horiz: WrapMode, vert: WrapMode)
+		end
+
+		Drawable = record
 		end
 
 		Font = record
@@ -657,8 +684,8 @@ global love = record
 		end
 
 		Image = record
-			isCompressed: function(self: Image): boolean
 			getFlags: function(self: Image): {ImageFlag}
+			isCompressed: function(self: Image): boolean
 			replacePixels: function(self: Image, data: image.ImageData, slice: number, mipmap: number, x: number, y: number, reloadmipmaps: boolean)
 		end
 
@@ -830,16 +857,26 @@ global love = record
 		Texture = record
 			getDPIScale: function(self: Texture): number
 			getDepth: function(self: Texture): number
+			getDepthSampleMode: function(self: Texture): CompareMode
+			getDimensions: function(self: Texture): number, number
+			getFilter: function(self: Texture): FilterMode, FilterMode, number
 			getFormat: function(self: Texture): image.PixelFormat
+			getHeight: function(self: Texture): number
 			getLayerCount: function(self: Texture): number
 			getMipmapCount: function(self: Texture): number
 			getMipmapFilter: function(self: Texture): FilterMode, number
+			getPixelDimensions: function(self: Texture): number, number
 			getPixelHeight: function(self: Texture): number
 			getPixelWidth: function(self: Texture): number
 			getTextureType: function(self: Texture): TextureType
+			getWidth: function(self: Texture): number
+			getWrap: function(self: Texture): WrapMode, WrapMode, WrapMode
 			isReadable: function(self: Texture): boolean
+			setDepthSampleMode: function(self: Texture, compare: CompareMode)
+			setFilter: function(self: Texture, min: FilterMode, mag: FilterMode, anisotropy: number)
 			setMipmapFilter: function(self: Texture, filtermode: FilterMode, sharpness: number)
 			setMipmapFilter: function(self: Texture)
+			setWrap: function(self: Texture, horiz: WrapMode, vert: WrapMode, depth: WrapMode)
 		end
 
 		Video = record
@@ -882,7 +919,7 @@ global love = record
 			readable: boolean
 			msaa: number
 			dpiscale: number
-			mipmaps: CanvasMipmapMode
+			mipmaps: MipmapMode
 		end
 
 		VideoSetting = record
@@ -968,7 +1005,7 @@ global love = record
 		newFont: function(filename: string): Font
 		newFont: function(filename: string, size: number, hinting: font.HintingMode, dpiscale: number): Font
 		newFont: function(filename: string, imagefilename: string): Font
-		newFont: function(size: number, hinting: font.HintingMode): Font
+		newFont: function(size: number, hinting: font.HintingMode, dpiscale: number): Font
 		newImage: function(filename: string): Image
 		newImage: function(imageData: image.ImageData): Image
 		newImage: function(compressedImageData: image.CompressedImageData): Image
@@ -1125,7 +1162,6 @@ global love = record
 			"r8"
 			"rg8"
 			"rgba8"
-			"rgba8"
 			"srgba8"
 			"r16"
 			"rg16"
@@ -1158,10 +1194,6 @@ global love = record
 			"BC6h"
 			"BC6hs"
 			"BC7"
-			"PVR1rgb2"
-			"PVR1rgb4"
-			"PVR1rgba2"
-			"PVR1rgba4"
 			"ETC1"
 			"ETC2rgb"
 			"ETC2rgba"
@@ -1170,6 +1202,10 @@ global love = record
 			"EACrs"
 			"EACrg"
 			"EACrgs"
+			"PVR1rgb2"
+			"PVR1rgb4"
+			"PVR1rgba2"
+			"PVR1rgba4"
 			"ASTC4x4"
 			"ASTC5x4"
 			"ASTC5x5"
@@ -2348,30 +2384,6 @@ global love = record
 		toPixels: function(value: number): number
 		toPixels: function(x: number, y: number): number, number
 		updateMode: function(width: number, height: number, settings: WindowSetting): boolean
-
-	end
-	font = record
-		HintingMode = enum
-			"normal"
-			"light"
-			"mono"
-			"none"
-		end
-
-		GlyphData = record
-		end
-
-		Rasterizer = record
-			getAdvance: function(self: Rasterizer): number
-			getAscent: function(self: Rasterizer): number
-			getDescent: function(self: Rasterizer): number
-			getGlyphCount: function(self: Rasterizer): number
-			getGlyphData: function(self: Rasterizer, glyph: string): GlyphData
-			getGlyphData: function(self: Rasterizer, glyphNumber: number): GlyphData
-			getHeight: function(self: Rasterizer): number
-			getLineHeight: function(self: Rasterizer): number
-			hasGlyphs: function(self: Rasterizer, ...: number|string): boolean
-		end
 
 	end
 end

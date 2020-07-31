@@ -9,23 +9,6 @@ local overrides = {}
 -- Changes to the LÖVE API --
 -----------------------------
 
--- love.graphics.newFont 4th dpiscale parameter for TrueType overload
-assert(api.modules[5].name == "graphics" and api.modules[5].functions[52].name == "newFont")
-api.modules[5].functions[52].variants[2].arguments[4] = {
-	type = "number",
-	name = "dpiscale",
-	description = "The DPI scale factor of the font.",
-	default = "love.graphics.getDPIScale()",
-}
-
--- Move "Drawable" to love.graphics
-assert(api.types[3].name == "Drawable")
-table.insert(api.modules[5].types, 1, table.remove(api.types, 3))
-
--- Move ByteData to love.data
-assert(api.types[1].name == "ByteData")
-table.insert(api.modules[2].types, table.remove(api.types, 1))
-
 -- Source:getActiveEffects table type is string
 assert(api.modules[1].types[2].functions[2].name == "getActiveEffects")
 api.modules[1].types[2].functions[2].variants[1].returns[1].valuetype = "string"
@@ -52,136 +35,21 @@ api.modules[4].functions[8].variants[3].returns[1].typename = "FileInfo"
 overrides["graphics.Mesh:getVertexFormat[1]"] = "getVertexFormat: function(self: Mesh): {{number|string}}"
 
 -- Define graphics.getStats table return type record
-assert(api.modules[5].functions[37].name == "getStats")
-api.modules[5].functions[37].variants[1].returns[1].typename = "GraphicsStats"
-api.modules[5].functions[37].variants[2].returns[1].typename = "GraphicsStats"
+assert(api.modules[6].functions[37].name == "getStats")
+api.modules[6].functions[37].variants[1].returns[1].typename = "GraphicsStats"
+api.modules[6].functions[37].variants[2].returns[1].typename = "GraphicsStats"
 
 -- Define window.getMode table return type record
-assert(api.modules[18].name == "window" and api.modules[18].functions[9].name == "getMode")
-api.modules[18].functions[9].variants[1].returns[3].typename = "WindowSetting"
+assert(api.modules[19].name == "window" and api.modules[19].functions[9].name == "getMode")
+api.modules[19].functions[9].variants[1].returns[3].typename = "WindowSetting"
 
 -- Set window.setMode table flags type record
-assert(api.modules[18].functions[28].name == "setMode")
-api.modules[18].functions[28].variants[1].arguments[3].typename = "WindowSetting"
+assert(api.modules[19].functions[28].name == "setMode")
+api.modules[19].functions[28].variants[1].arguments[3].typename = "WindowSetting"
 
 -- Set window.updateMode table flags type record
-assert(api.modules[18].functions[34].name == "updateMode")
-api.modules[18].functions[34].variants[1].arguments[3].typename = "WindowSetting"
-
--- Add window.DisplayOrientation enum
-table.insert(api.modules[18].enums, 1, {
-	name = "DisplayOrientation",
-	constants = {
-		{name = "unknown"},
-		{name = "landscape"},
-		{name = "landscapeflipped"},
-		{name = "portrait"},
-		{name = "portraitflipped"}
-	}
-})
-
--- Add filesystem.DroppedFile type
-table.insert(api.modules[4].types, 1, {
-	name = "DroppedFile",
-	supertypes = {"File", "Object"},
-	functions = {}
-})
-
--- Add Object functions
-assert(api.types[2].name == "Object")
-api.types[2].functions = {
-	{
-		name = "release",
-		variants = {
-			{
-				returns = {
-					{type = "boolean"}
-				}
-			}
-		}
-	},
-	{
-		name = "type",
-		variants = {
-			{
-				returns = {
-					{type = "string"}
-				}
-			}
-		}
-	},
-	{
-		name = "typeOf",
-		variants = {
-			{
-				arguments = {
-					{
-						name = "name",
-						type = "string"
-					}
-				},
-				returns = {
-					{type = "boolean"}
-				}
-			}
-		}
-	}
-}
-
--- Add Data functions
-assert(api.types[1].name == "Data")
-api.types[1].functions = {
-	{
-		name = "clone",
-		variants = {
-			{
-				returns = {
-					{type = "Data"}
-				}
-			}
-		}
-	},
-	{
-		name = "getFFIPointer",
-		variants = {
-			{
-				returns = {
-					{type = "cdata"}
-				}
-			}
-		}
-	},
-	{
-		name = "getPointer",
-		variants = {
-			{
-				returns = {
-					{type = "light userdata"}
-				}
-			}
-		}
-	},
-	{
-		name = "getSize",
-		variants = {
-			{
-				returns = {
-					{type = "number"}
-				}
-			}
-		}
-	},
-	{
-		name = "getString",
-		variants = {
-			{
-				returns = {
-					{type = "string"}
-				}
-			}
-		}
-	}
-}
+assert(api.modules[19].functions[34].name == "updateMode")
+api.modules[19].functions[34].variants[1].arguments[3].typename = "WindowSetting"
 
 -- Override love.run
 overrides["love.run[1]"] = "run: function(): function(): string|number"
@@ -211,19 +79,19 @@ api.modules[1].functions[21].variants[1].arguments[2].valuetype = "any"
 api.modules[1].functions[21].variants[1].arguments[2].table = nil
 
 -- Mesh:setVertex 2nd & 4th variant type arguments is number
-assert(api.modules[5].types[5].name == "Mesh" and api.modules[5].types[5].functions[17].name == "setVertex")
-api.modules[5].types[5].functions[17].variants[2].arguments[2].valuetype = "number"
-api.modules[5].types[5].functions[17].variants[2].arguments[2].table = nil
-api.modules[5].types[5].functions[17].variants[4].arguments[2].valuetype = "number"
-api.modules[5].types[5].functions[17].variants[4].arguments[2].table = nil
+assert(api.modules[6].types[5].name == "Mesh" and api.modules[6].types[5].functions[17].name == "setVertex")
+api.modules[6].types[5].functions[17].variants[2].arguments[2].valuetype = "number"
+api.modules[6].types[5].functions[17].variants[2].arguments[2].table = nil
+api.modules[6].types[5].functions[17].variants[4].arguments[2].valuetype = "number"
+api.modules[6].types[5].functions[17].variants[4].arguments[2].table = nil
 
 -- Override Mesh:setVertices
-assert(api.modules[5].types[5].functions[20].name =="setVertices")
+assert(api.modules[6].types[5].functions[20].name =="setVertices")
 overrides["graphics.Mesh:setVertices[1]"] = "setVertices: function(self: Mesh, vertices: {{number}}, startvertex: number)"
-api.modules[5].types[5].functions[20].variants[3] = nil
+api.modules[6].types[5].functions[20].variants[3] = nil
 
 -- Override Text:add 2nd variant
-assert(api.modules[5].types[10].name == "Text")
+assert(api.modules[6].types[10].name == "Text")
 overrides["graphics.Text:add[2]"] = "add: function(self: Text, coloredtext: {table|string}, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number"
 
 -- Override Text:addf 2nd variant
@@ -236,27 +104,27 @@ overrides["graphics.Text:set[2]"] = "set: function(self: Text, coloredtext: {tab
 overrides["graphics.Text:setf[2]"] = "setf: function(self: Text, coloredtext: {table|string}, wraplimit: number, alignmode: AlignMode)"
 
 -- love.graphics.newArrayImage modification
-assert(api.modules[5].functions[49].name == "newArrayImage")
-api.modules[5].functions[49].variants[1].arguments[1].literal = true
-api.modules[5].functions[49].variants[1].arguments[2].typename = "ImageSetting"
+assert(api.modules[6].functions[49].name == "newArrayImage")
+api.modules[6].functions[49].variants[1].arguments[1].literal = true
+api.modules[6].functions[49].variants[1].arguments[2].typename = "ImageSetting"
 
 -- love.graphics.newCanvas modification
-assert(api.modules[5].functions[50].name == "newCanvas")
-api.modules[5].functions[50].variants[3].arguments[3].typename = "CanvasSetting"
-api.modules[5].functions[50].variants[4].arguments[4].typename = "CanvasSetting"
+assert(api.modules[6].functions[50].name == "newCanvas")
+api.modules[6].functions[50].variants[3].arguments[3].typename = "CanvasSetting"
+api.modules[6].functions[50].variants[4].arguments[4].typename = "CanvasSetting"
 overrides["graphics.newCanvas[5]"] = ""
-api.modules[5].functions[50].variants[6].arguments[3].type = "PixelFormat"
+api.modules[6].functions[50].variants[6].arguments[3].type = "PixelFormat"
 
 -- Define love.graphics.newCubeImage table type argument
-assert(api.modules[5].functions[51].name == "newCubeImage")
-api.modules[5].functions[51].variants[1].arguments[2].typename = "ImageSetting"
-api.modules[5].functions[51].variants[2].arguments[1].literal = true
-api.modules[5].functions[51].variants[2].arguments[2].typename = "ImageSetting"
+assert(api.modules[6].functions[51].name == "newCubeImage")
+api.modules[6].functions[51].variants[1].arguments[2].typename = "ImageSetting"
+api.modules[6].functions[51].variants[2].arguments[1].literal = true
+api.modules[6].functions[51].variants[2].arguments[2].typename = "ImageSetting"
 
 -- Define love.graphics.newImage table type argument
-assert(api.modules[5].functions[53].name == "newImage")
-api.modules[5].functions[53].variants[4].arguments[2].typename = "ImageSetting"
-api.modules[5].functions[53].variants[5].arguments[2].type = "PixelFormat"
+assert(api.modules[6].functions[53].name == "newImage")
+api.modules[6].functions[53].variants[4].arguments[2].typename = "ImageSetting"
+api.modules[6].functions[53].variants[5].arguments[2].type = "PixelFormat"
 
 -- Override love.graphics.newMesh 1st, 3rd & 4th variant
 overrides["graphics.newMesh[1]"] = "newMesh: function(vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
@@ -264,13 +132,13 @@ overrides["graphics.newMesh[3]"] = "newMesh: function(vertexformat: {{number|str
 overrides["graphics.newMesh[4]"] = "newMesh: function(vertexformat: {{number|string}}, vertexcount: number, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
 
 -- Define love.graphics.newVideo table type argument
-assert(api.modules[5].functions[61].name == "newVideo")
-api.modules[5].functions[61].variants[3].arguments[2].typename = "VideoSetting"
+assert(api.modules[6].functions[61].name == "newVideo")
+api.modules[6].functions[61].variants[3].arguments[2].typename = "VideoSetting"
 
 -- Define love.graphics.newVolumeImage table type name
-assert(api.modules[5].functions[62].name == "newVolumeImage")
-api.modules[5].functions[62].variants[1].arguments[1].literal = true
-api.modules[5].functions[62].variants[1].arguments[2].type = "ImageSetting"
+assert(api.modules[6].functions[62].name == "newVolumeImage")
+api.modules[6].functions[62].variants[1].arguments[1].literal = true
+api.modules[6].functions[62].variants[1].arguments[2].type = "ImageSetting"
 
 -- Override love.graphics.points 2nd & 3rd variant
 overrides["graphics.points[2]"] = "points: function(points: {number})"
@@ -282,20 +150,20 @@ overrides["graphics.print[4]"] = "print: function(coloredtext: {table|string}, t
 overrides["graphics.print[6]"] = "print: function(coloredtext: {table|string}, font: Font, transform: math.Transform)"
 
 -- Add 7th love.graphics.print variant
-assert(api.modules[5].functions[68].name == "print")
-api.modules[5].functions[68].variants[7] = {
+assert(api.modules[6].functions[68].name == "print")
+api.modules[6].functions[68].variants[7] = {
 	arguments = {
-		api.modules[5].functions[68].variants[1].arguments[1],
-		api.modules[5].functions[68].variants[6].arguments[2],
-		api.modules[5].functions[68].variants[1].arguments[2],
-		api.modules[5].functions[68].variants[1].arguments[3],
-		api.modules[5].functions[68].variants[1].arguments[4],
-		api.modules[5].functions[68].variants[1].arguments[5],
-		api.modules[5].functions[68].variants[1].arguments[6],
-		api.modules[5].functions[68].variants[1].arguments[7],
-		api.modules[5].functions[68].variants[1].arguments[8],
-		api.modules[5].functions[68].variants[1].arguments[9],
-		api.modules[5].functions[68].variants[1].arguments[10]
+		api.modules[6].functions[68].variants[1].arguments[1],
+		api.modules[6].functions[68].variants[6].arguments[2],
+		api.modules[6].functions[68].variants[1].arguments[2],
+		api.modules[6].functions[68].variants[1].arguments[3],
+		api.modules[6].functions[68].variants[1].arguments[4],
+		api.modules[6].functions[68].variants[1].arguments[5],
+		api.modules[6].functions[68].variants[1].arguments[6],
+		api.modules[6].functions[68].variants[1].arguments[7],
+		api.modules[6].functions[68].variants[1].arguments[8],
+		api.modules[6].functions[68].variants[1].arguments[9],
+		api.modules[6].functions[68].variants[1].arguments[10]
 	}
 }
 
@@ -377,46 +245,15 @@ overrides["filesystem.load[1]"] = "load: function(name: string): function(...: a
 overrides["filesystem.read[1]"] = "read: function(name: string, size: number): string, number|string"
 overrides["filesystem.read[2]"] = "read: function(container: data.ContainerType, name: string, size: number): string|FileData, number|string"
 
--- Define love.graphics.MipmapMode enum
-api.modules[5].enums[#api.modules[5].enums + 1] = {
-	name = "MipmapMode",
-	constants = {
-		{name = "none"},
-		{name = "manual"},
-		{name = "auto"}
-	}
-}
-
 -- Override Canvas:renderTo
 overrides["graphics.Canvas:renderTo[1]"] = "renderTo: function(func: function())"
 
 -- Font:getWrap table return type is string
-assert(api.modules[5].types[3].name == "Font" and api.modules[5].types[3].functions[9].name == "getWrap")
-api.modules[5].types[3].functions[9].variants[1].returns[2].valuetype = "string"
-
--- Remove almost all functions from Image object as it was inherited from Texture
-assert(api.modules[5].types[4].name == "Image")
-api.modules[5].types[4].functions[9] = nil
-api.modules[5].types[4].functions[8] = nil
-table.remove(api.modules[5].types[4].functions, 6)
-table.remove(api.modules[5].types[4].functions, 5)
-table.remove(api.modules[5].types[4].functions, 4)
-table.remove(api.modules[5].types[4].functions, 2)
-
--- Define Image:isCompressed
-api.modules[5].types[4].functions[1] = {
-	name = "isCompressed",
-	variants = {
-		{
-			returns = {
-				{type = "boolean"}
-			}
-		}
-	}
-}
+assert(api.modules[6].types[3].name == "Font" and api.modules[6].types[3].functions[9].name == "getWrap")
+api.modules[6].types[3].functions[9].variants[1].returns[2].valuetype = "string"
 
 -- Add ImageFlag enum
-api.modules[5].enums[#api.modules[5].enums + 1] = {
+api.modules[6].enums[#api.modules[6].enums + 1] = {
 	name = "ImageFlag",
 	constants = {
 		{name = "linear"},
@@ -425,39 +262,21 @@ api.modules[5].enums[#api.modules[5].enums + 1] = {
 }
 
 -- Image:getFlags table return type is ImageFlag
-assert(api.modules[5].types[4].functions[2].name == "getFlags")
-api.modules[5].types[4].functions[2].variants[1].returns[1].valuetype = "ImageFlag"
-
--- Add VertexAttributeStep enum
-api.modules[5].enums[#api.modules[5].enums + 1] = {
-	name = "VertexAttributeStep",
-	constants = {
-		{name = "pervertex"},
-		{name = "perinstance"}
-	}
-}
+assert(api.modules[6].types[4].functions[1].name == "getFlags")
+api.modules[6].types[4].functions[1].variants[1].returns[1].valuetype = "ImageFlag"
 
 -- Mesh:getVertexMap table return type is number
-assert(api.modules[5].types[5].functions[11].name == "getVertexMap")
-api.modules[5].types[5].functions[11].variants[1].returns[1].valuetype = "number"
+assert(api.modules[6].types[5].functions[11].name == "getVertexMap")
+api.modules[6].types[5].functions[11].variants[1].returns[1].valuetype = "number"
 
 -- Mesh:setVertexMap tweaks
-assert(api.modules[5].types[5].functions[19].name == "setVertexMap")
-api.modules[5].types[5].functions[19].variants[1].arguments[1].valuetype = "number"
-api.modules[5].types[5].functions[19].variants[2].arguments[1].name = "..."
-
--- Define IndexDataType enum
-api.modules[5].enums[#api.modules[5].enums + 1] = {
-	name = "IndexDataType",
-	constants = {
-		{name = "uint16"},
-		{name = "uint32"}
-	}
-}
+assert(api.modules[6].types[5].functions[19].name == "setVertexMap")
+api.modules[6].types[5].functions[19].variants[1].arguments[1].valuetype = "number"
+api.modules[6].types[5].functions[19].variants[2].arguments[1].name = "..."
 
 -- ParticleSystem:getQuads table return type is Quad
-assert(api.modules[5].types[6].name == "ParticleSystem" and api.modules[5].types[6].functions[16].name == "getQuads")
-api.modules[5].types[6].functions[16].variants[1].returns[1].valuetype = "Quad"
+assert(api.modules[6].types[6].name == "ParticleSystem" and api.modules[6].types[6].functions[16].name == "getQuads")
+api.modules[6].types[6].functions[16].variants[1].returns[1].valuetype = "Quad"
 
 -- love.audio.play 2nd variant table argument
 assert(api.modules[1].functions[18].name == "play")
@@ -470,102 +289,24 @@ api.modules[1].functions[27].variants[3].arguments[1].name = "..."
 api.modules[1].functions[27].variants[4].arguments[1].valuetype = "Source"
 
 -- ParticleSystem:setQuads modification
-assert(api.modules[5].types[6].functions[46].name == "setQuads")
-api.modules[5].types[6].functions[46].variants[1].arguments[1].name = "..."
-api.modules[5].types[6].functions[46].variants[2].arguments[1].valuetype = "Quad"
+assert(api.modules[6].types[6].functions[46].name == "setQuads")
+api.modules[6].types[6].functions[46].variants[1].arguments[1].name = "..."
+api.modules[6].types[6].functions[46].variants[2].arguments[1].valuetype = "Quad"
 
 -- Shader:send modification
-assert(api.modules[5].types[8].name == "Shader" and api.modules[5].types[8].functions[3].name == "send")
-api.modules[5].types[8].functions[3].variants[1].arguments[2].name = "..."
-api.modules[5].types[8].functions[3].variants[2].arguments[2].name = "..."
-api.modules[5].types[8].functions[3].variants[2].arguments[2].valuetype = "number"
+assert(api.modules[6].types[8].name == "Shader" and api.modules[6].types[8].functions[3].name == "send")
+api.modules[6].types[8].functions[3].variants[1].arguments[2].name = "..."
+api.modules[6].types[8].functions[3].variants[2].arguments[2].name = "..."
+api.modules[6].types[8].functions[3].variants[2].arguments[2].valuetype = "number"
 overrides["graphics.Shader:send[3]"] = "send: function(self: Shader, name: string, ...: {{number}})"
-api.modules[5].types[8].functions[3].variants[5].arguments[2].name = "..."
-api.modules[5].types[8].functions[3].variants[5].arguments[2].valuetype = "number"
+api.modules[6].types[8].functions[3].variants[5].arguments[2].name = "..."
+api.modules[6].types[8].functions[3].variants[5].arguments[2].valuetype = "number"
 overrides["graphics.Shader:send[6]"] = "send: function(self: Shader, name: string, matrixLayout: math.MatrixLayout, ...: {{number}})"
 
 -- Shader:sendColor modification
-assert(api.modules[5].types[8].functions[4].name == "sendColor")
-api.modules[5].types[8].functions[4].variants[1].arguments[2].name = "..."
-api.modules[5].types[8].functions[4].variants[1].arguments[2].valuetype = "number"
-
--- Define PixelFormat enum
-api.modules[6].enums[#api.modules[6].enums + 1] = {
-	name = "PixelFormat",
-	constants = {
-		{name = "unknown"},
-
-		{name = "normal"},
-		{name = "hdr"},
-
-		{name = "r8"},
-		{name = "rg8"},
-		{name = "rgba8"},
-		{name = "rgba8"},
-		{name = "srgba8"},
-		{name = "r16"},
-		{name = "rg16"},
-		{name = "rgba16"},
-		{name = "r16f"},
-		{name = "rg16f"},
-		{name = "rgba16f"},
-		{name = "r32f"},
-		{name = "rg32f"},
-		{name = "rgba32f"},
-
-		{name = "la8"},
-
-		{name = "rgba4"},
-		{name = "rgb5a1"},
-		{name = "rgb565"},
-		{name = "rgb10a2"},
-		{name = "rg11b10f"},
-
-		{name = "stencil8"},
-		{name = "depth16"},
-		{name = "depth24"},
-		{name = "depth32f"},
-		{name = "depth24stencil8"},
-		{name = "depth32fstencil8"},
-
-		{name = "DXT1"},
-		{name = "DXT3"},
-		{name = "DXT5"},
-		{name = "BC4"},
-		{name = "BC4s"},
-		{name = "BC5"},
-		{name = "BC5s"},
-		{name = "BC6h"},
-		{name = "BC6hs"},
-		{name = "BC7"},
-		{name = "PVR1rgb2"},
-		{name = "PVR1rgb4"},
-		{name = "PVR1rgba2"},
-		{name = "PVR1rgba4"},
-		{name = "ETC1"},
-		{name = "ETC2rgb"},
-		{name = "ETC2rgba"},
-		{name = "ETC2rgba1"},
-		{name = "EACr"},
-		{name = "EACrs"},
-		{name = "EACrg"},
-		{name = "EACrgs"},
-		{name = "ASTC4x4"},
-		{name = "ASTC5x4"},
-		{name = "ASTC5x5"},
-		{name = "ASTC6x5"},
-		{name = "ASTC6x6"},
-		{name = "ASTC8x5"},
-		{name = "ASTC8x6"},
-		{name = "ASTC8x8"},
-		{name = "ASTC10x5"},
-		{name = "ASTC10x6"},
-		{name = "ASTC10x8"},
-		{name = "ASTC10x10"},
-		{name = "ASTC12x10"},
-		{name = "ASTC12x12"}
-	}
-}
+assert(api.modules[6].types[8].functions[4].name == "sendColor")
+api.modules[6].types[8].functions[4].variants[1].arguments[2].name = "..."
+api.modules[6].types[8].functions[4].variants[1].arguments[2].valuetype = "number"
 
 -- Override love.graphics.captureScreenshot 2nd variant
 overrides["graphics.captureScreenshot[2]"] = "captureScreenshot: function(callback: function(image: image.ImageData))"
@@ -574,159 +315,60 @@ overrides["graphics.captureScreenshot[2]"] = "captureScreenshot: function(callba
 overrides["graphics.clear[3]"] = "clear: function(...: {number}|boolean)"
 
 -- love.graphics.discard 2nd variant table value type
-assert(api.modules[5].functions[6].name == "discard")
-api.modules[5].functions[6].variants[2].arguments[1].valuetype = "boolean"
+assert(api.modules[6].functions[6].name == "discard")
+api.modules[6].functions[6].variants[2].arguments[1].valuetype = "boolean"
 
 -- love.graphics.getCanvasFormats variant table return type
-assert(api.modules[5].functions[15].name == "getCanvasFormats")
-api.modules[5].functions[15].variants[1].returns[1].keytype = "PixelFormat"
-api.modules[5].functions[15].variants[1].returns[1].valuetype = "boolean"
-api.modules[5].functions[15].variants[2].returns[1].keytype = "PixelFormat"
-api.modules[5].functions[15].variants[2].returns[1].valuetype = "boolean"
-
--- Load existing VertexWinding enum
-api.modules[5].enums[#api.modules[5].enums + 1] = require("love-api.modules.graphics.enums.VertexWinding")
+assert(api.modules[6].functions[15].name == "getCanvasFormats")
+api.modules[6].functions[15].variants[1].returns[1].keytype = "PixelFormat"
+api.modules[6].functions[15].variants[1].returns[1].valuetype = "boolean"
+api.modules[6].functions[15].variants[2].returns[1].keytype = "PixelFormat"
+api.modules[6].functions[15].variants[2].returns[1].valuetype = "boolean"
 
 -- love.graphics.getImageFormats variant table return type
-assert(api.modules[5].functions[25].name == "getImageFormats")
-api.modules[5].functions[25].variants[1].returns[1].keytype = "PixelFormat"
-api.modules[5].functions[25].variants[1].returns[1].valuetype = "boolean"
+assert(api.modules[6].functions[25].name == "getImageFormats")
+api.modules[6].functions[25].variants[1].returns[1].keytype = "PixelFormat"
+api.modules[6].functions[25].variants[1].returns[1].valuetype = "boolean"
 
 -- love.graphics.getStats modification
-assert(api.modules[5].functions[37].name == "getStats")
-api.modules[5].functions[37].variants[1].returns[1].typename = "Stats"
-api.modules[5].functions[37].variants[2].arguments[1].literal = true
-api.modules[5].functions[37].variants[2].returns[1].typename = "Stats"
+assert(api.modules[6].functions[37].name == "getStats")
+api.modules[6].functions[37].variants[1].returns[1].typename = "Stats"
+api.modules[6].functions[37].variants[2].arguments[1].literal = true
+api.modules[6].functions[37].variants[2].returns[1].typename = "Stats"
 
 -- love.graphics.getSupported return table type
-assert(api.modules[5].functions[39].name == "getSupported")
-api.modules[5].functions[39].variants[1].returns[1].keytype = "GraphicsFeature"
-api.modules[5].functions[39].variants[1].returns[1].valuetype = "boolean"
+assert(api.modules[6].functions[39].name == "getSupported")
+api.modules[6].functions[39].variants[1].returns[1].keytype = "GraphicsFeature"
+api.modules[6].functions[39].variants[1].returns[1].valuetype = "boolean"
 
 -- love.graphics.getSystemLimits return table type
-assert(api.modules[5].functions[40].name == "getSystemLimits")
-api.modules[5].functions[40].variants[1].returns[1].keytype = "GraphicsLimit"
-api.modules[5].functions[40].variants[1].returns[1].valuetype = "boolean"
+assert(api.modules[6].functions[40].name == "getSystemLimits")
+api.modules[6].functions[40].variants[1].returns[1].keytype = "GraphicsLimit"
+api.modules[6].functions[40].variants[1].returns[1].valuetype = "boolean"
 
 -- love.graphics.getTextureTypes return table type
-assert(api.modules[5].functions[41].name == "getTextureTypes")
-api.modules[5].functions[41].variants[1].returns[1].keytype = "TextureType"
-api.modules[5].functions[41].variants[1].returns[1].valuetype = "boolean"
+assert(api.modules[6].functions[41].name == "getTextureTypes")
+api.modules[6].functions[41].variants[1].returns[1].keytype = "TextureType"
+api.modules[6].functions[41].variants[1].returns[1].valuetype = "boolean"
 
 -- love.graphics.line 2nd variant argument table type
-assert(api.modules[5].functions[48].name == "line")
-api.modules[5].functions[48].variants[1].arguments[1].name = "..."
-api.modules[5].functions[48].variants[2].arguments[1].valuetype = "number"
-
--- love.font module
-api.modules[#api.modules + 1] = {
-	name = "font",
-	types = {
-		{
-			name = "GlyphData",
-			supertypes = {"Data", "Object"},
-			functions = {}
-		},
-		{
-			name = "Rasterizer",
-			supertypes = {"Object"},
-			functions = {
-				{
-					name = "getAdvance",
-					variants = {
-						{
-							returns = {
-								{type = "number"}
-							}
-						}
-					}
-				},
-				api.modules[5].types[3].functions[1],
-				api.modules[5].types[3].functions[4],
-				{
-					name = "getGlyphCount",
-					variants = {
-						{
-							returns = {
-								{type = "number"}
-							}
-						}
-					}
-				},
-				{
-					name = "getGlyphData",
-					variants = {
-						{
-							arguments = {
-								{type = "string", name = "glyph"}
-							},
-							returns = {
-								{type = "GlyphData"}
-							}
-						},
-						{
-							arguments = {
-								{type = "number", name = "glyphNumber"}
-							},
-							returns = {
-								{type = "GlyphData"}
-							}
-						}
-					}
-				},
-				api.modules[5].types[3].functions[6],
-				api.modules[5].types[3].functions[7],
-				{
-					name = "hasGlyphs",
-					variants = {
-						{
-							arguments = {
-								{type = "string or number", name = "..."}
-							},
-							returns = {
-								{type = "boolean"}
-							}
-						}
-					}
-				}
-			}
-		}
-	},
-	enums = {
-		{
-			name = "HintingMode",
-			constants = {
-				{name = "normal"},
-				{name = "light"},
-				{name = "mono"},
-				{name = "none"}
-			}
-		}
-	}
-}
+assert(api.modules[6].functions[48].name == "line")
+api.modules[6].functions[48].variants[1].arguments[1].name = "..."
+api.modules[6].functions[48].variants[2].arguments[1].valuetype = "number"
 
 -- Rasterizer:hasGlyphs override
 overrides["font.Rasterizer:hasGlyphs[1]"] = "hasGlyphs: function(self: Rasterizer, ...: number|string): boolean"
 
--- love.graphics.newShader 2nd variant override
-assert(api.modules[5].functions[58].name == "newShader")
-api.modules[5].functions[58].variants[2] = {
-	arguments = {
-		{type = "string", name = "pixelcode"},
-		{type = "string", name = "vertexcode"}
-	},
-	returns = {
-		{type = "Shader"}
-	}
-}
+-- Blacklist (wrong) love.graphics.newShader 3rd variant
+overrides["graphics.newShader[3]"] = ""
 
 -- love.graphics.polygon 2nd variant table argument type
-assert(api.modules[5].functions[65].name == "polygon")
-api.modules[5].functions[65].variants[2].arguments[2].valuetype = "number"
+assert(api.modules[6].functions[65].name == "polygon")
+api.modules[6].functions[65].variants[2].arguments[2].valuetype = "number"
 
 -- love.graphics.setColor 2nd variant table argument type
-assert(api.modules[5].functions[79].name == "setColor")
-api.modules[5].functions[79].variants[2].arguments[1].valuetype = "number"
+assert(api.modules[6].functions[79].name == "setColor")
+api.modules[6].functions[79].variants[2].arguments[1].valuetype = "number"
 
 -- Override love.graphics.stencil
 overrides["graphics.stencil[1]"] = "stencil: function(stencilfunction: function(), action: StencilAction, value: number, keepvalues: boolean)"
@@ -735,94 +377,90 @@ overrides["graphics.stencil[1]"] = "stencil: function(stencilfunction: function(
 overrides["image.ImageData:mapPixel[1]"] = "mapPixel: function(self: ImageData, pixelFunction: function(x: number, y: number, r: number, g: number, b: number, a: number): (number, number, number, number), x: number, y: number, width: number, height: number)"
 
 -- love.joystick.getJoysticks table return type
-assert(api.modules[7].name == "joystick" and api.modules[7].functions[3].name == "getJoysticks")
-api.modules[7].functions[3].variants[1].returns[1].valuetype = "Joystick"
+assert(api.modules[8].name == "joystick" and api.modules[8].functions[3].name == "getJoysticks")
+api.modules[8].functions[3].variants[1].returns[1].valuetype = "Joystick"
 
 -- BezierCurve:render table return type
-assert(api.modules[9].name == "math" and api.modules[9].types[1].name == "BezierCurve" and api.modules[9].types[1].functions[9].name == "render")
-api.modules[9].types[1].functions[9].variants[1].returns[1].valuetype = "number"
+assert(api.modules[10].name == "math" and api.modules[10].types[1].name == "BezierCurve" and api.modules[10].types[1].functions[9].name == "render")
+api.modules[10].types[1].functions[9].variants[1].returns[1].valuetype = "number"
 
 -- BezierCurve:renderSegment table return type
-assert(api.modules[9].types[1].functions[10].name == "renderSegment")
-api.modules[9].types[1].functions[10].variants[1].returns[1].valuetype = "number"
-
--- Rename Transform:isAffine to Transform:isAffine2DTransform
-assert(api.modules[9].types[4].name == "Transform")
-api.modules[9].types[4].functions[6].name = "isAffine2DTransform"
+assert(api.modules[10].types[1].functions[10].name == "renderSegment")
+api.modules[10].types[1].functions[10].variants[1].returns[1].valuetype = "number"
 
 -- Transform:setMatrix modification
-assert(api.modules[9].types[4].functions[10].name == "setMatrix")
-api.modules[9].types[4].functions[10].variants[1].arguments[1].name = "..."
-api.modules[9].types[4].functions[10].variants[2].arguments[2].name = "..."
-api.modules[9].types[4].functions[10].variants[3].arguments[2].valuetype = "number"
+assert(api.modules[10].types[3].functions[10].name == "setMatrix")
+api.modules[10].types[3].functions[10].variants[1].arguments[1].name = "..."
+api.modules[10].types[3].functions[10].variants[2].arguments[2].name = "..."
+api.modules[10].types[3].functions[10].variants[3].arguments[2].valuetype = "number"
 overrides["math.Transform:setMatrix[4]"] = "setMatrix: function(self: Transform, layout: MatrixLayout, matrix: {{number}}): Transform"
 
 -- love.math.gammaToLinear table argument type
-assert(api.modules[9].functions[5].name == "gammaToLinear")
-api.modules[9].functions[5].variants[2].arguments[1].valuetype = "number"
+assert(api.modules[10].functions[5].name == "gammaToLinear")
+api.modules[10].functions[5].variants[2].arguments[1].valuetype = "number"
 
 -- love.math.isConvex modification
-assert(api.modules[9].functions[8].name == "isConvex")
-api.modules[9].functions[8].variants[1].arguments[1].valuetype = "number"
-api.modules[9].functions[8].variants[2].arguments[1].name = "..."
+assert(api.modules[10].functions[8].name == "isConvex")
+api.modules[10].functions[8].variants[1].arguments[1].valuetype = "number"
+api.modules[10].functions[8].variants[2].arguments[1].name = "..."
 
 -- love.math.linearToGamma table argument type
-assert(api.modules[9].functions[9].name == "linearToGamma")
-api.modules[9].functions[9].variants[2].arguments[1].valuetype = "number"
+assert(api.modules[10].functions[9].name == "linearToGamma")
+api.modules[10].functions[9].variants[2].arguments[1].valuetype = "number"
 
 -- love.math.newBezierCurve modification
-assert(api.modules[9].functions[10].name == "newBezierCurve")
-api.modules[9].functions[10].variants[1].arguments[1].valuetype = "number"
-api.modules[9].functions[10].variants[2].arguments[1].name = "..."
+assert(api.modules[10].functions[10].name == "newBezierCurve")
+api.modules[10].functions[10].variants[1].arguments[1].valuetype = "number"
+api.modules[10].functions[10].variants[2].arguments[1].name = "..."
 
 -- love.math.triangulate modification
-assert(api.modules[9].functions[18].name == "triangulate")
-api.modules[9].functions[18].variants[1].arguments[1].valuetype = "number"
-api.modules[9].functions[18].variants[1].returns[1].valuetype = "number"
-api.modules[9].functions[18].variants[2].arguments[1].name = "..."
-api.modules[9].functions[18].variants[2].returns[1].valuetype = "number"
+assert(api.modules[10].functions[18].name == "triangulate")
+api.modules[10].functions[18].variants[1].arguments[1].valuetype = "number"
+api.modules[10].functions[18].variants[1].returns[1].valuetype = "number"
+api.modules[10].functions[18].variants[2].arguments[1].name = "..."
+api.modules[10].functions[18].variants[2].returns[1].valuetype = "number"
 
 -- love.mouse.isDown modifications
-assert(api.modules[10].name == "mouse" and api.modules[10].functions[9].name == "isDown")
-api.modules[10].functions[9].variants[1].arguments[1].name = "..."
+assert(api.modules[11].name == "mouse" and api.modules[11].functions[9].name == "isDown")
+api.modules[11].functions[9].variants[1].arguments[1].name = "..."
 overrides["mouse.isDown[2]"] = ""
 
 -- Body:getContacts table return type
-assert(api.modules[11].name == "physics" and api.modules[11].types[1].name == "Body" and api.modules[11].types[1].functions[9].name == "getContacts")
-api.modules[11].types[1].functions[9].variants[1].returns[1].valuetype = "Contact"
+assert(api.modules[12].name == "physics" and api.modules[12].types[1].name == "Body" and api.modules[12].types[1].functions[9].name == "getContacts")
+api.modules[12].types[1].functions[9].variants[1].returns[1].valuetype = "Contact"
 
 -- Body:getFixtures table return type
-assert(api.modules[11].types[1].functions[10].name == "getFixtures")
-api.modules[11].types[1].functions[10].variants[1].returns[1].valuetype = "Fixture"
+assert(api.modules[12].types[1].functions[10].name == "getFixtures")
+api.modules[12].types[1].functions[10].variants[1].returns[1].valuetype = "Fixture"
 
 -- Body:getJoints table return type
-assert(api.modules[11].types[1].functions[13].name == "getJoints")
-api.modules[11].types[1].functions[13].variants[1].returns[1].valuetype = "Joint"
+assert(api.modules[12].types[1].functions[13].name == "getJoints")
+api.modules[12].types[1].functions[13].variants[1].returns[1].valuetype = "Joint"
 
 -- World:getBodies table return type
-assert(api.modules[11].types[21].name == "World" and api.modules[11].types[21].functions[2].name == "getBodies")
-api.modules[11].types[21].functions[2].variants[1].returns[1].valuetype = "Body"
+assert(api.modules[12].types[21].name == "World" and api.modules[12].types[21].functions[2].name == "getBodies")
+api.modules[12].types[21].functions[2].variants[1].returns[1].valuetype = "Body"
 
 -- World:getContacts table return type
-assert(api.modules[11].types[21].functions[7].name == "getContacts")
-api.modules[11].types[21].functions[7].variants[1].returns[1].valuetype = "Contact"
+assert(api.modules[12].types[21].functions[7].name == "getContacts")
+api.modules[12].types[21].functions[7].variants[1].returns[1].valuetype = "Contact"
 
 -- World:getJoints table return type
-assert(api.modules[11].types[21].functions[10].name == "getJoints")
-api.modules[11].types[21].functions[10].variants[1].returns[1].valuetype = "Joint"
+assert(api.modules[12].types[21].functions[10].name == "getJoints")
+api.modules[12].types[21].functions[10].variants[1].returns[1].valuetype = "Joint"
 
 -- Override World:queryBoundingBox
 overrides["physics.World:queryBoundingBox[1]"] = "queryBoundingBox: function(self: World, topLeftX: number, topLeftY: number, bottomRightX: number, bottomRightY: number, callback: function(fixture: Fixture): boolean)"
 
 -- love.physics.newChainShape modification
-assert(api.modules[11].functions[4].name == "newChainShape")
-api.modules[11].functions[4].variants[1].arguments[2].name = "..."
-api.modules[11].functions[4].variants[2].arguments[2].valuetype = "number"
+assert(api.modules[12].functions[4].name == "newChainShape")
+api.modules[12].functions[4].variants[1].arguments[2].name = "..."
+api.modules[12].functions[4].variants[2].arguments[2].valuetype = "number"
 
 -- love.physics.newPolygonShape modification
-assert(api.modules[11].functions[13].name == "newPolygonShape")
-api.modules[11].functions[13].variants[1].arguments[1].name = "..."
-api.modules[11].functions[13].variants[2].arguments[1].valuetype = "number"
+assert(api.modules[12].functions[13].name == "newPolygonShape")
+api.modules[12].functions[13].variants[1].arguments[1].name = "..."
+api.modules[12].functions[13].variants[2].arguments[1].valuetype = "number"
 
 -- Blacklist Channel:demand 1st variant so it only has 1 variant
 overrides["thread.Channel:demand[1]"] = ""
@@ -831,12 +469,12 @@ overrides["thread.Channel:demand[1]"] = ""
 overrides["thread.Channel:performAtomic[1]"] = "performAtomic: function(self: Channel, func: function(...: any): any..., ...: any): any..."
 
 -- love.touch.getTouches return table type
-assert(api.modules[16].name == "touch" and api.modules[16].functions[3].name == "getTouches")
-api.modules[16].functions[3].variants[1].returns[1].valuetype = "light userdata"
+assert(api.modules[17].name == "touch" and api.modules[17].functions[3].name == "getTouches")
+api.modules[17].functions[3].variants[1].returns[1].valuetype = "light userdata"
 
 -- Define FullscreenMode type
-assert(api.modules[18].name == "window")
-api.modules[18].types[#api.modules[18].types + 1] = {
+assert(api.modules[19].name == "window")
+api.modules[19].types[#api.modules[19].types + 1] = {
 	name = "FullscreenMode",
 	fields = {
 		{type = "number", name = "width"},
@@ -845,8 +483,8 @@ api.modules[18].types[#api.modules[18].types + 1] = {
 }
 
 -- love.window.getFullscreenModes return table type
-assert(api.modules[18].functions[7].name == "getFullscreenModes")
-api.modules[18].functions[7].variants[1].returns[1].valuetype = "FullscreenMode"
+assert(api.modules[19].functions[7].name == "getFullscreenModes")
+api.modules[19].functions[7].variants[1].returns[1].valuetype = "FullscreenMode"
 
 -- love.event.quit override
 overrides["event.quit[1]"] = "quit: function(exitstatus: number|string)"
@@ -864,14 +502,6 @@ api.modules[1].functions[23].variants[1] = {
 		{type = "number", name = "uz"}
 	}
 }
-
--- Move CompressedDataFormat enum from love.math to love.data
-assert(api.modules[9].enums[1].name == "CompressedDataFormat")
-api.modules[2].enums[#api.modules[2].enums + 1] = table.remove(api.modules[9].enums, 1)
-
--- Move CompressedData type from love.math to love.data
-assert(api.modules[9].types[2].name == "CompressedData")
-api.modules[2].types[#api.modules[2].types + 1] = table.remove(api.modules[9].types, 2)
 
 -------------------------------------
 -- Blacklisted Functions with TODO --
