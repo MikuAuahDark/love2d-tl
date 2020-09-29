@@ -1,8 +1,8 @@
 -- generated with generate_tl.lua
 -- LÖVE 11.3
 
-global love = record
-	Data = record
+global type love = record
+	type Data = record
 		clone: function(self: Data): Data
 		getFFIPointer: function(self: Data): any
 		getPointer: function(self: Data): any
@@ -10,13 +10,13 @@ global love = record
 		getString: function(self: Data): string
 	end
 
-	Object = record
+	type Object = record
 		release: function(self: Object): boolean
 		type: function(self: Object): string
 		typeOf: function(self: Object, name: string): boolean
 	end
 
-	Configuration = record
+	type Configuration = record
 		identity: string
 		appendidentity: boolean
 		version: string
@@ -24,12 +24,12 @@ global love = record
 		accelerometerjoystick: boolean
 		externalstorage: boolean
 		gammacorrect: boolean
-		audio = record
+		type audio = record
 			mic: boolean
 			mixwithsystem: boolean
 		end
 
-		window = record
+		type window = record
 			title: string
 			icon: string
 			width: number
@@ -51,7 +51,7 @@ global love = record
 			y: number
 		end
 
-		modules = record
+		type modules = record
 			audio: boolean
 			event: boolean
 			graphics: boolean
@@ -114,8 +114,8 @@ global love = record
 	visible: function(visible: boolean)
 	wheelmoved: function(x: number, y: number)
 
-	audio = record
-		DistanceModel = enum
+	type audio = record
+		type DistanceModel = enum
 			"none"
 			"inverse"
 			"inverseclamped"
@@ -125,7 +125,7 @@ global love = record
 			"exponentclamped"
 		end
 
-		EffectType = enum
+		type EffectType = enum
 			"chorus"
 			"compressor"
 			"distortion"
@@ -136,31 +136,31 @@ global love = record
 			"ringmodulator"
 		end
 
-		EffectWaveform = enum
+		type EffectWaveform = enum
 			"sawtooth"
 			"sine"
 			"square"
 			"triangle"
 		end
 
-		FilterType = enum
+		type FilterType = enum
 			"lowpass"
 			"highpass"
 			"bandpass"
 		end
 
-		SourceType = enum
+		type SourceType = enum
 			"static"
 			"stream"
 			"queue"
 		end
 
-		TimeUnit = enum
+		type TimeUnit = enum
 			"seconds"
 			"samples"
 		end
 
-		RecordingDevice = record
+		type RecordingDevice = record
 			getBitDepth: function(self: RecordingDevice): number
 			getBitDepth: function(self: RecordingDevice): number
 			getChannelCount: function(self: RecordingDevice): number
@@ -173,7 +173,7 @@ global love = record
 			stop: function(self: RecordingDevice): sound.SoundData
 		end
 
-		Source = record
+		type Source = record
 			clone: function(self: Source): Source
 			getActiveEffects: function(self: Source): {string}
 			getAirAbsorption: function(self: Source): number
@@ -219,7 +219,7 @@ global love = record
 			tell: function(self: Source, unit: TimeUnit): number
 		end
 
-		FilterSettings = record
+		type FilterSettings = record
 			type: FilterType
 			volume: number
 			highgain: number
@@ -266,25 +266,25 @@ global love = record
 		stop: function(sources: {Source})
 
 	end
-	data = record
-		CompressedDataFormat = enum
+	type data = record
+		type CompressedDataFormat = enum
 			"lz4"
 			"zlib"
 			"gzip"
 			"deflate"
 		end
 
-		ContainerType = enum
+		type ContainerType = enum
 			"data"
 			"string"
 		end
 
-		EncodeFormat = enum
+		type EncodeFormat = enum
 			"base64"
 			"hex"
 		end
 
-		HashFunction = enum
+		type HashFunction = enum
 			"md5"
 			"sha1"
 			"sha224"
@@ -293,10 +293,10 @@ global love = record
 			"sha512"
 		end
 
-		ByteData = record
+		type ByteData = record
 		end
 
-		CompressedData = record
+		type CompressedData = record
 			getFormat: function(self: CompressedData): CompressedDataFormat
 		end
 
@@ -316,7 +316,7 @@ global love = record
 		unpack: function(format: string, data: string|love.Data, pos: number): any...
 
 	end
-	event = record
+	type event = record
 		clear: function()
 		poll: function(): function(): string, any...
 		pump: function()
@@ -325,36 +325,36 @@ global love = record
 		wait: function(): string, any...
 
 	end
-	filesystem = record
-		BufferMode = enum
+	type filesystem = record
+		type BufferMode = enum
 			"none"
 			"line"
 			"full"
 		end
 
-		FileDecoder = enum
+		type FileDecoder = enum
 			"file"
 			"base64"
 		end
 
-		FileMode = enum
+		type FileMode = enum
 			"r"
 			"w"
 			"a"
 			"c"
 		end
 
-		FileType = enum
+		type FileType = enum
 			"file"
 			"directory"
 			"symlink"
 			"other"
 		end
 
-		DroppedFile = record
+		type DroppedFile = record
 		end
 
-		File = record
+		type File = record
 			close: function(self: File): boolean
 			flush: function(self: File): boolean, string
 			getBuffer: function(self: File): BufferMode, number
@@ -374,12 +374,12 @@ global love = record
 			write: function(self: File, data: love.Data, size: number): boolean, string
 		end
 
-		FileData = record
+		type FileData = record
 			getExtension: function(self: FileData): string
 			getFilename: function(self: FileData): string
 		end
 
-		FileInfo = record
+		type FileInfo = record
 			type: FileType
 			size: number
 			modtime: number
@@ -429,15 +429,15 @@ global love = record
 		write: function(name: string, data: love.Data, size: number): boolean, string
 
 	end
-	font = record
-		HintingMode = enum
+	type font = record
+		type HintingMode = enum
 			"normal"
 			"light"
 			"mono"
 			"none"
 		end
 
-		GlyphData = record
+		type GlyphData = record
 			getAdvance: function(self: GlyphData): number
 			getBearing: function(self: GlyphData): number, number
 			getBoundingBox: function(self: GlyphData): number, number, number, number
@@ -449,7 +449,7 @@ global love = record
 			getWidth: function(self: GlyphData): number
 		end
 
-		Rasterizer = record
+		type Rasterizer = record
 			getAdvance: function(self: Rasterizer): number
 			getAscent: function(self: Rasterizer): number
 			getDescent: function(self: Rasterizer): number
@@ -477,21 +477,21 @@ global love = record
 		newTrueTypeRasterizer: function(fileData: filesystem.FileData, size: number, hinting: HintingMode, dpiscale: number): Rasterizer
 
 	end
-	graphics = record
-		AlignMode = enum
+	type graphics = record
+		type AlignMode = enum
 			"center"
 			"left"
 			"right"
 			"justify"
 		end
 
-		ArcType = enum
+		type ArcType = enum
 			"pie"
 			"open"
 			"closed"
 		end
 
-		AreaSpreadDistribution = enum
+		type AreaSpreadDistribution = enum
 			"uniform"
 			"normal"
 			"ellipse"
@@ -500,12 +500,12 @@ global love = record
 			"none"
 		end
 
-		BlendAlphaMode = enum
+		type BlendAlphaMode = enum
 			"alphamultiply"
 			"premultiplied"
 		end
 
-		BlendMode = enum
+		type BlendMode = enum
 			"alpha"
 			"replace"
 			"screen"
@@ -520,7 +520,7 @@ global love = record
 			"premultiplied"
 		end
 
-		CompareMode = enum
+		type CompareMode = enum
 			"equal"
 			"notequal"
 			"less"
@@ -531,23 +531,23 @@ global love = record
 			"always"
 		end
 
-		CullMode = enum
+		type CullMode = enum
 			"back"
 			"front"
 			"none"
 		end
 
-		DrawMode = enum
+		type DrawMode = enum
 			"fill"
 			"line"
 		end
 
-		FilterMode = enum
+		type FilterMode = enum
 			"linear"
 			"nearest"
 		end
 
-		GraphicsFeature = enum
+		type GraphicsFeature = enum
 			"clampzero"
 			"lighten"
 			"multicanvasformats"
@@ -558,7 +558,7 @@ global love = record
 			"shaderderivatives"
 		end
 
-		GraphicsLimit = enum
+		type GraphicsLimit = enum
 			"pointsize"
 			"texturesize"
 			"multicanvas"
@@ -569,53 +569,53 @@ global love = record
 			"anisotropy"
 		end
 
-		IndexDataType = enum
+		type IndexDataType = enum
 			"uint16"
 			"uint32"
 		end
 
-		LineJoin = enum
+		type LineJoin = enum
 			"miter"
 			"none"
 			"bevel"
 		end
 
-		LineStyle = enum
+		type LineStyle = enum
 			"rough"
 			"smooth"
 		end
 
-		MeshDrawMode = enum
+		type MeshDrawMode = enum
 			"fan"
 			"strip"
 			"triangles"
 			"points"
 		end
 
-		MipmapMode = enum
+		type MipmapMode = enum
 			"none"
 			"auto"
 			"manual"
 		end
 
-		ParticleInsertMode = enum
+		type ParticleInsertMode = enum
 			"top"
 			"bottom"
 			"random"
 		end
 
-		SpriteBatchUsage = enum
+		type SpriteBatchUsage = enum
 			"dynamic"
 			"static"
 			"stream"
 		end
 
-		StackType = enum
+		type StackType = enum
 			"transform"
 			"all"
 		end
 
-		StencilAction = enum
+		type StencilAction = enum
 			"replace"
 			"increment"
 			"decrement"
@@ -624,36 +624,36 @@ global love = record
 			"invert"
 		end
 
-		TextureType = enum
+		type TextureType = enum
 			"2d"
 			"array"
 			"cube"
 			"volume"
 		end
 
-		VertexAttributeStep = enum
+		type VertexAttributeStep = enum
 			"pervertex"
 			"perinstance"
 		end
 
-		VertexWinding = enum
+		type VertexWinding = enum
 			"cw"
 			"ccw"
 		end
 
-		WrapMode = enum
+		type WrapMode = enum
 			"clamp"
 			"repeat"
 			"mirroredrepeat"
 			"clampzero"
 		end
 
-		ImageFlag = enum
+		type ImageFlag = enum
 			"linear"
 			"mipmaps"
 		end
 
-		Canvas = record
+		type Canvas = record
 			generateMipmaps: function(self: Canvas)
 			getMSAA: function(self: Canvas): number
 			getMipmapMode: function(self: Canvas): MipmapMode
@@ -662,10 +662,10 @@ global love = record
 			renderTo: function(func: function())
 		end
 
-		Drawable = record
+		type Drawable = record
 		end
 
-		Font = record
+		type Font = record
 			getAscent: function(self: Font): number
 			getBaseline: function(self: Font): number
 			getDPIScale: function(self: Font): number
@@ -683,13 +683,13 @@ global love = record
 			setLineHeight: function(self: Font, height: number)
 		end
 
-		Image = record
+		type Image = record
 			getFlags: function(self: Image): {ImageFlag}
 			isCompressed: function(self: Image): boolean
 			replacePixels: function(self: Image, data: image.ImageData, slice: number, mipmap: number, x: number, y: number, reloadmipmaps: boolean)
 		end
 
-		Mesh = record
+		type Mesh = record
 			attachAttribute: function(self: Mesh, name: string, mesh: Mesh)
 			attachAttribute: function(self: Mesh, name: string, mesh: Mesh, step: VertexAttributeStep, attachname: string)
 			attachAttribute: function(self: Mesh, name: string, mesh: Mesh)
@@ -723,7 +723,7 @@ global love = record
 			setVertices: function(self: Mesh, data: love.Data, startvertex: number)
 		end
 
-		ParticleSystem = record
+		type ParticleSystem = record
 			clone: function(self: ParticleSystem): ParticleSystem
 			emit: function(self: ParticleSystem, numparticles: number)
 			getBufferSize: function(self: ParticleSystem): number
@@ -787,13 +787,13 @@ global love = record
 			update: function(self: ParticleSystem, dt: number)
 		end
 
-		Quad = record
+		type Quad = record
 			getTextureDimensions: function(self: Quad): number, number
 			getViewport: function(self: Quad): number, number, number, number
 			setViewport: function(self: Quad, x: number, y: number, w: number, h: number, sw: number, sh: number)
 		end
 
-		Shader = record
+		type Shader = record
 			getWarnings: function(self: Shader): string
 			hasUniform: function(self: Shader, name: string): boolean
 			send: function(self: Shader, name: string, ...: number)
@@ -807,7 +807,7 @@ global love = record
 			sendColor: function(self: Shader, name: string, ...: table)
 		end
 
-		SpriteBatch = record
+		type SpriteBatch = record
 			add: function(self: SpriteBatch, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
 			add: function(self: SpriteBatch, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
 			addLayer: function(self: SpriteBatch, layerindex: number, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
@@ -834,7 +834,7 @@ global love = record
 			setTexture: function(self: SpriteBatch, texture: Texture)
 		end
 
-		Text = record
+		type Text = record
 			add: function(self: Text, textstring: string, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
 			add: function(self: Text, coloredtext: {table|string}, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
 			addf: function(self: Text, textstring: string, wraplimit: number, align: AlignMode, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
@@ -854,7 +854,7 @@ global love = record
 			setf: function(self: Text, coloredtext: {table|string}, wraplimit: number, alignmode: AlignMode)
 		end
 
-		Texture = record
+		type Texture = record
 			getDPIScale: function(self: Texture): number
 			getDepth: function(self: Texture): number
 			getDepthSampleMode: function(self: Texture): CompareMode
@@ -879,7 +879,7 @@ global love = record
 			setWrap: function(self: Texture, horiz: WrapMode, vert: WrapMode, depth: WrapMode)
 		end
 
-		Video = record
+		type Video = record
 			getDimensions: function(self: Video): number, number
 			getFilter: function(self: Video): FilterMode, FilterMode, number
 			getHeight: function(self: Video): number
@@ -896,7 +896,7 @@ global love = record
 			tell: function(self: Video): number
 		end
 
-		Stats = record
+		type Stats = record
 			drawcalls: number
 			canvasswitches: number
 			texturememory: number
@@ -907,13 +907,13 @@ global love = record
 			drawcallsbatched: number
 		end
 
-		ImageSetting = record
+		type ImageSetting = record
 			mipmaps: boolean
 			linear: boolean
 			dpiscale: number
 		end
 
-		CanvasSetting = record
+		type CanvasSetting = record
 			type: TextureType
 			format: image.PixelFormat
 			readable: boolean
@@ -922,7 +922,7 @@ global love = record
 			mipmaps: MipmapMode
 		end
 
-		VideoSetting = record
+		type VideoSetting = record
 			audio: boolean
 			dpiscale: number
 		end
@@ -1108,8 +1108,8 @@ global love = record
 		validateShader: function(gles: boolean, pixelcode: string, vertexcode: string): boolean, string
 
 	end
-	image = record
-		CompressedImageFormat = enum
+	type image = record
+		type CompressedImageFormat = enum
 			"DXT1"
 			"DXT3"
 			"DXT5"
@@ -1148,14 +1148,14 @@ global love = record
 			"ASTC12x12"
 		end
 
-		ImageFormat = enum
+		type ImageFormat = enum
 			"tga"
 			"png"
 			"jpg"
 			"bmp"
 		end
 
-		PixelFormat = enum
+		type PixelFormat = enum
 			"unknown"
 			"normal"
 			"hdr"
@@ -1222,7 +1222,7 @@ global love = record
 			"ASTC12x12"
 		end
 
-		CompressedImageData = record
+		type CompressedImageData = record
 			getDimensions: function(self: CompressedImageData): number, number
 			getDimensions: function(self: CompressedImageData, level: number): number, number
 			getFormat: function(self: CompressedImageData): CompressedImageFormat
@@ -1233,7 +1233,7 @@ global love = record
 			getWidth: function(self: CompressedImageData, level: number): number
 		end
 
-		ImageData = record
+		type ImageData = record
 			encode: function(self: ImageData, format: ImageFormat, filename: string): filesystem.FileData
 			encode: function(self: ImageData, outFile: string)
 			encode: function(self: ImageData, outFile: string, format: ImageFormat)
@@ -1257,8 +1257,8 @@ global love = record
 		newImageData: function(filedata: filesystem.FileData): ImageData
 
 	end
-	joystick = record
-		GamepadAxis = enum
+	type joystick = record
+		type GamepadAxis = enum
 			"leftx"
 			"lefty"
 			"rightx"
@@ -1267,7 +1267,7 @@ global love = record
 			"triggerright"
 		end
 
-		GamepadButton = enum
+		type GamepadButton = enum
 			"a"
 			"b"
 			"x"
@@ -1285,7 +1285,7 @@ global love = record
 			"dpright"
 		end
 
-		JoystickHat = enum
+		type JoystickHat = enum
 			"c"
 			"d"
 			"l"
@@ -1297,13 +1297,13 @@ global love = record
 			"u"
 		end
 
-		JoystickInputType = enum
+		type JoystickInputType = enum
 			"axis"
 			"button"
 			"hat"
 		end
 
-		Joystick = record
+		type Joystick = record
 			getAxes: function(self: Joystick): number, number, number
 			getAxis: function(self: Joystick, axis: number): number
 			getAxisCount: function(self: Joystick): number
@@ -1340,8 +1340,8 @@ global love = record
 		setGamepadMapping: function(guid: string, axis: GamepadAxis, inputtype: JoystickInputType, inputindex: number, hatdir: JoystickHat): boolean
 
 	end
-	keyboard = record
-		KeyConstant = enum
+	type keyboard = record
+		type KeyConstant = enum
 			"a"
 			"b"
 			"c"
@@ -1488,7 +1488,7 @@ global love = record
 			"appbookmarks"
 		end
 
-		Scancode = enum
+		type Scancode = enum
 			"a"
 			"b"
 			"c"
@@ -1697,13 +1697,13 @@ global love = record
 		setTextInput: function(enable: boolean, x: number, y: number, w: number, h: number)
 
 	end
-	math = record
-		MatrixLayout = enum
+	type math = record
+		type MatrixLayout = enum
 			"row"
 			"column"
 		end
 
-		BezierCurve = record
+		type BezierCurve = record
 			evaluate: function(self: BezierCurve, t: number): number, number
 			getControlPoint: function(self: BezierCurve, i: number): number, number
 			getControlPointCount: function(self: BezierCurve): number
@@ -1720,7 +1720,7 @@ global love = record
 			translate: function(self: BezierCurve, dx: number, dy: number)
 		end
 
-		RandomGenerator = record
+		type RandomGenerator = record
 			getSeed: function(self: RandomGenerator): number, number
 			getState: function(self: RandomGenerator): string
 			random: function(self: RandomGenerator): number
@@ -1732,7 +1732,7 @@ global love = record
 			setState: function(self: RandomGenerator, state: string)
 		end
 
-		Transform = record
+		type Transform = record
 			apply: function(self: Transform, other: Transform): Transform
 			clone: function(self: Transform): Transform
 			getMatrix: function(self: Transform): number, number, number...
@@ -1791,8 +1791,8 @@ global love = record
 		triangulate: function(...: number): {number}
 
 	end
-	mouse = record
-		CursorType = enum
+	type mouse = record
+		type CursorType = enum
 			"image"
 			"arrow"
 			"ibeam"
@@ -1808,7 +1808,7 @@ global love = record
 			"hand"
 		end
 
-		Cursor = record
+		type Cursor = record
 			getType: function(self: Cursor): CursorType
 		end
 
@@ -1836,14 +1836,14 @@ global love = record
 		setY: function(y: number)
 
 	end
-	physics = record
-		BodyType = enum
+	type physics = record
+		type BodyType = enum
 			"static"
 			"dynamic"
 			"kinematic"
 		end
 
-		JointType = enum
+		type JointType = enum
 			"distance"
 			"friction"
 			"gear"
@@ -1855,14 +1855,14 @@ global love = record
 			"weld"
 		end
 
-		ShapeType = enum
+		type ShapeType = enum
 			"circle"
 			"polygon"
 			"edge"
 			"chain"
 		end
 
-		Body = record
+		type Body = record
 			applyAngularImpulse: function(self: Body, impulse: number)
 			applyForce: function(self: Body, fx: number, fy: number)
 			applyForce: function(self: Body, fx: number, fy: number, x: number, y: number)
@@ -1928,7 +1928,7 @@ global love = record
 			setY: function(self: Body, y: number)
 		end
 
-		ChainShape = record
+		type ChainShape = record
 			getChildEdge: function(self: ChainShape, index: number): EdgeShape
 			getNextVertex: function(self: ChainShape): number, number
 			getPoint: function(self: ChainShape, index: number): number, number
@@ -1939,14 +1939,14 @@ global love = record
 			setPreviousVertex: function(self: ChainShape, x: number, y: number)
 		end
 
-		CircleShape = record
+		type CircleShape = record
 			getPoint: function(self: CircleShape): number, number
 			getRadius: function(self: CircleShape): number
 			setPoint: function(self: CircleShape, x: number, y: number)
 			setRadius: function(self: CircleShape, radius: number)
 		end
 
-		Contact = record
+		type Contact = record
 			getFixtures: function(self: Contact): Fixture, Fixture
 			getFriction: function(self: Contact): number
 			getNormal: function(self: Contact): number, number
@@ -1961,7 +1961,7 @@ global love = record
 			setRestitution: function(self: Contact, restitution: number)
 		end
 
-		DistanceJoint = record
+		type DistanceJoint = record
 			getDampingRatio: function(self: DistanceJoint): number
 			getFrequency: function(self: DistanceJoint): number
 			getLength: function(self: DistanceJoint): number
@@ -1970,7 +1970,7 @@ global love = record
 			setLength: function(self: DistanceJoint, l: number)
 		end
 
-		EdgeShape = record
+		type EdgeShape = record
 			getNextVertex: function(self: EdgeShape): number, number
 			getPoints: function(self: EdgeShape): number, number, number, number
 			getPreviousVertex: function(self: EdgeShape): number, number
@@ -1978,7 +1978,7 @@ global love = record
 			setPreviousVertex: function(self: EdgeShape, x: number, y: number)
 		end
 
-		Fixture = record
+		type Fixture = record
 			destroy: function(self: Fixture)
 			getBody: function(self: Fixture): Body
 			getBoundingBox: function(self: Fixture, index: number): number, number, number, number
@@ -2007,20 +2007,20 @@ global love = record
 			testPoint: function(self: Fixture, x: number, y: number): boolean
 		end
 
-		FrictionJoint = record
+		type FrictionJoint = record
 			getMaxForce: function(self: FrictionJoint): number
 			getMaxTorque: function(self: FrictionJoint): number
 			setMaxForce: function(self: FrictionJoint, maxForce: number)
 			setMaxTorque: function(self: FrictionJoint, torque: number)
 		end
 
-		GearJoint = record
+		type GearJoint = record
 			getJoints: function(self: GearJoint): Joint, Joint
 			getRatio: function(self: GearJoint): number
 			setRatio: function(self: GearJoint, ratio: number)
 		end
 
-		Joint = record
+		type Joint = record
 			destroy: function(self: Joint)
 			getAnchors: function(self: Joint): number, number, number, number
 			getBodies: function(self: Joint): Body, Body
@@ -2033,14 +2033,14 @@ global love = record
 			setUserData: function(self: Joint, value: any)
 		end
 
-		MotorJoint = record
+		type MotorJoint = record
 			getAngularOffset: function(self: MotorJoint): number
 			getLinearOffset: function(self: MotorJoint): number, number
 			setAngularOffset: function(self: MotorJoint, angleoffset: number)
 			setLinearOffset: function(self: MotorJoint, x: number, y: number)
 		end
 
-		MouseJoint = record
+		type MouseJoint = record
 			getDampingRatio: function(self: MouseJoint): number
 			getFrequency: function(self: MouseJoint): number
 			getMaxForce: function(self: MouseJoint): number
@@ -2051,11 +2051,11 @@ global love = record
 			setTarget: function(self: MouseJoint, x: number, y: number)
 		end
 
-		PolygonShape = record
+		type PolygonShape = record
 			getPoints: function(self: PolygonShape): number, number, number, number
 		end
 
-		PrismaticJoint = record
+		type PrismaticJoint = record
 			areLimitsEnabled: function(self: PrismaticJoint): boolean
 			getAxis: function(self: PrismaticJoint): number, number
 			getJointSpeed: function(self: PrismaticJoint): number
@@ -2076,7 +2076,7 @@ global love = record
 			setUpperLimit: function(self: PrismaticJoint, upper: number)
 		end
 
-		PulleyJoint = record
+		type PulleyJoint = record
 			getConstant: function(self: PulleyJoint): number
 			getGroundAnchors: function(self: PulleyJoint): number, number, number, number
 			getLengthA: function(self: PulleyJoint): number
@@ -2088,7 +2088,7 @@ global love = record
 			setRatio: function(self: PulleyJoint, ratio: number)
 		end
 
-		RevoluteJoint = record
+		type RevoluteJoint = record
 			areLimitsEnabled: function(self: RevoluteJoint): boolean
 			getJointAngle: function(self: RevoluteJoint): number
 			getJointSpeed: function(self: RevoluteJoint): number
@@ -2109,12 +2109,12 @@ global love = record
 			setUpperLimit: function(self: RevoluteJoint, upper: number)
 		end
 
-		RopeJoint = record
+		type RopeJoint = record
 			getMaxLength: function(self: RopeJoint): number
 			setMaxLength: function(self: RopeJoint, maxLength: number)
 		end
 
-		Shape = record
+		type Shape = record
 			computeAABB: function(self: Shape, tx: number, ty: number, tr: number, childIndex: number): number, number, number, number
 			computeMass: function(self: Shape, density: number): number, number, number, number
 			getChildCount: function(self: Shape): number
@@ -2124,14 +2124,14 @@ global love = record
 			testPoint: function(self: Shape, tx: number, ty: number, tr: number, x: number, y: number): boolean
 		end
 
-		WeldJoint = record
+		type WeldJoint = record
 			getDampingRatio: function(self: WeldJoint): number
 			getFrequency: function(self: WeldJoint): number
 			setDampingRatio: function(self: WeldJoint, ratio: number)
 			setFrequency: function(self: WeldJoint, freq: number)
 		end
 
-		WheelJoint = record
+		type WheelJoint = record
 			getAxis: function(self: WheelJoint): number, number
 			getJointSpeed: function(self: WheelJoint): number
 			getJointTranslation: function(self: WheelJoint): number
@@ -2147,7 +2147,7 @@ global love = record
 			setSpringFrequency: function(self: WheelJoint, freq: number)
 		end
 
-		World = record
+		type World = record
 			destroy: function(self: World)
 			getBodies: function(self: World): {Body}
 			getBodyCount: function(self: World): number
@@ -2203,8 +2203,8 @@ global love = record
 		setMeter: function(scale: number)
 
 	end
-	sound = record
-		Decoder = record
+	type sound = record
+		type Decoder = record
 			clone: function(self: Decoder): Decoder
 			getBitDepth: function(self: Decoder): number
 			getChannelCount: function(self: Decoder): number
@@ -2212,7 +2212,7 @@ global love = record
 			getSampleRate: function(self: Decoder): number
 		end
 
-		SoundData = record
+		type SoundData = record
 			getBitDepth: function(self: SoundData): number
 			getChannelCount: function(self: SoundData): number
 			getDuration: function(self: SoundData): number
@@ -2232,8 +2232,8 @@ global love = record
 		newSoundData: function(samples: number, rate: number, bits: number, channels: number): SoundData
 
 	end
-	system = record
-		PowerState = enum
+	type system = record
+		type PowerState = enum
 			"unknown"
 			"battery"
 			"nobattery"
@@ -2251,8 +2251,8 @@ global love = record
 		vibrate: function(seconds: number)
 
 	end
-	thread = record
-		Channel = record
+	type thread = record
+		type Channel = record
 			clear: function(self: Channel)
 			demand: function(self: Channel, timeout: number): any
 			getCount: function(self: Channel): number
@@ -2265,7 +2265,7 @@ global love = record
 			supply: function(self: Channel, value: any, timeout: number): boolean
 		end
 
-		Thread = record
+		type Thread = record
 			getError: function(self: Thread): string
 			isRunning: function(self: Thread): boolean
 			start: function(self: Thread)
@@ -2280,7 +2280,7 @@ global love = record
 		newThread: function(codestring: string): Thread
 
 	end
-	timer = record
+	type timer = record
 		getAverageDelta: function(): number
 		getDelta: function(): number
 		getFPS: function(): number
@@ -2289,22 +2289,22 @@ global love = record
 		step: function(): number
 
 	end
-	touch = record
+	type touch = record
 		getPosition: function(id: any): number, number
 		getPressure: function(id: any): number
 		getTouches: function(): {any}
 
 	end
-	video = record
-		VideoStream = record
+	type video = record
+		type VideoStream = record
 		end
 
 		newVideoStream: function(filename: string): VideoStream
 		newVideoStream: function(file: filesystem.File): VideoStream
 
 	end
-	window = record
-		DisplayOrientation = enum
+	type window = record
+		type DisplayOrientation = enum
 			"unknown"
 			"landscape"
 			"landscapeflipped"
@@ -2312,24 +2312,24 @@ global love = record
 			"portraitflipped"
 		end
 
-		FullscreenType = enum
+		type FullscreenType = enum
 			"desktop"
 			"exclusive"
 			"normal"
 		end
 
-		MessageBoxType = enum
+		type MessageBoxType = enum
 			"info"
 			"warning"
 			"error"
 		end
 
-		FullscreenMode = record
+		type FullscreenMode = record
 			width: number
 			height: number
 		end
 
-		WindowSetting = record
+		type WindowSetting = record
 			fullscreen: boolean
 			fullscreentype: FullscreenType
 			vsync: boolean

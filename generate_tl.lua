@@ -806,7 +806,7 @@ local function writeNestedFields(name, fields, level, module)
 	local tab = string.rep("\t", level)
 	local tab1 = string.rep("\t", level + 1)
 
-	io.write(tab, name, " = record\n")
+	io.write(tab, "type ", name, " = record\n")
 
 	for _, v in ipairs(fields) do
 		if v.type == "table" and v.table then
@@ -822,7 +822,7 @@ end
 -- Create the recursive function for that
 local function startLookup(name, data, level)
 	-- begin
-	io.write(string.rep("\t", level), name, " = record\n")
+	io.write(string.rep("\t", level), "type ", name, " = record\n")
 
 	-- Increase indentation
 	level = level + 1
@@ -834,7 +834,7 @@ local function startLookup(name, data, level)
 			local tab1 = string.rep("\t", level + 1)
 
 			-- Enumerate constants
-			io.write(tab, e.name, " = enum\n")
+			io.write(tab, "type ", e.name, " = enum\n")
 
 			for _, c in ipairs(e.constants) do
 				--io.write(tab1, "\"", c.name, "\"\n")
@@ -851,7 +851,7 @@ local function startLookup(name, data, level)
 			if t.fields then
 				writeNestedFields(t.name, t.fields, level, name)
 			else
-				io.write(tab, t.name, " = record\n")
+				io.write(tab, "type ", t.name, " = record\n")
 
 				if t.functions and #t.functions > 0 then
 					for _, f in ipairs(t.functions) do
