@@ -999,7 +999,6 @@ global type love = record
 		newCanvas: function(width: number, height: number): Canvas
 		newCanvas: function(width: number, height: number, settings: CanvasSetting): Canvas
 		newCanvas: function(width: number, height: number, layers: number, settings: CanvasSetting): Canvas
-		newCanvas: function(width: number, height: number, format: image.PixelFormat, msaa: number): Canvas
 		newCubeImage: function(filename: string, settings: ImageSetting): Image
 		newCubeImage: function(faces: table, settings: ImageSetting): Image
 		newFont: function(filename: string): Font
@@ -1010,7 +1009,6 @@ global type love = record
 		newImage: function(imageData: image.ImageData): Image
 		newImage: function(compressedImageData: image.CompressedImageData): Image
 		newImage: function(filename: string, flags: ImageSetting): Image
-		newImage: function(filename: string, format: image.PixelFormat): Image
 		newImageFont: function(filename: string, glyphs: string): Font
 		newImageFont: function(imageData: image.ImageData, glyphs: string): Font
 		newImageFont: function(filename: string, glyphs: string, extraspacing: number): Font

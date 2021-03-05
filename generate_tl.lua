@@ -112,8 +112,6 @@ api.modules[6].functions[49].variants[1].arguments[2].typename = "ImageSetting"
 assert(api.modules[6].functions[50].name == "newCanvas")
 api.modules[6].functions[50].variants[3].arguments[3].typename = "CanvasSetting"
 api.modules[6].functions[50].variants[4].arguments[4].typename = "CanvasSetting"
-overrides["graphics.newCanvas[5]"] = ""
-api.modules[6].functions[50].variants[6].arguments[3].type = "PixelFormat"
 
 -- Define love.graphics.newCubeImage table type argument
 assert(api.modules[6].functions[51].name == "newCubeImage")
@@ -124,7 +122,6 @@ api.modules[6].functions[51].variants[2].arguments[2].typename = "ImageSetting"
 -- Define love.graphics.newImage table type argument
 assert(api.modules[6].functions[53].name == "newImage")
 api.modules[6].functions[53].variants[4].arguments[2].typename = "ImageSetting"
-api.modules[6].functions[53].variants[5].arguments[2].type = "PixelFormat"
 
 -- Override love.graphics.newMesh 1st, 3rd & 4th variant
 overrides["graphics.newMesh[1]"] = "newMesh: function(vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
