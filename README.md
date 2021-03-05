@@ -25,3 +25,20 @@ Lists of function (variants) that are currently blacklisted due to limitations i
 * [`World:setContactFilter`](https://love2d.org/wiki/World:setContactFilter)
 
 * [`love.window.showMessageBox` 2nd variant](https://love2d.org/wiki/love.window.showMessageBox#Function_2)
+
+Usage
+-----
+
+You need to cast at various places due to Teal lacking record inheritance (see [#4](https://github.com/MikuAuahDark/love2d-tl/issues/4)). Example simple usage.
+
+```lua
+function love.load()
+	global myimage = love.graphics.newImage("path/to/image.png")
+	local imageW, imageH = (myimage as love.graphics.Texture):getDimensions()
+	print("Width", imageW, "Height", imageH)
+end
+
+function love.draw()
+	love.graphics.draw(myimage as love.graphics.Drawable)
+end
+```
