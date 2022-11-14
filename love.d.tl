@@ -1,5 +1,5 @@
 -- generated with generate_tl.lua
--- LÖVE 11.3
+-- LÖVE 11.4
 
 global type love = record
 	type Data = record
@@ -74,6 +74,8 @@ global type love = record
 
 	getVersion: function(): number, number, number, string
 	hasDeprecationOutput: function(): boolean
+	isVersionCompatible: function(version: string): boolean
+	isVersionCompatible: function(major: number, minor: number, revision: number): boolean
 	setDeprecationOutput: function(enable: boolean)
 
 	conf: function(t: Configuration)
@@ -95,6 +97,8 @@ global type love = record
 	keypressed: function(key: keyboard.KeyConstant, scancode: keyboard.Scancode, isrepeat: boolean)
 	keypressed: function(key: keyboard.KeyConstant, isrepeat: boolean)
 	keyreleased: function(key: keyboard.KeyConstant, scancode: keyboard.Scancode)
+arg
+unfilteredArg
 	load: function(arg: {string}, unfilteredArg: {string})
 	lowmemory: function()
 	mousefocus: function(focus: boolean)
@@ -162,7 +166,6 @@ global type love = record
 
 		type RecordingDevice = record
 			getBitDepth: function(self: RecordingDevice): number
-			getBitDepth: function(self: RecordingDevice): number
 			getChannelCount: function(self: RecordingDevice): number
 			getData: function(self: RecordingDevice): sound.SoundData
 			getName: function(self: RecordingDevice): string
@@ -175,6 +178,7 @@ global type love = record
 
 		type Source = record
 			clone: function(self: Source): Source
+effects
 			getActiveEffects: function(self: Source): {string}
 			getAirAbsorption: function(self: Source): number
 			getAttenuationDistances: function(self: Source): number, number
@@ -226,6 +230,7 @@ global type love = record
 			lowgain: number
 		end
 
+effects
 		getActiveEffects: function(): {string}
 		getActiveSourceCount: function(): number
 		getDistanceModel: function(): DistanceModel
@@ -234,6 +239,7 @@ global type love = record
 		getMaxSourceEffects: function(): number
 		getOrientation: function(): number, number
 		getPosition: function(): number, number, number
+devices
 		getRecordingDevices: function(): {RecordingDevice}
 		getSourceCount: function(): number
 		getVelocity: function(): number, number, number
@@ -245,10 +251,13 @@ global type love = record
 		newSource: function(decoder: sound.Decoder, type: SourceType): Source
 		newSource: function(data: filesystem.FileData, type: SourceType): Source
 		newSource: function(data: sound.SoundData): Source
+Sources
 		pause: function(): {Source}
 		pause: function(source: Source, ...: Source)
+sources
 		pause: function(sources: {Source})
 		play: function(source: Source)
+sources
 		play: function(sources: {Source})
 		play: function(...: Source)
 		setDistanceModel: function(model: DistanceModel)
@@ -263,6 +272,7 @@ global type love = record
 		stop: function()
 		stop: function(source: Source)
 		stop: function(...: Source)
+sources
 		stop: function(sources: {Source})
 
 	end
@@ -391,6 +401,7 @@ global type love = record
 		createDirectory: function(name: string): boolean
 		getAppdataDirectory: function(): string
 		getCRequirePath: function(): string
+files
 		getDirectoryItems: function(dir: string): {string}
 		getDirectoryItems: function(dir: string, callback: function(filename: string)): {string}
 		getIdentity: function(): string
@@ -414,6 +425,7 @@ global type love = record
 		newFile: function(filename: string): File
 		newFile: function(filename: string, mode: FileMode): File, string
 		newFileData: function(contents: string, name: string): FileData
+		newFileData: function(originaldata: love.Data, name: string): FileData
 		newFileData: function(filepath: string): FileData, string
 		read: function(name: string, size: number): string, number|string
 		read: function(container: data.ContainerType, name: string, size: number): string|FileData, number|string
@@ -672,9 +684,11 @@ global type love = record
 			getDescent: function(self: Font): number
 			getFilter: function(self: Font): FilterMode, FilterMode, number
 			getHeight: function(self: Font): number
+			getKerning: function(self: Font, leftchar: string, rightchar: string): number
+			getKerning: function(self: Font, leftglyph: number, rightglyph: number): number
 			getLineHeight: function(self: Font): number
 			getWidth: function(self: Font, text: string): number
-			getWrap: function(self: Font, text: string, wraplimit: number): number, {string}
+			getWrap: function(self: Font, text: string, wraplimit: number): number, Text
 			hasGlyphs: function(self: Font, text: string): boolean
 			hasGlyphs: function(self: Font, character1: string, character2: string): boolean
 			hasGlyphs: function(self: Font, codepoint1: number, codepoint2: number): boolean
@@ -684,6 +698,7 @@ global type love = record
 		end
 
 		type Image = record
+flags
 			getFlags: function(self: Image): {ImageFlag}
 			isCompressed: function(self: Image): boolean
 			replacePixels: function(self: Image, data: image.ImageData, slice: number, mipmap: number, x: number, y: number, reloadmipmaps: boolean)
@@ -703,6 +718,7 @@ global type love = record
 			getVertexAttribute: function(self: Mesh, vertexindex: number, attributeindex: number): number, number, number...
 			getVertexCount: function(self: Mesh): number
 			getVertexFormat: function(self: Mesh): {{number|string}}
+map
 			getVertexMap: function(self: Mesh): {number}
 			isAttributeEnabled: function(self: Mesh, name: string): boolean
 			setAttributeEnabled: function(self: Mesh, name: string, enable: boolean)
@@ -712,10 +728,13 @@ global type love = record
 			setTexture: function(self: Mesh, texture: Texture)
 			setTexture: function(self: Mesh)
 			setVertex: function(self: Mesh, index: number, attributecomponent: number, ...: number)
+vertex
 			setVertex: function(self: Mesh, index: number, vertex: {number})
 			setVertex: function(self: Mesh, index: number, x: number, y: number, u: number, v: number, r: number, g: number, b: number, a: number)
+vertex
 			setVertex: function(self: Mesh, index: number, vertex: {number})
 			setVertexAttribute: function(self: Mesh, vertexindex: number, attributeindex: number, value1: number, value2: number, ...: number)
+map
 			setVertexMap: function(self: Mesh, map: {number})
 			setVertexMap: function(self: Mesh, ...: number)
 			setVertexMap: function(self: Mesh, data: love.Data, datatype: IndexDataType)
@@ -739,6 +758,7 @@ global type love = record
 			getOffset: function(self: ParticleSystem): number, number
 			getParticleLifetime: function(self: ParticleSystem): number, number
 			getPosition: function(self: ParticleSystem): number, number
+quads
 			getQuads: function(self: ParticleSystem): {Quad}
 			getRadialAcceleration: function(self: ParticleSystem): number, number
 			getRotation: function(self: ParticleSystem): number, number
@@ -759,6 +779,7 @@ global type love = record
 			reset: function(self: ParticleSystem)
 			setBufferSize: function(self: ParticleSystem, size: number)
 			setColors: function(self: ParticleSystem, r1: number, g1: number, b1: number, a1: number, r2: number, g2: number, b2: number, a2: number, r8: number, g8: number, b8: number, a8: number)
+			setColors: function(self: ParticleSystem, rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})
 			setDirection: function(self: ParticleSystem, direction: number)
 			setEmissionArea: function(self: ParticleSystem, distribution: AreaSpreadDistribution, dx: number, dy: number, angle: number, directionRelativeToCenter: boolean)
 			setEmissionRate: function(self: ParticleSystem, rate: number)
@@ -770,6 +791,7 @@ global type love = record
 			setParticleLifetime: function(self: ParticleSystem, min: number, max: number)
 			setPosition: function(self: ParticleSystem, x: number, y: number)
 			setQuads: function(self: ParticleSystem, ...: Quad)
+quads
 			setQuads: function(self: ParticleSystem, quads: {Quad})
 			setRadialAcceleration: function(self: ParticleSystem, min: number, max: number)
 			setRelativeRotation: function(self: ParticleSystem, enable: boolean)
@@ -804,6 +826,7 @@ global type love = record
 			send: function(self: Shader, name: string, matrixLayout: math.MatrixLayout, ...: {{number}})
 			send: function(self: Shader, name: string, data: love.Data, offset: number, size: number)
 			send: function(self: Shader, name: string, data: love.Data, matrixlayout: math.MatrixLayout, offset: number, size: number)
+			send: function(self: Shader, name: string, matrixlayout: math.MatrixLayout, data: love.Data, offset: number, size: number)
 			sendColor: function(self: Shader, name: string, ...: table)
 		end
 
@@ -940,6 +963,7 @@ global type love = record
 		clear: function(...: {number}|boolean)
 		clear: function(clearcolor: boolean, clearstencil: boolean, cleardepth: boolean)
 		discard: function(discardcolor: boolean, discardstencil: boolean)
+discardcolors
 		discard: function(discardcolors: {boolean}, discardstencil: boolean)
 		draw: function(drawable: Drawable, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
 		draw: function(texture: Texture, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
@@ -973,6 +997,7 @@ global type love = record
 		getLineStyle: function(): LineStyle
 		getLineWidth: function(): number
 		getMeshCullMode: function(): CullMode
+		getPixelDimenions: function(): number, number
 		getPixelHeight: function(): number
 		getPixelWidth: function(): number
 		getPointSize: function(): number
@@ -993,6 +1018,7 @@ global type love = record
 		isGammaCorrect: function(): boolean
 		isWireframe: function(): boolean
 		line: function(...: number)
+points
 		line: function(points: {number})
 		newArrayImage: function(slices: table, settings: ImageSetting): Image
 		newCanvas: function(): Canvas
@@ -1005,10 +1031,10 @@ global type love = record
 		newFont: function(filename: string, size: number, hinting: font.HintingMode, dpiscale: number): Font
 		newFont: function(filename: string, imagefilename: string): Font
 		newFont: function(size: number, hinting: font.HintingMode, dpiscale: number): Font
-		newImage: function(filename: string): Image
-		newImage: function(imageData: image.ImageData): Image
-		newImage: function(compressedImageData: image.CompressedImageData): Image
-		newImage: function(filename: string, flags: ImageSetting): Image
+		newImage: function(filename: string, settings: ImageSetting): Image
+		newImage: function(fileData: filesystem.FileData, settings: ImageSetting): Image
+		newImage: function(imageData: image.ImageData, settings: ImageSetting): Image
+		newImage: function(compressedImageData: image.CompressedImageData, settings: ImageSetting): Image
 		newImageFont: function(filename: string, glyphs: string): Font
 		newImageFont: function(imageData: image.ImageData, glyphs: string): Font
 		newImageFont: function(filename: string, glyphs: string, extraspacing: number): Font
@@ -1037,6 +1063,7 @@ global type love = record
 		points: function(points: {number})
 		points: function(points: {{number}})
 		polygon: function(mode: DrawMode, ...: number)
+vertices
 		polygon: function(mode: DrawMode, vertices: {number})
 		pop: function()
 		present: function()
@@ -1064,8 +1091,7 @@ global type love = record
 		rotate: function(angle: number)
 		scale: function(sx: number, sy: number)
 		setBackgroundColor: function(red: number, green: number, blue: number, alpha: number)
-		setBackgroundColor: function()
-		setBackgroundColor: function()
+		setBackgroundColor: function(rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})
 		setBlendMode: function(mode: BlendMode)
 		setBlendMode: function(mode: BlendMode, alphamode: BlendAlphaMode)
 		setCanvas: function(canvas: Canvas, mipmap: number)
@@ -1073,6 +1099,7 @@ global type love = record
 		setCanvas: function(canvas1: Canvas, canvas2: Canvas, ...: Canvas)
 		setCanvas: function(canvas: Canvas, slice: number, mipmap: number)
 		setColor: function(red: number, green: number, blue: number, alpha: number)
+rgba
 		setColor: function(rgba: {number})
 		setColorMask: function(red: boolean, green: boolean, blue: boolean, alpha: boolean)
 		setColorMask: function()
@@ -1242,6 +1269,7 @@ global type love = record
 			mapPixel: function(self: ImageData, pixelFunction: function(x: number, y: number, r: number, g: number, b: number, a: number): (number, number, number, number), x: number, y: number, width: number, height: number)
 			paste: function(self: ImageData, source: ImageData, dx: number, dy: number, sx: number, sy: number, sw: number, sh: number)
 			setPixel: function(self: ImageData, x: number, y: number, r: number, g: number, b: number, a: number)
+			getFormat: function(self: ImageData): PixelFormat
 		end
 
 		isCompressed: function(filename: string): boolean
@@ -1329,6 +1357,7 @@ global type love = record
 
 		getGamepadMappingString: function(guid: string): string
 		getJoystickCount: function(): number
+joysticks
 		getJoysticks: function(): {Joystick}
 		loadGamepadMappings: function(filename: string)
 		loadGamepadMappings: function(mappings: string)
@@ -1686,6 +1715,7 @@ global type love = record
 		getKeyFromScancode: function(scancode: Scancode): KeyConstant
 		getScancodeFromKey: function(key: KeyConstant): Scancode
 		hasKeyRepeat: function(): boolean
+		hasScreenKeyboard: function(): boolean
 		hasTextInput: function(): boolean
 		isDown: function(key: KeyConstant): boolean
 		isDown: function(key: KeyConstant, ...: KeyConstant): boolean
@@ -1710,7 +1740,9 @@ global type love = record
 			getSegment: function(self: BezierCurve, startpoint: number, endpoint: number): BezierCurve
 			insertControlPoint: function(self: BezierCurve, x: number, y: number, i: number)
 			removeControlPoint: function(self: BezierCurve, index: number)
+coordinates
 			render: function(self: BezierCurve, depth: number): {number}
+coordinates
 			renderSegment: function(self: BezierCurve, startpoint: number, endpoint: number, depth: number): {number}
 			rotate: function(self: BezierCurve, angle: number, ox: number, oy: number)
 			scale: function(self: BezierCurve, s: number, ox: number, oy: number)
@@ -1742,6 +1774,7 @@ global type love = record
 			scale: function(self: Transform, sx: number, sy: number): Transform
 			setMatrix: function(self: Transform, ...: number): Transform
 			setMatrix: function(self: Transform, layout: MatrixLayout, ...: number): Transform
+matrix
 			setMatrix: function(self: Transform, layout: MatrixLayout, matrix: {number}): Transform
 			setMatrix: function(self: Transform, layout: MatrixLayout, matrix: {{number}}): Transform
 			setTransformation: function(self: Transform, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): Transform
@@ -1758,15 +1791,19 @@ global type love = record
 		decompress: function(compressedstring: string, format: data.CompressedDataFormat): string
 		decompress: function(data: love.Data, format: data.CompressedDataFormat): string
 		gammaToLinear: function(r: number, g: number, b: number): number, number, number
+color
 		gammaToLinear: function(color: {number}): number, number, number
 		gammaToLinear: function(c: number): number
 		getRandomSeed: function(): number, number
 		getRandomState: function(): string
+vertices
 		isConvex: function(vertices: {number}): boolean
 		isConvex: function(...: number): boolean
 		linearToGamma: function(lr: number, lg: number, lb: number): number, number, number
+color
 		linearToGamma: function(color: {number}): number, number, number
 		linearToGamma: function(lc: number): number
+vertices
 		newBezierCurve: function(vertices: {number}): BezierCurve
 		newBezierCurve: function(...: number): BezierCurve
 		newRandomGenerator: function(): RandomGenerator
@@ -1785,7 +1822,10 @@ global type love = record
 		setRandomSeed: function(seed: number)
 		setRandomSeed: function(low: number, high: number)
 		setRandomState: function(state: string)
+polygon
+triangles
 		triangulate: function(polygon: {number}): {number}
+triangles
 		triangulate: function(...: number): {number}
 
 	end
@@ -1816,7 +1856,6 @@ global type love = record
 		getSystemCursor: function(ctype: CursorType): Cursor
 		getX: function(): number
 		getY: function(): number
-		hasCursor: function(): boolean
 		isCursorSupported: function(): boolean
 		isDown: function(...: number): boolean
 		isGrabbed: function(): boolean
@@ -1871,10 +1910,13 @@ global type love = record
 			getAngle: function(self: Body): number
 			getAngularDamping: function(self: Body): number
 			getAngularVelocity: function(self: Body): number
+contacts
 			getContacts: function(self: Body): {Contact}
+fixtures
 			getFixtures: function(self: Body): {Fixture}
 			getGravityScale: function(self: Body): number
 			getInertia: function(self: Body): number
+joints
 			getJoints: function(self: Body): {Joint}
 			getLinearDamping: function(self: Body): number
 			getLinearVelocity: function(self: Body): number, number
@@ -1882,6 +1924,7 @@ global type love = record
 			getLinearVelocityFromWorldPoint: function(self: Body, x: number, y: number): number, number
 			getLocalCenter: function(self: Body): number, number
 			getLocalPoint: function(self: Body, worldX: number, worldY: number): number, number
+			getLocalPoints: function(self: Body, x1: number, y1: number, x2: number, y2: number, ...: number): number, number, number, number, number...
 			getLocalVector: function(self: Body, worldX: number, worldY: number): number, number
 			getMass: function(self: Body): number
 			getMassData: function(self: Body): number, number, number, number
@@ -1945,6 +1988,7 @@ global type love = record
 		end
 
 		type Contact = record
+			getChildren: function(self: Contact): number, number
 			getFixtures: function(self: Contact): Fixture, Fixture
 			getFriction: function(self: Contact): number
 			getNormal: function(self: Contact): number, number
@@ -2063,6 +2107,7 @@ global type love = record
 			getMaxMotorForce: function(self: PrismaticJoint): number
 			getMotorForce: function(self: PrismaticJoint, invdt: number): number
 			getMotorSpeed: function(self: PrismaticJoint): number
+			getReferenceAngle: function(self: PrismaticJoint): number
 			getUpperLimit: function(self: PrismaticJoint): number
 			isMotorEnabled: function(self: PrismaticJoint): boolean
 			setLimits: function(self: PrismaticJoint, lower: number, upper: number)
@@ -2095,6 +2140,7 @@ global type love = record
 			getMaxMotorTorque: function(self: RevoluteJoint): number
 			getMotorSpeed: function(self: RevoluteJoint): number
 			getMotorTorque: function(self: RevoluteJoint): number
+			getReferenceAngle: function(self: RevoluteJoint): number
 			getUpperLimit: function(self: RevoluteJoint): number
 			hasLimitsEnabled: function(self: RevoluteJoint): boolean
 			isMotorEnabled: function(self: RevoluteJoint): boolean
@@ -2125,6 +2171,7 @@ global type love = record
 		type WeldJoint = record
 			getDampingRatio: function(self: WeldJoint): number
 			getFrequency: function(self: WeldJoint): number
+			getReferenceAngle: function(self: WeldJoint): number
 			setDampingRatio: function(self: WeldJoint, ratio: number)
 			setFrequency: function(self: WeldJoint, freq: number)
 		end
@@ -2138,6 +2185,7 @@ global type love = record
 			getMotorTorque: function(self: WheelJoint, invdt: number): number
 			getSpringDampingRatio: function(self: WheelJoint): number
 			getSpringFrequency: function(self: WheelJoint): number
+			isMotorEnabled: function(self: WheelJoint): boolean
 			setMaxMotorTorque: function(self: WheelJoint, maxTorque: number)
 			setMotorEnabled: function(self: WheelJoint, enable: boolean)
 			setMotorSpeed: function(self: WheelJoint, speed: number)
@@ -2147,12 +2195,15 @@ global type love = record
 
 		type World = record
 			destroy: function(self: World)
+bodies
 			getBodies: function(self: World): {Body}
 			getBodyCount: function(self: World): number
 			getContactCount: function(self: World): number
+contacts
 			getContacts: function(self: World): {Contact}
 			getGravity: function(self: World): number, number
 			getJointCount: function(self: World): number
+joints
 			getJoints: function(self: World): {Joint}
 			isDestroyed: function(self: World): boolean
 			isLocked: function(self: World): boolean
@@ -2169,6 +2220,7 @@ global type love = record
 		getMeter: function(): number
 		newBody: function(world: World, x: number, y: number, type: BodyType): Body
 		newChainShape: function(loop: boolean, ...: number): ChainShape
+points
 		newChainShape: function(loop: boolean, points: {number}): ChainShape
 		newCircleShape: function(radius: number): CircleShape
 		newCircleShape: function(x: number, y: number, radius: number): CircleShape
@@ -2182,6 +2234,7 @@ global type love = record
 		newMotorJoint: function(body1: Body, body2: Body, correctionFactor: number, collideConnected: boolean): MotorJoint
 		newMouseJoint: function(body: Body, x: number, y: number): MouseJoint
 		newPolygonShape: function(...: number): PolygonShape
+vertices
 		newPolygonShape: function(vertices: {number}): PolygonShape
 		newPrismaticJoint: function(body1: Body, body2: Body, x: number, y: number, ax: number, ay: number, collideConnected: boolean): PrismaticJoint
 		newPrismaticJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, ax: number, ay: number, collideConnected: boolean): PrismaticJoint
@@ -2204,10 +2257,12 @@ global type love = record
 	type sound = record
 		type Decoder = record
 			clone: function(self: Decoder): Decoder
+			decode: function(self: Decoder): SoundData
 			getBitDepth: function(self: Decoder): number
 			getChannelCount: function(self: Decoder): number
 			getDuration: function(self: Decoder): number
 			getSampleRate: function(self: Decoder): number
+			seek: function(self: Decoder, offset: number)
 		end
 
 		type SoundData = record
@@ -2290,11 +2345,19 @@ global type love = record
 	type touch = record
 		getPosition: function(id: any): number, number
 		getPressure: function(id: any): number
+touches
 		getTouches: function(): {any}
 
 	end
 	type video = record
 		type VideoStream = record
+			getFilename: function(self: VideoStream): string
+			isPlaying: function(self: VideoStream): boolean
+			pause: function(self: VideoStream)
+			play: function(self: VideoStream)
+			rewind: function(self: VideoStream)
+			seek: function(self: VideoStream, offset: number)
+			tell: function(self: VideoStream): number
 		end
 
 		newVideoStream: function(filename: string): VideoStream
@@ -2349,10 +2412,13 @@ global type love = record
 		fromPixels: function(pixelvalue: number): number
 		fromPixels: function(px: number, py: number): number, number
 		getDPIScale: function(): number
+		getDesktopDimensions: function(displayindex: number): string, string
+		getDisplayCount: function(): number
 		getDisplayName: function(displayindex: number): string
-		getDisplayOrientation: function(index: number): DisplayOrientation
+		getDisplayOrientation: function(displayindex: number): DisplayOrientation
 		getFullscreen: function(): boolean, FullscreenType
-		getFullscreenModes: function(display: number): {FullscreenMode}
+modes
+		getFullscreenModes: function(displayindex: number): {FullscreenMode}
 		getIcon: function(): image.ImageData
 		getMode: function(): number, number, WindowSetting
 		getPosition: function(): number, number, number
@@ -2375,7 +2441,7 @@ global type love = record
 		setFullscreen: function(fullscreen: boolean, fstype: FullscreenType): boolean
 		setIcon: function(imagedata: image.ImageData): boolean
 		setMode: function(width: number, height: number, flags: WindowSetting): boolean
-		setPosition: function(x: number, y: number, display: number)
+		setPosition: function(x: number, y: number, displayindex: number)
 		setTitle: function(title: string)
 		setVSync: function(vsync: number)
 		showMessageBox: function(title: string, message: string, type: MessageBoxType, attachtowindow: boolean): boolean
