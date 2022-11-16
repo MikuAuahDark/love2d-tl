@@ -97,8 +97,6 @@ global type love = record
 	keypressed: function(key: keyboard.KeyConstant, scancode: keyboard.Scancode, isrepeat: boolean)
 	keypressed: function(key: keyboard.KeyConstant, isrepeat: boolean)
 	keyreleased: function(key: keyboard.KeyConstant, scancode: keyboard.Scancode)
-arg
-unfilteredArg
 	load: function(arg: {string}, unfilteredArg: {string})
 	lowmemory: function()
 	mousefocus: function(focus: boolean)
@@ -178,7 +176,6 @@ unfilteredArg
 
 		type Source = record
 			clone: function(self: Source): Source
-effects
 			getActiveEffects: function(self: Source): {string}
 			getAirAbsorption: function(self: Source): number
 			getAttenuationDistances: function(self: Source): number, number
@@ -230,7 +227,6 @@ effects
 			lowgain: number
 		end
 
-effects
 		getActiveEffects: function(): {string}
 		getActiveSourceCount: function(): number
 		getDistanceModel: function(): DistanceModel
@@ -239,7 +235,6 @@ effects
 		getMaxSourceEffects: function(): number
 		getOrientation: function(): number, number
 		getPosition: function(): number, number, number
-devices
 		getRecordingDevices: function(): {RecordingDevice}
 		getSourceCount: function(): number
 		getVelocity: function(): number, number, number
@@ -251,13 +246,10 @@ devices
 		newSource: function(decoder: sound.Decoder, type: SourceType): Source
 		newSource: function(data: filesystem.FileData, type: SourceType): Source
 		newSource: function(data: sound.SoundData): Source
-Sources
 		pause: function(): {Source}
 		pause: function(source: Source, ...: Source)
-sources
 		pause: function(sources: {Source})
 		play: function(source: Source)
-sources
 		play: function(sources: {Source})
 		play: function(...: Source)
 		setDistanceModel: function(model: DistanceModel)
@@ -272,7 +264,6 @@ sources
 		stop: function()
 		stop: function(source: Source)
 		stop: function(...: Source)
-sources
 		stop: function(sources: {Source})
 
 	end
@@ -401,7 +392,6 @@ sources
 		createDirectory: function(name: string): boolean
 		getAppdataDirectory: function(): string
 		getCRequirePath: function(): string
-files
 		getDirectoryItems: function(dir: string): {string}
 		getDirectoryItems: function(dir: string, callback: function(filename: string)): {string}
 		getIdentity: function(): string
@@ -698,7 +688,6 @@ files
 		end
 
 		type Image = record
-flags
 			getFlags: function(self: Image): {ImageFlag}
 			isCompressed: function(self: Image): boolean
 			replacePixels: function(self: Image, data: image.ImageData, slice: number, mipmap: number, x: number, y: number, reloadmipmaps: boolean)
@@ -718,7 +707,6 @@ flags
 			getVertexAttribute: function(self: Mesh, vertexindex: number, attributeindex: number): number, number, number...
 			getVertexCount: function(self: Mesh): number
 			getVertexFormat: function(self: Mesh): {{number|string}}
-map
 			getVertexMap: function(self: Mesh): {number}
 			isAttributeEnabled: function(self: Mesh, name: string): boolean
 			setAttributeEnabled: function(self: Mesh, name: string, enable: boolean)
@@ -728,13 +716,10 @@ map
 			setTexture: function(self: Mesh, texture: Texture)
 			setTexture: function(self: Mesh)
 			setVertex: function(self: Mesh, index: number, attributecomponent: number, ...: number)
-vertex
 			setVertex: function(self: Mesh, index: number, vertex: {number})
 			setVertex: function(self: Mesh, index: number, x: number, y: number, u: number, v: number, r: number, g: number, b: number, a: number)
-vertex
 			setVertex: function(self: Mesh, index: number, vertex: {number})
 			setVertexAttribute: function(self: Mesh, vertexindex: number, attributeindex: number, value1: number, value2: number, ...: number)
-map
 			setVertexMap: function(self: Mesh, map: {number})
 			setVertexMap: function(self: Mesh, ...: number)
 			setVertexMap: function(self: Mesh, data: love.Data, datatype: IndexDataType)
@@ -758,7 +743,6 @@ map
 			getOffset: function(self: ParticleSystem): number, number
 			getParticleLifetime: function(self: ParticleSystem): number, number
 			getPosition: function(self: ParticleSystem): number, number
-quads
 			getQuads: function(self: ParticleSystem): {Quad}
 			getRadialAcceleration: function(self: ParticleSystem): number, number
 			getRotation: function(self: ParticleSystem): number, number
@@ -791,7 +775,6 @@ quads
 			setParticleLifetime: function(self: ParticleSystem, min: number, max: number)
 			setPosition: function(self: ParticleSystem, x: number, y: number)
 			setQuads: function(self: ParticleSystem, ...: Quad)
-quads
 			setQuads: function(self: ParticleSystem, quads: {Quad})
 			setRadialAcceleration: function(self: ParticleSystem, min: number, max: number)
 			setRelativeRotation: function(self: ParticleSystem, enable: boolean)
@@ -963,7 +946,6 @@ quads
 		clear: function(...: {number}|boolean)
 		clear: function(clearcolor: boolean, clearstencil: boolean, cleardepth: boolean)
 		discard: function(discardcolor: boolean, discardstencil: boolean)
-discardcolors
 		discard: function(discardcolors: {boolean}, discardstencil: boolean)
 		draw: function(drawable: Drawable, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
 		draw: function(texture: Texture, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
@@ -1018,7 +1000,6 @@ discardcolors
 		isGammaCorrect: function(): boolean
 		isWireframe: function(): boolean
 		line: function(...: number)
-points
 		line: function(points: {number})
 		newArrayImage: function(slices: table, settings: ImageSetting): Image
 		newCanvas: function(): Canvas
@@ -1063,7 +1044,6 @@ points
 		points: function(points: {number})
 		points: function(points: {{number}})
 		polygon: function(mode: DrawMode, ...: number)
-vertices
 		polygon: function(mode: DrawMode, vertices: {number})
 		pop: function()
 		present: function()
@@ -1099,7 +1079,6 @@ vertices
 		setCanvas: function(canvas1: Canvas, canvas2: Canvas, ...: Canvas)
 		setCanvas: function(canvas: Canvas, slice: number, mipmap: number)
 		setColor: function(red: number, green: number, blue: number, alpha: number)
-rgba
 		setColor: function(rgba: {number})
 		setColorMask: function(red: boolean, green: boolean, blue: boolean, alpha: boolean)
 		setColorMask: function()
@@ -1357,7 +1336,6 @@ rgba
 
 		getGamepadMappingString: function(guid: string): string
 		getJoystickCount: function(): number
-joysticks
 		getJoysticks: function(): {Joystick}
 		loadGamepadMappings: function(filename: string)
 		loadGamepadMappings: function(mappings: string)
@@ -1740,9 +1718,7 @@ joysticks
 			getSegment: function(self: BezierCurve, startpoint: number, endpoint: number): BezierCurve
 			insertControlPoint: function(self: BezierCurve, x: number, y: number, i: number)
 			removeControlPoint: function(self: BezierCurve, index: number)
-coordinates
 			render: function(self: BezierCurve, depth: number): {number}
-coordinates
 			renderSegment: function(self: BezierCurve, startpoint: number, endpoint: number, depth: number): {number}
 			rotate: function(self: BezierCurve, angle: number, ox: number, oy: number)
 			scale: function(self: BezierCurve, s: number, ox: number, oy: number)
@@ -1774,7 +1750,6 @@ coordinates
 			scale: function(self: Transform, sx: number, sy: number): Transform
 			setMatrix: function(self: Transform, ...: number): Transform
 			setMatrix: function(self: Transform, layout: MatrixLayout, ...: number): Transform
-matrix
 			setMatrix: function(self: Transform, layout: MatrixLayout, matrix: {number}): Transform
 			setMatrix: function(self: Transform, layout: MatrixLayout, matrix: {{number}}): Transform
 			setTransformation: function(self: Transform, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): Transform
@@ -1791,19 +1766,15 @@ matrix
 		decompress: function(compressedstring: string, format: data.CompressedDataFormat): string
 		decompress: function(data: love.Data, format: data.CompressedDataFormat): string
 		gammaToLinear: function(r: number, g: number, b: number): number, number, number
-color
 		gammaToLinear: function(color: {number}): number, number, number
 		gammaToLinear: function(c: number): number
 		getRandomSeed: function(): number, number
 		getRandomState: function(): string
-vertices
 		isConvex: function(vertices: {number}): boolean
 		isConvex: function(...: number): boolean
 		linearToGamma: function(lr: number, lg: number, lb: number): number, number, number
-color
 		linearToGamma: function(color: {number}): number, number, number
 		linearToGamma: function(lc: number): number
-vertices
 		newBezierCurve: function(vertices: {number}): BezierCurve
 		newBezierCurve: function(...: number): BezierCurve
 		newRandomGenerator: function(): RandomGenerator
@@ -1822,10 +1793,7 @@ vertices
 		setRandomSeed: function(seed: number)
 		setRandomSeed: function(low: number, high: number)
 		setRandomState: function(state: string)
-polygon
-triangles
 		triangulate: function(polygon: {number}): {number}
-triangles
 		triangulate: function(...: number): {number}
 
 	end
@@ -1910,13 +1878,10 @@ triangles
 			getAngle: function(self: Body): number
 			getAngularDamping: function(self: Body): number
 			getAngularVelocity: function(self: Body): number
-contacts
 			getContacts: function(self: Body): {Contact}
-fixtures
 			getFixtures: function(self: Body): {Fixture}
 			getGravityScale: function(self: Body): number
 			getInertia: function(self: Body): number
-joints
 			getJoints: function(self: Body): {Joint}
 			getLinearDamping: function(self: Body): number
 			getLinearVelocity: function(self: Body): number, number
@@ -2195,15 +2160,12 @@ joints
 
 		type World = record
 			destroy: function(self: World)
-bodies
 			getBodies: function(self: World): {Body}
 			getBodyCount: function(self: World): number
 			getContactCount: function(self: World): number
-contacts
 			getContacts: function(self: World): {Contact}
 			getGravity: function(self: World): number, number
 			getJointCount: function(self: World): number
-joints
 			getJoints: function(self: World): {Joint}
 			isDestroyed: function(self: World): boolean
 			isLocked: function(self: World): boolean
@@ -2220,7 +2182,6 @@ joints
 		getMeter: function(): number
 		newBody: function(world: World, x: number, y: number, type: BodyType): Body
 		newChainShape: function(loop: boolean, ...: number): ChainShape
-points
 		newChainShape: function(loop: boolean, points: {number}): ChainShape
 		newCircleShape: function(radius: number): CircleShape
 		newCircleShape: function(x: number, y: number, radius: number): CircleShape
@@ -2234,7 +2195,6 @@ points
 		newMotorJoint: function(body1: Body, body2: Body, correctionFactor: number, collideConnected: boolean): MotorJoint
 		newMouseJoint: function(body: Body, x: number, y: number): MouseJoint
 		newPolygonShape: function(...: number): PolygonShape
-vertices
 		newPolygonShape: function(vertices: {number}): PolygonShape
 		newPrismaticJoint: function(body1: Body, body2: Body, x: number, y: number, ax: number, ay: number, collideConnected: boolean): PrismaticJoint
 		newPrismaticJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, ax: number, ay: number, collideConnected: boolean): PrismaticJoint
@@ -2345,7 +2305,6 @@ vertices
 	type touch = record
 		getPosition: function(id: any): number, number
 		getPressure: function(id: any): number
-touches
 		getTouches: function(): {any}
 
 	end
@@ -2417,7 +2376,6 @@ touches
 		getDisplayName: function(displayindex: number): string
 		getDisplayOrientation: function(displayindex: number): DisplayOrientation
 		getFullscreen: function(): boolean, FullscreenType
-modes
 		getFullscreenModes: function(displayindex: number): {FullscreenMode}
 		getIcon: function(): image.ImageData
 		getMode: function(): number, number, WindowSetting
