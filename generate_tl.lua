@@ -34,22 +34,26 @@ api.modules[4].functions[8].variants[3].returns[1].typename = "FileInfo"
 -- Override Mesh:getVertexFormat
 overrides["graphics.Mesh:getVertexFormat[1]"] = "getVertexFormat: function(self: Mesh): {{number|string}}"
 
+-- Define font.getWrap table return type record
+assert(api.modules[6].types[3].functions[10].name == "getWrap")
+api.modules[6].types[3].functions[10].variants[1].returns[2].typename = "Text"
+
 -- Define graphics.getStats table return type record
-assert(api.modules[6].functions[37].name == "getStats")
-api.modules[6].functions[37].variants[1].returns[1].typename = "GraphicsStats"
-api.modules[6].functions[37].variants[2].returns[1].typename = "GraphicsStats"
+assert(api.modules[6].functions[38].name == "getStats")
+api.modules[6].functions[38].variants[1].returns[1].typename = "GraphicsStats"
+api.modules[6].functions[38].variants[2].returns[1].typename = "GraphicsStats"
 
 -- Define window.getMode table return type record
-assert(api.modules[19].name == "window" and api.modules[19].functions[9].name == "getMode")
-api.modules[19].functions[9].variants[1].returns[3].typename = "WindowSetting"
+assert(api.modules[19].name == "window" and api.modules[19].functions[11].name == "getMode")
+api.modules[19].functions[11].variants[1].returns[3].typename = "WindowSetting"
 
 -- Set window.setMode table flags type record
-assert(api.modules[19].functions[28].name == "setMode")
-api.modules[19].functions[28].variants[1].arguments[3].typename = "WindowSetting"
+assert(api.modules[19].functions[30].name == "setMode")
+api.modules[19].functions[30].variants[1].arguments[3].typename = "WindowSetting"
 
 -- Set window.updateMode table flags type record
-assert(api.modules[19].functions[34].name == "updateMode")
-api.modules[19].functions[34].variants[1].arguments[3].typename = "WindowSetting"
+assert(api.modules[19].functions[36].name == "updateMode")
+api.modules[19].functions[36].variants[1].arguments[3].typename = "WindowSetting"
 
 -- Override love.run
 overrides["love.run[1]"] = "run: function(): function(): string|number"
@@ -90,6 +94,14 @@ assert(api.modules[6].types[5].functions[20].name =="setVertices")
 overrides["graphics.Mesh:setVertices[1]"] = "setVertices: function(self: Mesh, vertices: {{number}}, startvertex: number)"
 api.modules[6].types[5].functions[20].variants[3] = nil
 
+-- override graphics.ParticleSystem:setColors second variant
+assert(api.modules[6].types[6].functions[35].name == "setColors")
+overrides["graphics.ParticleSystem:setColors[2]"] = "setColors: function(self: ParticleSystem, rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})"
+
+-- override graphics.setBackgroundColor second variant
+assert(api.modules[6].functions[77].name == "setBackgroundColor")
+overrides["graphics.setBackgroundColor[2]"] = "setBackgroundColor: function(rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})"
+
 -- Override Text:add 2nd variant
 assert(api.modules[6].types[10].name == "Text")
 overrides["graphics.Text:add[2]"] = "add: function(self: Text, coloredtext: {table|string}, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number"
@@ -104,38 +116,40 @@ overrides["graphics.Text:set[2]"] = "set: function(self: Text, coloredtext: {tab
 overrides["graphics.Text:setf[2]"] = "setf: function(self: Text, coloredtext: {table|string}, wraplimit: number, alignmode: AlignMode)"
 
 -- love.graphics.newArrayImage modification
-assert(api.modules[6].functions[49].name == "newArrayImage")
-api.modules[6].functions[49].variants[1].arguments[1].literal = true
-api.modules[6].functions[49].variants[1].arguments[2].typename = "ImageSetting"
+assert(api.modules[6].functions[50].name == "newArrayImage")
+api.modules[6].functions[50].variants[1].arguments[1].literal = true
+api.modules[6].functions[50].variants[1].arguments[2].typename = "ImageSetting"
 
 -- love.graphics.newCanvas modification
-assert(api.modules[6].functions[50].name == "newCanvas")
-api.modules[6].functions[50].variants[3].arguments[3].typename = "CanvasSetting"
-api.modules[6].functions[50].variants[4].arguments[4].typename = "CanvasSetting"
+assert(api.modules[6].functions[51].name == "newCanvas")
+api.modules[6].functions[51].variants[3].arguments[3].typename = "CanvasSetting"
+api.modules[6].functions[51].variants[4].arguments[4].typename = "CanvasSetting"
 
 -- Define love.graphics.newCubeImage table type argument
-assert(api.modules[6].functions[51].name == "newCubeImage")
-api.modules[6].functions[51].variants[1].arguments[2].typename = "ImageSetting"
-api.modules[6].functions[51].variants[2].arguments[1].literal = true
-api.modules[6].functions[51].variants[2].arguments[2].typename = "ImageSetting"
+assert(api.modules[6].functions[52].name == "newCubeImage")
+api.modules[6].functions[52].variants[1].arguments[2].typename = "ImageSetting"
+api.modules[6].functions[52].variants[2].arguments[1].literal = true
+api.modules[6].functions[52].variants[2].arguments[2].typename = "ImageSetting"
 
 -- Define love.graphics.newImage table type argument
-assert(api.modules[6].functions[53].name == "newImage")
-api.modules[6].functions[53].variants[4].arguments[2].typename = "ImageSetting"
-
+assert(api.modules[6].functions[54].name == "newImage")
+api.modules[6].functions[54].variants[4].arguments[2].typename = "ImageSetting"
+api.modules[6].functions[54].variants[1].arguments[2].typename = "ImageSetting"
+api.modules[6].functions[54].variants[2].arguments[2].typename = "ImageSetting"
+api.modules[6].functions[54].variants[3].arguments[2].typename = "ImageSetting"
 -- Override love.graphics.newMesh 1st, 3rd & 4th variant
 overrides["graphics.newMesh[1]"] = "newMesh: function(vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
 overrides["graphics.newMesh[3]"] = "newMesh: function(vertexformat: {{number|string}}, vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
 overrides["graphics.newMesh[4]"] = "newMesh: function(vertexformat: {{number|string}}, vertexcount: number, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
 
 -- Define love.graphics.newVideo table type argument
-assert(api.modules[6].functions[61].name == "newVideo")
-api.modules[6].functions[61].variants[3].arguments[2].typename = "VideoSetting"
+assert(api.modules[6].functions[62].name == "newVideo")
+api.modules[6].functions[62].variants[3].arguments[2].typename = "VideoSetting"
 
 -- Define love.graphics.newVolumeImage table type name
-assert(api.modules[6].functions[62].name == "newVolumeImage")
-api.modules[6].functions[62].variants[1].arguments[1].literal = true
-api.modules[6].functions[62].variants[1].arguments[2].type = "ImageSetting"
+assert(api.modules[6].functions[63].name == "newVolumeImage")
+api.modules[6].functions[63].variants[1].arguments[1].literal = true
+api.modules[6].functions[63].variants[1].arguments[2].type = "ImageSetting"
 
 -- Override love.graphics.points 2nd & 3rd variant
 overrides["graphics.points[2]"] = "points: function(points: {number})"
@@ -147,20 +161,20 @@ overrides["graphics.print[4]"] = "print: function(coloredtext: {table|string}, t
 overrides["graphics.print[6]"] = "print: function(coloredtext: {table|string}, font: Font, transform: math.Transform)"
 
 -- Add 7th love.graphics.print variant
-assert(api.modules[6].functions[68].name == "print")
-api.modules[6].functions[68].variants[7] = {
+assert(api.modules[6].functions[69].name == "print")
+api.modules[6].functions[69].variants[7] = {
 	arguments = {
-		api.modules[6].functions[68].variants[1].arguments[1],
-		api.modules[6].functions[68].variants[6].arguments[2],
-		api.modules[6].functions[68].variants[1].arguments[2],
-		api.modules[6].functions[68].variants[1].arguments[3],
-		api.modules[6].functions[68].variants[1].arguments[4],
-		api.modules[6].functions[68].variants[1].arguments[5],
-		api.modules[6].functions[68].variants[1].arguments[6],
-		api.modules[6].functions[68].variants[1].arguments[7],
-		api.modules[6].functions[68].variants[1].arguments[8],
-		api.modules[6].functions[68].variants[1].arguments[9],
-		api.modules[6].functions[68].variants[1].arguments[10]
+		api.modules[6].functions[69].variants[1].arguments[1],
+		api.modules[6].functions[69].variants[6].arguments[2],
+		api.modules[6].functions[69].variants[1].arguments[2],
+		api.modules[6].functions[69].variants[1].arguments[3],
+		api.modules[6].functions[69].variants[1].arguments[4],
+		api.modules[6].functions[69].variants[1].arguments[5],
+		api.modules[6].functions[69].variants[1].arguments[6],
+		api.modules[6].functions[69].variants[1].arguments[7],
+		api.modules[6].functions[69].variants[1].arguments[8],
+		api.modules[6].functions[69].variants[1].arguments[9],
+		api.modules[6].functions[69].variants[1].arguments[10]
 	}
 }
 
@@ -246,8 +260,8 @@ overrides["filesystem.read[2]"] = "read: function(container: data.ContainerType,
 overrides["graphics.Canvas:renderTo[1]"] = "renderTo: function(func: function())"
 
 -- Font:getWrap table return type is string
-assert(api.modules[6].types[3].name == "Font" and api.modules[6].types[3].functions[9].name == "getWrap")
-api.modules[6].types[3].functions[9].variants[1].returns[2].valuetype = "string"
+-- assert(api.modules[6].types[3].name == "Font" and api.modules[6].types[3].functions[9].name == "getWrap")
+-- api.modules[6].types[3].functions[9].variants[1].returns[2].valuetype = "string"
 
 -- Add ImageFlag enum
 api.modules[6].enums[#api.modules[6].enums + 1] = {
@@ -328,30 +342,30 @@ api.modules[6].functions[25].variants[1].returns[1].keytype = "PixelFormat"
 api.modules[6].functions[25].variants[1].returns[1].valuetype = "boolean"
 
 -- love.graphics.getStats modification
-assert(api.modules[6].functions[37].name == "getStats")
-api.modules[6].functions[37].variants[1].returns[1].typename = "Stats"
-api.modules[6].functions[37].variants[2].arguments[1].literal = true
-api.modules[6].functions[37].variants[2].returns[1].typename = "Stats"
+assert(api.modules[6].functions[38].name == "getStats")
+api.modules[6].functions[38].variants[1].returns[1].typename = "Stats"
+api.modules[6].functions[38].variants[2].arguments[1].literal = true
+api.modules[6].functions[38].variants[2].returns[1].typename = "Stats"
 
 -- love.graphics.getSupported return table type
-assert(api.modules[6].functions[39].name == "getSupported")
-api.modules[6].functions[39].variants[1].returns[1].keytype = "GraphicsFeature"
-api.modules[6].functions[39].variants[1].returns[1].valuetype = "boolean"
-
--- love.graphics.getSystemLimits return table type
-assert(api.modules[6].functions[40].name == "getSystemLimits")
-api.modules[6].functions[40].variants[1].returns[1].keytype = "GraphicsLimit"
+assert(api.modules[6].functions[40].name == "getSupported")
+api.modules[6].functions[40].variants[1].returns[1].keytype = "GraphicsFeature"
 api.modules[6].functions[40].variants[1].returns[1].valuetype = "boolean"
 
--- love.graphics.getTextureTypes return table type
-assert(api.modules[6].functions[41].name == "getTextureTypes")
-api.modules[6].functions[41].variants[1].returns[1].keytype = "TextureType"
+-- love.graphics.getSystemLimits return table type
+assert(api.modules[6].functions[41].name == "getSystemLimits")
+api.modules[6].functions[41].variants[1].returns[1].keytype = "GraphicsLimit"
 api.modules[6].functions[41].variants[1].returns[1].valuetype = "boolean"
 
+-- love.graphics.getTextureTypes return table type
+assert(api.modules[6].functions[42].name == "getTextureTypes")
+api.modules[6].functions[42].variants[1].returns[1].keytype = "TextureType"
+api.modules[6].functions[42].variants[1].returns[1].valuetype = "boolean"
+
 -- love.graphics.line 2nd variant argument table type
-assert(api.modules[6].functions[48].name == "line")
-api.modules[6].functions[48].variants[1].arguments[1].name = "..."
-api.modules[6].functions[48].variants[2].arguments[1].valuetype = "number"
+assert(api.modules[6].functions[49].name == "line")
+api.modules[6].functions[49].variants[1].arguments[1].name = "..."
+api.modules[6].functions[49].variants[2].arguments[1].valuetype = "number"
 
 -- Rasterizer:hasGlyphs override
 overrides["font.Rasterizer:hasGlyphs[1]"] = "hasGlyphs: function(self: Rasterizer, ...: number|string): boolean"
@@ -360,12 +374,12 @@ overrides["font.Rasterizer:hasGlyphs[1]"] = "hasGlyphs: function(self: Rasterize
 overrides["graphics.newShader[3]"] = ""
 
 -- love.graphics.polygon 2nd variant table argument type
-assert(api.modules[6].functions[65].name == "polygon")
-api.modules[6].functions[65].variants[2].arguments[2].valuetype = "number"
+assert(api.modules[6].functions[66].name == "polygon")
+api.modules[6].functions[66].variants[2].arguments[2].valuetype = "number"
 
 -- love.graphics.setColor 2nd variant table argument type
-assert(api.modules[6].functions[79].name == "setColor")
-api.modules[6].functions[79].variants[2].arguments[1].valuetype = "number"
+assert(api.modules[6].functions[80].name == "setColor")
+api.modules[6].functions[80].variants[2].arguments[1].valuetype = "number"
 
 -- Override love.graphics.stencil
 overrides["graphics.stencil[1]"] = "stencil: function(stencilfunction: function(), action: StencilAction, value: number, keepvalues: boolean)"
@@ -418,8 +432,8 @@ api.modules[10].functions[18].variants[2].arguments[1].name = "..."
 api.modules[10].functions[18].variants[2].returns[1].valuetype = "number"
 
 -- love.mouse.isDown modifications
-assert(api.modules[11].name == "mouse" and api.modules[11].functions[9].name == "isDown")
-api.modules[11].functions[9].variants[1].arguments[1].name = "..."
+assert(api.modules[11].name == "mouse" and api.modules[11].functions[8].name == "isDown")
+api.modules[11].functions[8].variants[1].arguments[1].name = "..."
 overrides["mouse.isDown[2]"] = ""
 
 -- Body:getContacts table return type
@@ -480,8 +494,8 @@ api.modules[19].types[#api.modules[19].types + 1] = {
 }
 
 -- love.window.getFullscreenModes return table type
-assert(api.modules[19].functions[7].name == "getFullscreenModes")
-api.modules[19].functions[7].variants[1].returns[1].valuetype = "FullscreenMode"
+assert(api.modules[19].functions[9].name == "getFullscreenModes")
+api.modules[19].functions[9].variants[1].returns[1].valuetype = "FullscreenMode"
 
 -- love.event.quit override
 overrides["event.quit[1]"] = "quit: function(exitstatus: number|string)"

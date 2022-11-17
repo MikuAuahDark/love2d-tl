@@ -1,5 +1,5 @@
 -- generated with generate_tl.lua
--- LÖVE 11.3
+-- LÖVE 11.4
 
 global type love = record
 	type Data = record
@@ -74,6 +74,8 @@ global type love = record
 
 	getVersion: function(): number, number, number, string
 	hasDeprecationOutput: function(): boolean
+	isVersionCompatible: function(version: string): boolean
+	isVersionCompatible: function(major: number, minor: number, revision: number): boolean
 	setDeprecationOutput: function(enable: boolean)
 
 	conf: function(t: Configuration)
@@ -161,7 +163,6 @@ global type love = record
 		end
 
 		type RecordingDevice = record
-			getBitDepth: function(self: RecordingDevice): number
 			getBitDepth: function(self: RecordingDevice): number
 			getChannelCount: function(self: RecordingDevice): number
 			getData: function(self: RecordingDevice): sound.SoundData
@@ -414,6 +415,7 @@ global type love = record
 		newFile: function(filename: string): File
 		newFile: function(filename: string, mode: FileMode): File, string
 		newFileData: function(contents: string, name: string): FileData
+		newFileData: function(originaldata: love.Data, name: string): FileData
 		newFileData: function(filepath: string): FileData, string
 		read: function(name: string, size: number): string, number|string
 		read: function(container: data.ContainerType, name: string, size: number): string|FileData, number|string
@@ -672,9 +674,11 @@ global type love = record
 			getDescent: function(self: Font): number
 			getFilter: function(self: Font): FilterMode, FilterMode, number
 			getHeight: function(self: Font): number
+			getKerning: function(self: Font, leftchar: string, rightchar: string): number
+			getKerning: function(self: Font, leftglyph: number, rightglyph: number): number
 			getLineHeight: function(self: Font): number
 			getWidth: function(self: Font, text: string): number
-			getWrap: function(self: Font, text: string, wraplimit: number): number, {string}
+			getWrap: function(self: Font, text: string, wraplimit: number): number, Text
 			hasGlyphs: function(self: Font, text: string): boolean
 			hasGlyphs: function(self: Font, character1: string, character2: string): boolean
 			hasGlyphs: function(self: Font, codepoint1: number, codepoint2: number): boolean
@@ -759,6 +763,7 @@ global type love = record
 			reset: function(self: ParticleSystem)
 			setBufferSize: function(self: ParticleSystem, size: number)
 			setColors: function(self: ParticleSystem, r1: number, g1: number, b1: number, a1: number, r2: number, g2: number, b2: number, a2: number, r8: number, g8: number, b8: number, a8: number)
+			setColors: function(self: ParticleSystem, rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})
 			setDirection: function(self: ParticleSystem, direction: number)
 			setEmissionArea: function(self: ParticleSystem, distribution: AreaSpreadDistribution, dx: number, dy: number, angle: number, directionRelativeToCenter: boolean)
 			setEmissionRate: function(self: ParticleSystem, rate: number)
@@ -804,6 +809,7 @@ global type love = record
 			send: function(self: Shader, name: string, matrixLayout: math.MatrixLayout, ...: {{number}})
 			send: function(self: Shader, name: string, data: love.Data, offset: number, size: number)
 			send: function(self: Shader, name: string, data: love.Data, matrixlayout: math.MatrixLayout, offset: number, size: number)
+			send: function(self: Shader, name: string, matrixlayout: math.MatrixLayout, data: love.Data, offset: number, size: number)
 			sendColor: function(self: Shader, name: string, ...: table)
 		end
 
@@ -973,6 +979,7 @@ global type love = record
 		getLineStyle: function(): LineStyle
 		getLineWidth: function(): number
 		getMeshCullMode: function(): CullMode
+		getPixelDimenions: function(): number, number
 		getPixelHeight: function(): number
 		getPixelWidth: function(): number
 		getPointSize: function(): number
@@ -1005,10 +1012,10 @@ global type love = record
 		newFont: function(filename: string, size: number, hinting: font.HintingMode, dpiscale: number): Font
 		newFont: function(filename: string, imagefilename: string): Font
 		newFont: function(size: number, hinting: font.HintingMode, dpiscale: number): Font
-		newImage: function(filename: string): Image
-		newImage: function(imageData: image.ImageData): Image
-		newImage: function(compressedImageData: image.CompressedImageData): Image
-		newImage: function(filename: string, flags: ImageSetting): Image
+		newImage: function(filename: string, settings: ImageSetting): Image
+		newImage: function(fileData: filesystem.FileData, settings: ImageSetting): Image
+		newImage: function(imageData: image.ImageData, settings: ImageSetting): Image
+		newImage: function(compressedImageData: image.CompressedImageData, settings: ImageSetting): Image
 		newImageFont: function(filename: string, glyphs: string): Font
 		newImageFont: function(imageData: image.ImageData, glyphs: string): Font
 		newImageFont: function(filename: string, glyphs: string, extraspacing: number): Font
@@ -1064,8 +1071,7 @@ global type love = record
 		rotate: function(angle: number)
 		scale: function(sx: number, sy: number)
 		setBackgroundColor: function(red: number, green: number, blue: number, alpha: number)
-		setBackgroundColor: function()
-		setBackgroundColor: function()
+		setBackgroundColor: function(rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})
 		setBlendMode: function(mode: BlendMode)
 		setBlendMode: function(mode: BlendMode, alphamode: BlendAlphaMode)
 		setCanvas: function(canvas: Canvas, mipmap: number)
@@ -1242,6 +1248,7 @@ global type love = record
 			mapPixel: function(self: ImageData, pixelFunction: function(x: number, y: number, r: number, g: number, b: number, a: number): (number, number, number, number), x: number, y: number, width: number, height: number)
 			paste: function(self: ImageData, source: ImageData, dx: number, dy: number, sx: number, sy: number, sw: number, sh: number)
 			setPixel: function(self: ImageData, x: number, y: number, r: number, g: number, b: number, a: number)
+			getFormat: function(self: ImageData): PixelFormat
 		end
 
 		isCompressed: function(filename: string): boolean
@@ -1686,6 +1693,7 @@ global type love = record
 		getKeyFromScancode: function(scancode: Scancode): KeyConstant
 		getScancodeFromKey: function(key: KeyConstant): Scancode
 		hasKeyRepeat: function(): boolean
+		hasScreenKeyboard: function(): boolean
 		hasTextInput: function(): boolean
 		isDown: function(key: KeyConstant): boolean
 		isDown: function(key: KeyConstant, ...: KeyConstant): boolean
@@ -1816,7 +1824,6 @@ global type love = record
 		getSystemCursor: function(ctype: CursorType): Cursor
 		getX: function(): number
 		getY: function(): number
-		hasCursor: function(): boolean
 		isCursorSupported: function(): boolean
 		isDown: function(...: number): boolean
 		isGrabbed: function(): boolean
@@ -1882,6 +1889,7 @@ global type love = record
 			getLinearVelocityFromWorldPoint: function(self: Body, x: number, y: number): number, number
 			getLocalCenter: function(self: Body): number, number
 			getLocalPoint: function(self: Body, worldX: number, worldY: number): number, number
+			getLocalPoints: function(self: Body, x1: number, y1: number, x2: number, y2: number, ...: number): number, number, number, number, number...
 			getLocalVector: function(self: Body, worldX: number, worldY: number): number, number
 			getMass: function(self: Body): number
 			getMassData: function(self: Body): number, number, number, number
@@ -1945,6 +1953,7 @@ global type love = record
 		end
 
 		type Contact = record
+			getChildren: function(self: Contact): number, number
 			getFixtures: function(self: Contact): Fixture, Fixture
 			getFriction: function(self: Contact): number
 			getNormal: function(self: Contact): number, number
@@ -2063,6 +2072,7 @@ global type love = record
 			getMaxMotorForce: function(self: PrismaticJoint): number
 			getMotorForce: function(self: PrismaticJoint, invdt: number): number
 			getMotorSpeed: function(self: PrismaticJoint): number
+			getReferenceAngle: function(self: PrismaticJoint): number
 			getUpperLimit: function(self: PrismaticJoint): number
 			isMotorEnabled: function(self: PrismaticJoint): boolean
 			setLimits: function(self: PrismaticJoint, lower: number, upper: number)
@@ -2095,6 +2105,7 @@ global type love = record
 			getMaxMotorTorque: function(self: RevoluteJoint): number
 			getMotorSpeed: function(self: RevoluteJoint): number
 			getMotorTorque: function(self: RevoluteJoint): number
+			getReferenceAngle: function(self: RevoluteJoint): number
 			getUpperLimit: function(self: RevoluteJoint): number
 			hasLimitsEnabled: function(self: RevoluteJoint): boolean
 			isMotorEnabled: function(self: RevoluteJoint): boolean
@@ -2125,6 +2136,7 @@ global type love = record
 		type WeldJoint = record
 			getDampingRatio: function(self: WeldJoint): number
 			getFrequency: function(self: WeldJoint): number
+			getReferenceAngle: function(self: WeldJoint): number
 			setDampingRatio: function(self: WeldJoint, ratio: number)
 			setFrequency: function(self: WeldJoint, freq: number)
 		end
@@ -2138,6 +2150,7 @@ global type love = record
 			getMotorTorque: function(self: WheelJoint, invdt: number): number
 			getSpringDampingRatio: function(self: WheelJoint): number
 			getSpringFrequency: function(self: WheelJoint): number
+			isMotorEnabled: function(self: WheelJoint): boolean
 			setMaxMotorTorque: function(self: WheelJoint, maxTorque: number)
 			setMotorEnabled: function(self: WheelJoint, enable: boolean)
 			setMotorSpeed: function(self: WheelJoint, speed: number)
@@ -2204,10 +2217,12 @@ global type love = record
 	type sound = record
 		type Decoder = record
 			clone: function(self: Decoder): Decoder
+			decode: function(self: Decoder): SoundData
 			getBitDepth: function(self: Decoder): number
 			getChannelCount: function(self: Decoder): number
 			getDuration: function(self: Decoder): number
 			getSampleRate: function(self: Decoder): number
+			seek: function(self: Decoder, offset: number)
 		end
 
 		type SoundData = record
@@ -2295,6 +2310,13 @@ global type love = record
 	end
 	type video = record
 		type VideoStream = record
+			getFilename: function(self: VideoStream): string
+			isPlaying: function(self: VideoStream): boolean
+			pause: function(self: VideoStream)
+			play: function(self: VideoStream)
+			rewind: function(self: VideoStream)
+			seek: function(self: VideoStream, offset: number)
+			tell: function(self: VideoStream): number
 		end
 
 		newVideoStream: function(filename: string): VideoStream
@@ -2349,10 +2371,12 @@ global type love = record
 		fromPixels: function(pixelvalue: number): number
 		fromPixels: function(px: number, py: number): number, number
 		getDPIScale: function(): number
+		getDesktopDimensions: function(displayindex: number): string, string
+		getDisplayCount: function(): number
 		getDisplayName: function(displayindex: number): string
-		getDisplayOrientation: function(index: number): DisplayOrientation
+		getDisplayOrientation: function(displayindex: number): DisplayOrientation
 		getFullscreen: function(): boolean, FullscreenType
-		getFullscreenModes: function(display: number): {FullscreenMode}
+		getFullscreenModes: function(displayindex: number): {FullscreenMode}
 		getIcon: function(): image.ImageData
 		getMode: function(): number, number, WindowSetting
 		getPosition: function(): number, number, number
@@ -2375,7 +2399,7 @@ global type love = record
 		setFullscreen: function(fullscreen: boolean, fstype: FullscreenType): boolean
 		setIcon: function(imagedata: image.ImageData): boolean
 		setMode: function(width: number, height: number, flags: WindowSetting): boolean
-		setPosition: function(x: number, y: number, display: number)
+		setPosition: function(x: number, y: number, displayindex: number)
 		setTitle: function(title: string)
 		setVSync: function(vsync: number)
 		showMessageBox: function(title: string, message: string, type: MessageBoxType, attachtowindow: boolean): boolean
