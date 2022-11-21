@@ -853,6 +853,20 @@ global type love = record
 			tell: function(self: Video): number
 		end
 
+		type RenderTargetSetup = record
+			{Canvas}
+			mipmap: number
+			layer: number
+			face: number
+		end
+
+		type CanvasSetup = record
+			{RenderTargetSetup}
+			stencil: boolean
+			depth: boolean
+			depthstencil: RenderTargetSetup
+		end
+
 		type Stats = record
 			drawcalls: number
 			canvasswitches: number
@@ -1029,6 +1043,7 @@ global type love = record
 		setCanvas: function()
 		setCanvas: function(canvas1: Canvas, canvas2: Canvas, ...: Canvas)
 		setCanvas: function(canvas: Canvas, slice: number, mipmap: number)
+		setCanvas: function(setup: CanvasSetup)
 		setColor: function(red: number, green: number, blue: number, alpha: number)
 		setColor: function(rgba: {number})
 		setColorMask: function(red: boolean, green: boolean, blue: boolean, alpha: boolean)

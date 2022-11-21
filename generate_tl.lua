@@ -20,13 +20,15 @@
 ---@field public type string
 ---@field public table? LoveAPIFunctionVariable[]
 ---@field package typename? string generate_tl.lua-specific
+---@field package arraytype? string generate_tl.lua-specific
 ---@field package keytype? string generate_tl.lua-specific
 ---@field package valuetype? string generate_tl.lua-specific
 
 ---@class LoveAPIType
 ---@field public name string
----@field public supertypes? string[]
----@field public fields? LoveAPIFunctionVariable[] generate_tl.lua-specific
+---@field package supertypes? string[]
+---@field package fields? LoveAPIFunctionVariable[] generate_tl.lua-specific
+---@field package arraytype? string generate_tl.lua-specific
 ---@field public functions LoveAPIFunction[]
 
 ---@class LoveAPIModule
@@ -378,11 +380,63 @@ overrides["graphics.printf[8]"] = "printf: function(coloredtext: {table|string},
 -- override love.graphics.setBackgroundColor second variant
 overrides["graphics.setBackgroundColor[2]"] = "setBackgroundColor: function(rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})"
 
+-- love.graphics.setCanvas 5th variant table type
+local setCanvas = findAPI("graphics", "setCanvas")
+setCanvas.variants[5].arguments[1].typename = "CanvasSetup"
+-- Remove number and ellipsis variant
+local setCanvasTable = setCanvas.variants[5].arguments[1].table
+for i = #setCanvasTable, 1, -1 do
+	if setCanvasTable[i].name == "..." or tonumber(setCanvasTable[i].name) ~= nil then
+		table.remove(setCanvasTable, i)
+	end
+end
+
 -- love.graphics.setColor 2nd variant table argument type
 findAPI("graphics", "setColor").variants[2].arguments[1].valuetype = "number"
 
 -- Override love.graphics.stencil
 overrides["graphics.stencil[1]"] = "stencil: function(stencilfunction: function(), action: StencilAction, value: number, keepvalues: boolean)"
+
+-- Create new RenderTargetSetup type for 5th variant of love.graphics.setCanvas
+local graphics = findAPI("graphics")
+graphics.types[#graphics.types + 1] = {
+	name = "RenderTargetSetup",
+	arraytype = "Canvas",
+	fields = {
+		{
+			name = "mipmap",
+			type = "number"
+		},
+		{
+			name = "layer",
+			type = "number"
+		},
+		{
+			name = "face",
+			type = "number"
+		},
+	}
+}
+
+-- Create new CanvasSetup type for 5th variant of love.graphics.setCanvas
+graphics.types[#graphics.types + 1] = {
+	name = "CanvasSetup",
+	arraytype = "RenderTargetSetup",
+	fields = {
+		{
+			name = "stencil",
+			type = "boolean"
+		},
+		{
+			name = "depth",
+			type = "boolean"
+		},
+		{
+			name = "depthstencil",
+			type = "RenderTargetSetup"
+		},
+	}
+}
 
 -- Override Canvas:renderTo
 overrides["graphics.Canvas:renderTo[1]"] = "renderTo: function(func: function())"
@@ -566,9 +620,6 @@ Window.types[#Window.types + 1] = {
 -------------------------------------
 -- Blacklisted Functions with TODO --
 -------------------------------------
-
--- FIXME: Blacklist love.graphics.setCanvas 5th variant until we have better way to describe it
-overrides["graphics.setCanvas[5]"] = ""
 
 -- FIXME: Blacklist love.audio.getEffect until we have know how the table structured
 overrides["audio.getEffect[1]"] = ""
@@ -913,19 +964,22 @@ local function writeFunction(data, level, module, object)
 end
 
 -- Write nested fields
----@param name string
----@param fields LoveAPIFunctionVariable[]
+---@param t LoveAPIType|LoveAPIFunctionVariable
 ---@param level integer
 ---@param module string
-local function writeNestedFields(name, fields, level, module)
+local function writeNestedFields(t, level, module)
 	local tab = string.rep("\t", level)
 	local tab1 = string.rep("\t", level + 1)
 
-	io.write(tab, "type ", name, " = record\n")
+	io.write(tab, "type ", t.name, " = record\n")
 
-	for _, v in ipairs(fields) do
+	if t.arraytype then
+		io.write(tab1, "{", t.arraytype, "}\n")
+	end
+
+	for _, v in ipairs(t.fields) do
 		if v.type == "table" and v.table then
-			writeNestedFields(v.name, v.table, level + 1, module)
+			writeNestedFields(v, level + 1, module)
 		else
 			io.write(tab1, v.name, ": ", getTypeName(v.type, module), "\n")
 		end
@@ -967,7 +1021,7 @@ local function startLookup(name, data, level)
 	if data.types and #data.types > 0 then
 		for _, t in ipairs(data.types) do
 			if t.fields then
-				writeNestedFields(t.name, t.fields, level, name)
+				writeNestedFields(t, level, name)
 			else
 				io.write(tab, "type ", t.name, " = record\n")
 
