@@ -1,7 +1,7 @@
 love2d-tl
 =====
 
-[![LOVE](https://img.shields.io/badge/L%C3%96VE-11.3-EA316E.svg)](http://love2d.org/)
+[![LOVE](https://img.shields.io/badge/L%C3%96VE-11.4-EA316E.svg)](http://love2d.org/)
 
 [Teal type](https://github.com/teal-language/teal-types) definition for LÖVE, an *awesome* framework you can use to make 2D games in Lua. Based on definitions provided by [love-api](https://github.com/love2d-community/love-api).
 
