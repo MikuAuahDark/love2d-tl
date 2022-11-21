@@ -24,52 +24,9 @@ global type love = record
 		accelerometerjoystick: boolean
 		externalstorage: boolean
 		gammacorrect: boolean
-		type audio = record
-			mic: boolean
-			mixwithsystem: boolean
-		end
-
-		type window = record
-			title: string
-			icon: string
-			width: number
-			height: number
-			borderless: boolean
-			resizable: boolean
-			minwidth: number
-			minheight: number
-			fullscreen: boolean
-			fullscreentype: string
-			usedpiscale: boolean
-			vsync: number
-			depth: number
-			stencil: number
-			msaa: number
-			display: number
-			highdpi: boolean
-			x: number
-			y: number
-		end
-
-		type modules = record
-			audio: boolean
-			event: boolean
-			graphics: boolean
-			image: boolean
-			joystick: boolean
-			keyboard: boolean
-			math: boolean
-			mouse: boolean
-			physics: boolean
-			sound: boolean
-			system: boolean
-			timer: boolean
-			touch: boolean
-			video: boolean
-			window: boolean
-			thread: boolean
-		end
-
+		audio: table
+		window: table
+		modules: table
 	end
 
 	getVersion: function(): number, number, number, string
@@ -221,10 +178,10 @@ global type love = record
 		end
 
 		type FilterSettings = record
-			type: FilterType
 			volume: number
 			highgain: number
 			lowgain: number
+			type: FilterType
 		end
 
 		getActiveEffects: function(): {string}
@@ -650,11 +607,6 @@ global type love = record
 			"clampzero"
 		end
 
-		type ImageFlag = enum
-			"linear"
-			"mipmaps"
-		end
-
 		type Canvas = record
 			generateMipmaps: function(self: Canvas)
 			getMSAA: function(self: Canvas): number
@@ -678,7 +630,7 @@ global type love = record
 			getKerning: function(self: Font, leftglyph: number, rightglyph: number): number
 			getLineHeight: function(self: Font): number
 			getWidth: function(self: Font, text: string): number
-			getWrap: function(self: Font, text: string, wraplimit: number): number, Text
+			getWrap: function(self: Font, text: string, wraplimit: number): number, {string}
 			hasGlyphs: function(self: Font, text: string): boolean
 			hasGlyphs: function(self: Font, character1: string, character2: string): boolean
 			hasGlyphs: function(self: Font, codepoint1: number, codepoint2: number): boolean
@@ -688,7 +640,6 @@ global type love = record
 		end
 
 		type Image = record
-			getFlags: function(self: Image): {ImageFlag}
 			isCompressed: function(self: Image): boolean
 			replacePixels: function(self: Image, data: image.ImageData, slice: number, mipmap: number, x: number, y: number, reloadmipmaps: boolean)
 		end
@@ -991,7 +942,7 @@ global type love = record
 		getStats: function(stats: table): Stats
 		getStencilTest: function(): CompareMode, number
 		getSupported: function(): {GraphicsFeature:boolean}
-		getSystemLimits: function(): {GraphicsLimit:boolean}
+		getSystemLimits: function(): {GraphicsLimit:number}
 		getTextureTypes: function(): {TextureType:boolean}
 		getWidth: function(): number
 		intersectScissor: function(x: number, y: number, width: number, height: number)
@@ -1040,7 +991,7 @@ global type love = record
 		newVideo: function(videostream: video.VideoStream, loadaudio: boolean): Video
 		newVolumeImage: function(layers: table, settings: ImageSetting): Image
 		origin: function()
-		points: function(x: number, y: number, ...: number)
+		points: function(...: number)
 		points: function(points: {number})
 		points: function(points: {{number}})
 		polygon: function(mode: DrawMode, ...: number)
@@ -2365,6 +2316,9 @@ global type love = record
 			x: number
 			y: number
 			srgb: boolean
+			stencil: boolean
+			depth: number
+			usedpiscale: boolean
 		end
 
 		close: function()
