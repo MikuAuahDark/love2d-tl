@@ -112,8 +112,60 @@ end
 -- Changes to the LÖVE API --
 -----------------------------
 
+-- Note: Manipulation should be in alphabetical order in their corresponding module.
 do
 ---@diagnostic disable: need-check-nil
+
+-- Define love.conf table type argument
+findAPI(nil, "conf").variants[1].arguments[1].typename = "Configuration"
+
+-- love.load table type arguments is string
+local load = findAPI(nil, "load")
+load.variants[1].arguments[1].valuetype = "string"
+load.variants[1].arguments[2].valuetype = "string"
+
+-- Override love.run
+overrides["love.run[1]"] = "run: function(): function(): string|number"
+
+-- love.audio.getActiveEffects table type is string
+findAPI("audio", "getActiveEffects").variants[1].returns[1].valuetype = "string"
+
+-- love.audio.getRecordingDevices return table type is RecordingDevice
+assert(api.modules[1].functions[10].name == "getRecordingDevices")
+findAPI("audio", "getRecordingDevices").variants[1].returns[1].valuetype = "RecordingDevice"
+
+-- love.audio.pause table type is Source
+local pause = findAPI("audio", "pause")
+pause.variants[1].returns[1].valuetype = "Source"
+pause.variants[3].arguments[1].valuetype = "Source"
+
+-- love.audio.play 2nd variant table argument
+local play = findAPI("audio", "play")
+play.variants[2].arguments[1].valuetype = "Source"
+play.variants[3].arguments[1].name = "..."
+
+-- love.audio.setEffect table type argument is {string:any}
+-- TODO: Is this correct?
+local setEffect = findAPI("audio", "setEffect")
+setEffect.variants[1].arguments[2].keytype = "string"
+setEffect.variants[1].arguments[2].valuetype = "any"
+
+-- Rewrite love.audio.setOrientation arguments
+findAPI("audio", "setOrientation").variants[1] = {
+	arguments = {
+		{type = "number", name = "fx"},
+		{type = "number", name = "fy"},
+		{type = "number", name = "fz"},
+		{type = "number", name = "ux"},
+		{type = "number", name = "uy"},
+		{type = "number", name = "uz"}
+	}
+}
+
+-- love.audio.stop 2nd variant table argument
+local stop = findAPI("audio", "stop")
+stop.variants[3].arguments[1].name = "..."
+stop.variants[4].arguments[1].valuetype = "Source"
 
 -- Source:getActiveEffects table type is string
 findAPI("audio", "Source:getActiveEffects").variants[1].returns[1].valuetype = "string"
@@ -126,6 +178,58 @@ getEffect.variants[1].returns[1].typename = "FilterSettings"
 -- Define Source:getFilter table return type record
 findAPI("audio", "Source:getFilter").variants[1].returns[1].typename = "FilterSettings"
 
+-- Define Source:setEffect table argument type record
+findAPI("audio", "Source:setEffect").variants[2].arguments[2].typename = "FilterSettings"
+
+-- Define Source:setFilter table argument type record
+findAPI("audio", "Source:setFilter").variants[1].arguments[1].typename = "FilterSettings"
+
+-- Override love.data.compress so it only has 1 variant
+overrides["data.compress[1]"] = "compress: function(container: ContainerType, format: CompressedDataFormat, data: string|Data, level: number): string|CompressedData"
+overrides["data.compress[2]"] = ""
+
+-- Override love.data.decode so it only has 1 variant
+overrides["data.decode[1]"] = "decode: function(container: ContainerType, format: EncodeFormat, source: string|love.Data): string|ByteData"
+overrides["data.decode[2]"] = ""
+
+-- Override love.data.decompress so it only has 2 variants
+overrides["data.decompress[1]"] = "decompress: function(container: ContainerType, compressedData: CompressedData): string|ByteData"
+overrides["data.decompress[2]"] = "decompress: function(container: ContainerType, format: CompressedDataFormat, compressed: string|ByteData): string|ByteData"
+overrides["data.decompress[3]"] = ""
+
+-- Override love.data.encode so it only has 1 variant
+overrides["data.encode[1]"] = "encode: function(container: ContainerType, format: EncodeFormat, source: string|love.Data, linelength: number): string|ByteData"
+overrides["data.encode[2]"] = ""
+
+-- Override love.data.pack
+overrides["data.pack[1]"] = "pack: function(container: ContainerType, format: string, ...: any): string|ByteData"
+
+-- Override love.data.unpack so it only has 1 variant
+overrides["data.unpack[1]"] = "unpack: function(format: string, data: string|love.Data, pos: number): any..."
+overrides["data.unpack[2]"] = ""
+
+-- Override love.event.poll
+overrides["event.poll[1]"] = "poll: function(): function(): string, any..."
+
+-- Override love.event.push
+overrides["event.push[1]"] = "push: function(n: string, ...: any)"
+
+-- Override love.event.wait
+overrides["event.wait[1]"] = "wait: function(): string, any..."
+
+-- love.event.quit override
+overrides["event.quit[1]"] = "quit: function(exitstatus: number|string)"
+overrides["event.quit[2]"] = ""
+
+-- Remove love.event.Event enum
+local event = findAPI("event")
+assert(event.enums[1].name == "Event")
+table.remove(event.enums, 1)
+
+-- love.filesystem.getDirectoryItems table return type and 2nd variant override
+findAPI("filesystem", "getDirectoryItems").variants[1].returns[1].valuetype = "string"
+overrides["filesystem.getDirectoryItems[2]"] = "getDirectoryItems: function(dir: string, callback: function(filename: string)): {string}"
+
 -- Define love.filesystem.getInfo table return type record
 local getInfo = findAPI("filesystem", "getInfo")
 getInfo.variants[1].returns[1].typename = "FileInfo"
@@ -134,75 +238,70 @@ getInfo.variants[2].returns[1].typename = "FileInfo"
 getInfo.variants[3].arguments[3].literal = true
 getInfo.variants[3].returns[1].typename = "FileInfo"
 
--- Override Mesh:getVertexFormat
-overrides["graphics.Mesh:getVertexFormat[1]"] = "getVertexFormat: function(self: Mesh): {{number|string}}"
+-- Override love.filesystem.lines
+overrides["filesystem.lines[1]"] = "lines: function(name: string): function(): string"
 
--- Define Font:getWrap table return type
-findAPI("graphics", "Font:getWrap").variants[1].returns[2].valuetype = "string"
+-- Override love.filesystem.load
+overrides["filesystem.load[1]"] = "load: function(name: string): function(...: any): any..., string"
 
--- Define graphics.getStats table return type record
+-- Override love.filesystem.read
+overrides["filesystem.read[1]"] = "read: function(name: string, size: number): string, number|string"
+overrides["filesystem.read[2]"] = "read: function(container: data.ContainerType, name: string, size: number): string|FileData, number|string"
+
+-- Override File:lines
+overrides["filesystem.File:lines[1]"] = "lines: function(self: File): function(): string"
+
+-- Override File:read 2nd variant
+overrides["filesystem.File:read[2]"] = "read: function(self: File, container: data.ContainerType, bytes: number): string|FileData"
+
+-- Rasterizer:hasGlyphs override
+overrides["font.Rasterizer:hasGlyphs[1]"] = "hasGlyphs: function(self: Rasterizer, ...: number|string): boolean"
+
+-- Override love.graphics.captureScreenshot 2nd variant
+overrides["graphics.captureScreenshot[2]"] = "captureScreenshot: function(callback: function(image: image.ImageData))"
+
+-- Override love.graphics.clear 3rd variant
+overrides["graphics.clear[3]"] = "clear: function(...: {number}|boolean)"
+
+-- love.graphics.discard 2nd variant table value type
+findAPI("graphics", "discard").variants[2].arguments[1].valuetype = "boolean"
+
+-- love.graphics.getCanvasFormats variant table return type
+local getCanvasFormats = findAPI("graphics", "getCanvasFormats")
+getCanvasFormats.variants[1].returns[1].keytype = "PixelFormat"
+getCanvasFormats.variants[1].returns[1].valuetype = "boolean"
+getCanvasFormats.variants[2].returns[1].keytype = "PixelFormat"
+getCanvasFormats.variants[2].returns[1].valuetype = "boolean"
+
+-- love.graphics.getImageFormats variant table return type
+local getImageFormats = findAPI("graphics", "getImageFormats")
+getImageFormats.variants[1].returns[1].keytype = "PixelFormat"
+getImageFormats.variants[1].returns[1].valuetype = "boolean"
+
+-- love.graphics.getSupported return table type
+local getSupported = findAPI("graphics", "getSupported")
+getSupported.variants[1].returns[1].keytype = "GraphicsFeature"
+getSupported.variants[1].returns[1].valuetype = "boolean"
+
+-- Define love.graphics.getStats table return type record
 local getStats = findAPI("graphics", "getStats")
 getStats.variants[1].returns[1].typename = "Stats"
 getStats.variants[2].returns[1].typename = "Stats"
 
--- Define window.getMode table return type record
-findAPI("window", "getMode").variants[1].returns[3].typename = "WindowSetting"
+-- love.graphics.getSystemLimits return table type
+local getSystemLimits = findAPI("graphics", "getSystemLimits")
+getSystemLimits.variants[1].returns[1].keytype = "GraphicsLimit"
+getSystemLimits.variants[1].returns[1].valuetype = "number"
 
--- Set window.setMode table flags type record
-findAPI("window", "setMode").variants[1].arguments[3].typename = "WindowSetting"
+-- love.graphics.getTextureTypes return table type
+local getTextureTypes = findAPI("graphics", "getTextureTypes")
+getTextureTypes.variants[1].returns[1].keytype = "TextureType"
+getTextureTypes.variants[1].returns[1].valuetype = "boolean"
 
--- Set window.updateMode table flags type record
-findAPI("window", "updateMode").variants[1].arguments[3].typename = "WindowSetting"
-
--- Override love.run
-overrides["love.run[1]"] = "run: function(): function(): string|number"
-
--- love.load table type arguments is string
-local load = findAPI(nil, "load")
-load.variants[1].arguments[1].valuetype = "string"
-load.variants[1].arguments[2].valuetype = "string"
-
--- Define love.conf table type argument
-findAPI(nil, "conf").variants[1].arguments[1].typename = "Configuration"
-
--- Define Source:setEffect table argument type record
-findAPI("audio", "Source:setEffect").variants[2].arguments[2].typename = "FilterSettings"
-
--- Define Source:setFilter table argument type record
-findAPI("audio", "Source:setFilter").variants[1].arguments[1].typename = "FilterSettings"
-
--- love.audio.setEffect table type argument is {string:any}
--- TODO: Is this correct?
-local setEffect = findAPI("audio", "setEffect")
-setEffect.variants[1].arguments[2].keytype = "string"
-setEffect.variants[1].arguments[2].valuetype = "any"
-
--- Mesh:setVertex 2nd & 4th variant type arguments is number
-local setVertex = findAPI("graphics", "Mesh:setVertex")
-setVertex.variants[2].arguments[2].valuetype = "number"
-setVertex.variants[4].arguments[2].valuetype = "number"
-
--- Override Mesh:setVertices
-overrides["graphics.Mesh:setVertices[1]"] = "setVertices: function(self: Mesh, vertices: {{number}}, startvertex: number)"
-findAPI("graphics", "Mesh:setVertices").variants[3] = nil
-
--- override graphics.ParticleSystem:setColors second variant
-overrides["graphics.ParticleSystem:setColors[2]"] = "setColors: function(self: ParticleSystem, rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})"
-
--- override graphics.setBackgroundColor second variant
-overrides["graphics.setBackgroundColor[2]"] = "setBackgroundColor: function(rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})"
-
--- Override Text:add 2nd variant
-overrides["graphics.Text:add[2]"] = "add: function(self: Text, coloredtext: {table|string}, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number"
-
--- Override Text:addf 2nd variant
-overrides["graphics.Text:addf[2]"] = "addf: function(self: Text, coloredtext: {table|string}, wraplimit: number, align: AlignMode, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number"
-
--- Override Text:set 2nd variant
-overrides["graphics.Text:set[2]"] = "set: function(self: Text, coloredtext: {table|string})"
-
--- Override Text:setf 2nd variant
-overrides["graphics.Text:setf[2]"] = "setf: function(self: Text, coloredtext: {table|string}, wraplimit: number, alignmode: AlignMode)"
+-- love.graphics.line 2nd variant argument table type
+local line = findAPI("graphics", "line")
+line.variants[1].arguments[1].name = "..."
+line.variants[2].arguments[1].valuetype = "number"
 
 -- love.graphics.newArrayImage modification
 findAPI("graphics", "newArrayImage").variants[1].arguments[2].typename = "ImageSetting"
@@ -230,11 +329,17 @@ overrides["graphics.newMesh[1]"] = "newMesh: function(vertices: {{number}}, mode
 overrides["graphics.newMesh[3]"] = "newMesh: function(vertexformat: {{number|string}}, vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
 overrides["graphics.newMesh[4]"] = "newMesh: function(vertexformat: {{number|string}}, vertexcount: number, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh"
 
+-- Blacklist (wrong) love.graphics.newShader 3rd variant
+overrides["graphics.newShader[3]"] = ""
+
 -- Define love.graphics.newVideo table type argument
 findAPI("graphics", "newVideo").variants[3].arguments[2].typename = "VideoSetting"
 
 -- Define love.graphics.newVolumeImage table type name
 findAPI("graphics", "newVolumeImage").variants[1].arguments[2].type = "ImageSetting"
+
+-- love.graphics.polygon 2nd variant table argument type
+findAPI("graphics", "polygon").variants[2].arguments[2].valuetype = "number"
 
 -- Override love.graphics.points
 overrides["graphics.points[1]"] = "points: function(...: number)"
@@ -270,104 +375,61 @@ overrides["graphics.printf[6]"] = "printf: function(coloredtext: {table|string},
 overrides["graphics.printf[7]"] = "printf: function(coloredtext: {table|string}, transform: math.Transform, limit: number, align: AlignMode)"
 overrides["graphics.printf[8]"] = "printf: function(coloredtext: {table|string}, font: Font, transform: math.Transform, limit: number, align: AlignMode)"
 
--- love.audio.getActiveEffects table type is string
-assert(api.modules[1].functions[1].name == "getActiveEffects")
-api.modules[1].functions[1].variants[1].returns[1].valuetype = "string"
+-- override love.graphics.setBackgroundColor second variant
+overrides["graphics.setBackgroundColor[2]"] = "setBackgroundColor: function(rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})"
 
--- love.audio.getRecordingDevices return table type is RecordingDevice
-assert(api.modules[1].functions[10].name == "getRecordingDevices")
-api.modules[1].functions[10].variants[1].returns[1].valuetype = "RecordingDevice"
+-- love.graphics.setColor 2nd variant table argument type
+findAPI("graphics", "setColor").variants[2].arguments[1].valuetype = "number"
 
--- love.audio.pause table type is Source
-assert(api.modules[1].functions[17].name == "pause")
-api.modules[1].functions[17].variants[1].returns[1].valuetype = "Source"
-api.modules[1].functions[17].variants[3].arguments[1].valuetype = "Source"
-
--- Override love.data.compress so it only has 1 variant
-overrides["data.compress[1]"] = "compress: function(container: ContainerType, format: CompressedDataFormat, data: string|Data, level: number): string|CompressedData"
-overrides["data.compress[2]"] = ""
-
--- Override love.data.decode so it only has 1 variant
-overrides["data.decode[1]"] = "decode: function(container: ContainerType, format: EncodeFormat, source: string|love.Data): string|ByteData"
-overrides["data.decode[2]"] = ""
-
--- Override love.data.decompress so it only has 2 variants
-overrides["data.decompress[1]"] = "decompress: function(container: ContainerType, compressedData: CompressedData): string|ByteData"
-overrides["data.decompress[2]"] = "decompress: function(container: ContainerType, format: CompressedDataFormat, compressed: string|ByteData): string|ByteData"
-overrides["data.decompress[3]"] = ""
-
--- Override love.data.encode so it only has 1 variant
-overrides["data.encode[1]"] = "encode: function(container: ContainerType, format: EncodeFormat, source: string|love.Data, linelength: number): string|ByteData"
-overrides["data.encode[2]"] = ""
-
--- Override love.data.pack
-overrides["data.pack[1]"] = "pack: function(container: ContainerType, format: string, ...: any): string|ByteData"
-
--- Override love.data.unpack so it only has 1 variant
-overrides["data.unpack[1]"] = "unpack: function(format: string, data: string|love.Data, pos: number): any..."
-overrides["data.unpack[2]"] = ""
-
--- Override love.event.poll
-overrides["event.poll[1]"] = "poll: function(): function(): string, any..."
-
--- Remove love.event.Event enum
-local event = findAPI("event")
-assert(event.enums[1].name == "Event")
-table.remove(event.enums, 1)
-
--- Override love.event.push
-overrides["event.push[1]"] = "push: function(n: string, ...: any)"
-
--- Override love.event.wait
-overrides["event.wait[1]"] = "wait: function(): string, any..."
-
--- Override File:lines
-overrides["filesystem.File:lines[1]"] = "lines: function(self: File): function(): string"
-
--- Override File:read 2nd variant
-overrides["filesystem.File:read[2]"] = "read: function(self: File, container: data.ContainerType, bytes: number): string|FileData"
-
--- love.filesystem.getDirectoryItems table return type and 2nd variant override
-local getDirectoryItems = findAPI("filesystem", "getDirectoryItems")
-getDirectoryItems.variants[1].returns[1].valuetype = "string"
-overrides["filesystem.getDirectoryItems[2]"] = "getDirectoryItems: function(dir: string, callback: function(filename: string)): {string}"
-
--- Override love.filesystem.lines
-overrides["filesystem.lines[1]"] = "lines: function(name: string): function(): string"
-
--- Override love.filesystem.load
-overrides["filesystem.load[1]"] = "load: function(name: string): function(...: any): any..., string"
-
--- Override love.filesystem.read
-overrides["filesystem.read[1]"] = "read: function(name: string, size: number): string, number|string"
-overrides["filesystem.read[2]"] = "read: function(container: data.ContainerType, name: string, size: number): string|FileData, number|string"
+-- Override love.graphics.stencil
+overrides["graphics.stencil[1]"] = "stencil: function(stencilfunction: function(), action: StencilAction, value: number, keepvalues: boolean)"
 
 -- Override Canvas:renderTo
 overrides["graphics.Canvas:renderTo[1]"] = "renderTo: function(func: function())"
 
+-- Define Font:getWrap table return type
+findAPI("graphics", "Font:getWrap").variants[1].returns[2].valuetype = "string"
+
 -- Remove Image:getFlags
 overrides["graphics.Image:getFlags[1]"] = ""
 
+-- Override Mesh:getVertexFormat
+overrides["graphics.Mesh:getVertexFormat[1]"] = "getVertexFormat: function(self: Mesh): {{number|string}}"
+
 -- Mesh:getVertexMap table return type is number
 findAPI("graphics", "Mesh:getVertexMap").variants[1].returns[1].valuetype = "number"
+
+-- Mesh:setVertex 2nd & 4th variant type arguments is number
+local setVertex = findAPI("graphics", "Mesh:setVertex")
+setVertex.variants[2].arguments[2].valuetype = "number"
+setVertex.variants[4].arguments[2].valuetype = "number"
 
 -- Mesh:setVertexMap tweaks
 local setVertexMap = findAPI("graphics", "Mesh:setVertexMap")
 setVertexMap.variants[1].arguments[1].valuetype = "number"
 setVertexMap.variants[2].arguments[1].name = "..."
 
+-- Override Mesh:setVertices
+overrides["graphics.Mesh:setVertices[1]"] = "setVertices: function(self: Mesh, vertices: {{number}}, startvertex: number)"
+findAPI("graphics", "Mesh:setVertices").variants[3] = nil
+
+-- override ParticleSystem:setColors second variant
+overrides["graphics.ParticleSystem:setColors[2]"] = "setColors: function(self: ParticleSystem, rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})"
+
+-- Override Text:add 2nd variant
+overrides["graphics.Text:add[2]"] = "add: function(self: Text, coloredtext: {table|string}, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number"
+
+-- Override Text:addf 2nd variant
+overrides["graphics.Text:addf[2]"] = "addf: function(self: Text, coloredtext: {table|string}, wraplimit: number, align: AlignMode, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number"
+
+-- Override Text:set 2nd variant
+overrides["graphics.Text:set[2]"] = "set: function(self: Text, coloredtext: {table|string})"
+
+-- Override Text:setf 2nd variant
+overrides["graphics.Text:setf[2]"] = "setf: function(self: Text, coloredtext: {table|string}, wraplimit: number, alignmode: AlignMode)"
+
 -- ParticleSystem:getQuads table return type is Quad
 findAPI("graphics", "ParticleSystem:getQuads").variants[1].returns[1].valuetype = "Quad"
-
--- love.audio.play 2nd variant table argument
-local play = findAPI("audio", "play")
-play.variants[2].arguments[1].valuetype = "Source"
-play.variants[3].arguments[1].name = "..."
-
--- love.audio.stop 2nd variant table argument
-local stop = findAPI("audio", "stop")
-stop.variants[3].arguments[1].name = "..."
-stop.variants[4].arguments[1].valuetype = "Source"
 
 -- ParticleSystem:setQuads modification
 assert(api.modules[6].types[6].functions[46].name == "setQuads")
@@ -392,80 +454,11 @@ local sendColor = findAPI("graphics", "Shader:sendColor")
 sendColor.variants[1].arguments[2].name = "..."
 sendColor.variants[1].arguments[2].valuetype = "number"
 
--- Override love.graphics.captureScreenshot 2nd variant
-overrides["graphics.captureScreenshot[2]"] = "captureScreenshot: function(callback: function(image: image.ImageData))"
-
--- Override love.graphics.clear 3rd variant
-overrides["graphics.clear[3]"] = "clear: function(...: {number}|boolean)"
-
--- love.graphics.discard 2nd variant table value type
-findAPI("graphics", "discard").variants[2].arguments[1].valuetype = "boolean"
-
--- love.graphics.getCanvasFormats variant table return type
-local getCanvasFormats = findAPI("graphics", "getCanvasFormats")
-getCanvasFormats.variants[1].returns[1].keytype = "PixelFormat"
-getCanvasFormats.variants[1].returns[1].valuetype = "boolean"
-getCanvasFormats.variants[2].returns[1].keytype = "PixelFormat"
-getCanvasFormats.variants[2].returns[1].valuetype = "boolean"
-
--- love.graphics.getImageFormats variant table return type
-local getImageFormats = findAPI("graphics", "getImageFormats")
-getImageFormats.variants[1].returns[1].keytype = "PixelFormat"
-getImageFormats.variants[1].returns[1].valuetype = "boolean"
-
--- love.graphics.getSupported return table type
-local getSupported = findAPI("graphics", "getSupported")
-getSupported.variants[1].returns[1].keytype = "GraphicsFeature"
-getSupported.variants[1].returns[1].valuetype = "boolean"
-
--- love.graphics.getSystemLimits return table type
-local getSystemLimits = findAPI("graphics", "getSystemLimits")
-getSystemLimits.variants[1].returns[1].keytype = "GraphicsLimit"
-getSystemLimits.variants[1].returns[1].valuetype = "number"
-
--- love.graphics.getTextureTypes return table type
-local getTextureTypes = findAPI("graphics", "getTextureTypes")
-getTextureTypes.variants[1].returns[1].keytype = "TextureType"
-getTextureTypes.variants[1].returns[1].valuetype = "boolean"
-
--- love.graphics.line 2nd variant argument table type
-local line = findAPI("graphics", "line")
-line.variants[1].arguments[1].name = "..."
-line.variants[2].arguments[1].valuetype = "number"
-
--- Rasterizer:hasGlyphs override
-overrides["font.Rasterizer:hasGlyphs[1]"] = "hasGlyphs: function(self: Rasterizer, ...: number|string): boolean"
-
--- Blacklist (wrong) love.graphics.newShader 3rd variant
-overrides["graphics.newShader[3]"] = ""
-
--- love.graphics.polygon 2nd variant table argument type
-findAPI("graphics", "polygon").variants[2].arguments[2].valuetype = "number"
-
--- love.graphics.setColor 2nd variant table argument type
-findAPI("graphics", "setColor").variants[2].arguments[1].valuetype = "number"
-
--- Override love.graphics.stencil
-overrides["graphics.stencil[1]"] = "stencil: function(stencilfunction: function(), action: StencilAction, value: number, keepvalues: boolean)"
-
 -- Override ImageData:mapPixel
 overrides["image.ImageData:mapPixel[1]"] = "mapPixel: function(self: ImageData, pixelFunction: function(x: number, y: number, r: number, g: number, b: number, a: number): (number, number, number, number), x: number, y: number, width: number, height: number)"
 
 -- love.joystick.getJoysticks table return type
 findAPI("joystick", "getJoysticks").variants[1].returns[1].valuetype = "Joystick"
-
--- BezierCurve:render table return type
-findAPI("math", "BezierCurve:render").variants[1].returns[1].valuetype = "number"
-
--- BezierCurve:renderSegment table return type
-findAPI("math", "BezierCurve:renderSegment").variants[1].returns[1].valuetype = "number"
-
--- Transform:setMatrix modification
-local setMatrix = findAPI("math", "Transform:setMatrix")
-setMatrix.variants[1].arguments[1].name = "..."
-setMatrix.variants[2].arguments[2].name = "..."
-setMatrix.variants[3].arguments[2].valuetype = "number"
-overrides["math.Transform:setMatrix[4]"] = "setMatrix: function(self: Transform, layout: MatrixLayout, matrix: {{number}}): Transform"
 
 -- love.math.gammaToLinear table argument type
 findAPI("math", "gammaToLinear").variants[2].arguments[1].valuetype = "number"
@@ -489,6 +482,19 @@ triangulate.variants[1].arguments[1].valuetype = "number"
 triangulate.variants[1].returns[1].valuetype = "number"
 triangulate.variants[2].arguments[1].name = "..."
 triangulate.variants[2].returns[1].valuetype = "number"
+
+-- BezierCurve:render table return type
+findAPI("math", "BezierCurve:render").variants[1].returns[1].valuetype = "number"
+
+-- BezierCurve:renderSegment table return type
+findAPI("math", "BezierCurve:renderSegment").variants[1].returns[1].valuetype = "number"
+
+-- Transform:setMatrix modification
+local setMatrix = findAPI("math", "Transform:setMatrix")
+setMatrix.variants[1].arguments[1].name = "..."
+setMatrix.variants[2].arguments[2].name = "..."
+setMatrix.variants[3].arguments[2].valuetype = "number"
+overrides["math.Transform:setMatrix[4]"] = "setMatrix: function(self: Transform, layout: MatrixLayout, matrix: {{number}}): Transform"
 
 -- love.mouse.isDown modifications
 findAPI("mouse", "isDown").variants[1].arguments[1].name = "..."
@@ -534,6 +540,19 @@ overrides["thread.Channel:performAtomic[1]"] = "performAtomic: function(self: Ch
 -- love.touch.getTouches return table type
 findAPI("touch", "getTouches").variants[1].returns[1].valuetype = "light userdata"
 
+-- love.window.getFullscreenModes return table type
+local getFullscreenModes = findAPI("window", "getFullscreenModes")
+getFullscreenModes.variants[1].returns[1].valuetype = "FullscreenMode"
+
+-- Define love.window.getMode table return type record
+findAPI("window", "getMode").variants[1].returns[3].typename = "WindowSetting"
+
+-- Set love.window.setMode table flags type record
+findAPI("window", "setMode").variants[1].arguments[3].typename = "WindowSetting"
+
+-- Set love.window.updateMode table flags type record
+findAPI("window", "updateMode").variants[1].arguments[3].typename = "WindowSetting"
+
 -- Define FullscreenMode type
 local Window = findAPI("window")
 Window.types[#Window.types + 1] = {
@@ -541,27 +560,6 @@ Window.types[#Window.types + 1] = {
 	fields = {
 		{type = "number", name = "width"},
 		{type = "number", name = "height"}
-	}
-}
-
--- love.window.getFullscreenModes return table type
-local getFullscreenModes = findAPI("window", "getFullscreenModes")
-getFullscreenModes.variants[1].returns[1].valuetype = "FullscreenMode"
-
--- love.event.quit override
-overrides["event.quit[1]"] = "quit: function(exitstatus: number|string)"
-overrides["event.quit[2]"] = ""
-
--- Rewrite love.audio.setOrientation arguments
-local setOrientation = findAPI("audio", "setOrientation")
-setOrientation.variants[1] = {
-	arguments = {
-		{type = "number", name = "fx"},
-		{type = "number", name = "fy"},
-		{type = "number", name = "fz"},
-		{type = "number", name = "ux"},
-		{type = "number", name = "uy"},
-		{type = "number", name = "uz"}
 	}
 }
 
