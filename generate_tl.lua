@@ -121,13 +121,16 @@ do
 -- Define love.conf table type argument
 findAPI(nil, "conf").variants[1].arguments[1].typename = "Configuration"
 
+-- Change return type of love.errorhandler for mainLoop function
+findAPI(nil, "errorhandler").variants[1].returns[1].type = "mainLoop"
+
 -- love.load table type arguments is string
 local load = findAPI(nil, "load")
 load.variants[1].arguments[1].valuetype = "string"
 load.variants[1].arguments[2].valuetype = "string"
 
--- Override love.run
-overrides["love.run[1]"] = "run: function(): function(): string|number"
+-- Change return type of love.run for mainLoop function
+findAPI(nil, "run").variants[1].returns[1].type = "mainLoop"
 
 -- love.audio.getActiveEffects table type is string
 findAPI("audio", "getActiveEffects").variants[1].returns[1].valuetype = "string"
@@ -575,6 +578,9 @@ findAPI("physics", "World:getJoints").variants[1].returns[1].valuetype = "Joint"
 -- Override World:queryBoundingBox
 overrides["physics.World:queryBoundingBox[1]"] = "queryBoundingBox: function(self: World, topLeftX: number, topLeftY: number, bottomRightX: number, bottomRightY: number, callback: function(fixture: Fixture): boolean)"
 
+-- Override World:rayCast
+overrides["physics.World:rayCast[1]"] = "rayCast: function(self: World, x1: number, y1: number, x2: number, y2: number, callback: (function(fixture: Fixture, x: number, y: number, xn: number, yn: number, fraction: number): number))"
+
 -- love.physics.newChainShape modification
 local newChainShape = findAPI("physics", "newChainShape")
 newChainShape.variants[1].arguments[2].name = "..."
@@ -594,9 +600,8 @@ overrides["thread.Channel:performAtomic[1]"] = "performAtomic: function(self: Ch
 -- love.touch.getTouches return table type
 findAPI("touch", "getTouches").variants[1].returns[1].valuetype = "light userdata"
 
--- love.window.getFullscreenModes return table type
-local getFullscreenModes = findAPI("window", "getFullscreenModes")
-getFullscreenModes.variants[1].returns[1].valuetype = "FullscreenMode"
+-- Override love.window.getFullscreenModes return type to match a table of modes
+overrides["window.getFullscreenModes[1]"] = "getFullscreenModes: function(displayindex: number): {FullscreenMode}"
 
 -- Define love.window.getMode table return type record
 findAPI("window", "getMode").variants[1].returns[3].typename = "WindowSetting"
@@ -820,6 +825,9 @@ local function getTypeName(name, module)
 		return name
 	elseif name == "cdata" or name == "light userdata" or name == "Variant" then
 		return "any"
+	elseif name == "mainLoop" then
+		-- Special case for functions returning the mainLoop
+		return "function(): number|string|nil"
 	elseif not loveTypes[name] then
 		error("unknown type "..name)
 	elseif loveTypes[name] and loveTypes[name][1] == module then
