@@ -127,7 +127,7 @@ global type love = record
 			getSampleCount: function(self: RecordingDevice): number
 			getSampleRate: function(self: RecordingDevice): number
 			isRecording: function(self: RecordingDevice): boolean
-			start: function(self: RecordingDevice, samplecount: number, samplerate: number, bitdepth: number, channels: number): boolean
+			start: function(self: RecordingDevice, samplecount: number, samplerate?: number, bitdepth?: number, channels?: number): boolean
 			stop: function(self: RecordingDevice): sound.SoundData
 		end
 
@@ -139,8 +139,8 @@ global type love = record
 			getChannelCount: function(self: Source): number
 			getCone: function(self: Source): number, number, number
 			getDirection: function(self: Source): number, number, number
-			getDuration: function(self: Source, unit: TimeUnit): number
-			getEffect: function(self: Source, name: string, filtersettings: table): FilterSettings
+			getDuration: function(self: Source, unit?: TimeUnit): number
+			getEffect: function(self: Source, name: string, filtersettings?: table): FilterSettings
 			getFilter: function(self: Source): FilterSettings
 			getFreeBufferCount: function(self: Source): number
 			getPitch: function(self: Source): number
@@ -156,25 +156,25 @@ global type love = record
 			pause: function(self: Source)
 			play: function(self: Source): boolean
 			queue: function(self: Source, sounddata: sound.SoundData): boolean
-			seek: function(self: Source, offset: number, unit: TimeUnit)
+			seek: function(self: Source, offset: number, unit?: TimeUnit)
 			setAirAbsorption: function(self: Source, amount: number)
 			setAttenuationDistances: function(self: Source, ref: number, max: number)
-			setCone: function(self: Source, innerAngle: number, outerAngle: number, outerVolume: number)
+			setCone: function(self: Source, innerAngle: number, outerAngle: number, outerVolume?: number)
 			setDirection: function(self: Source, x: number, y: number, z: number)
-			setEffect: function(self: Source, name: string, enable: boolean): boolean
+			setEffect: function(self: Source, name: string, enable?: boolean): boolean
 			setEffect: function(self: Source, name: string, filtersettings: FilterSettings): boolean
 			setFilter: function(self: Source, settings: FilterSettings): boolean
 			setFilter: function(self: Source)
 			setLooping: function(self: Source, loop: boolean)
 			setPitch: function(self: Source, pitch: number)
 			setPosition: function(self: Source, x: number, y: number, z: number)
-			setRelative: function(self: Source, enable: boolean)
+			setRelative: function(self: Source, enable?: boolean)
 			setRolloff: function(self: Source, rolloff: number)
 			setVelocity: function(self: Source, x: number, y: number, z: number)
 			setVolume: function(self: Source, volume: number)
 			setVolumeLimits: function(self: Source, min: number, max: number)
 			stop: function(self: Source)
-			tell: function(self: Source, unit: TimeUnit): number
+			tell: function(self: Source, unit?: TimeUnit): number
 		end
 
 		type FilterSettings = record
@@ -196,7 +196,7 @@ global type love = record
 		getVelocity: function(): number, number, number
 		getVolume: function(): number
 		isEffectsSupported: function(): boolean
-		newQueueableSource: function(samplerate: number, bitdepth: number, channels: number, buffercount: number): Source
+		newQueueableSource: function(samplerate: number, bitdepth: number, channels: number, buffercount?: number): Source
 		newSource: function(filename: string, type: SourceType): Source
 		newSource: function(file: filesystem.File, type: SourceType): Source
 		newSource: function(decoder: sound.Decoder, type: SourceType): Source
@@ -211,7 +211,7 @@ global type love = record
 		setDistanceModel: function(model: DistanceModel)
 		setDopplerScale: function(scale: number)
 		setEffect: function(name: string, settings: {string:any}): boolean
-		setEffect: function(name: string, enabled: boolean): boolean
+		setEffect: function(name: string, enabled?: boolean): boolean
 		setMixWithSystem: function(mix: boolean): boolean
 		setOrientation: function(fx: number, fy: number, fz: number, ux: number, uy: number, uz: number)
 		setPosition: function(x: number, y: number, z: number)
@@ -266,7 +266,7 @@ global type love = record
 		hash: function(hashFunction: HashFunction, string: string): string
 		hash: function(hashFunction: HashFunction, data: love.Data): string
 		newByteData: function(datastring: string): ByteData
-		newByteData: function(Data: love.Data, offset: number, size: number): ByteData
+		newByteData: function(Data: love.Data, offset?: number, size?: number): ByteData
 		newByteData: function(size: number): ByteData
 		newDataView: function(data: love.Data, offset: number, size: number): love.Data
 		pack: function(container: ContainerType, format: string, ...: any): string|ByteData
@@ -322,13 +322,13 @@ global type love = record
 			isOpen: function(self: File): boolean
 			lines: function(self: File): function(): string
 			open: function(self: File, mode: FileMode): boolean, string
-			read: function(self: File, bytes: number): string, number
+			read: function(self: File, bytes?: number): string, number
 			read: function(self: File, container: data.ContainerType, bytes: number): string|FileData
 			seek: function(self: File, pos: number): boolean
-			setBuffer: function(self: File, mode: BufferMode, size: number): boolean, string
+			setBuffer: function(self: File, mode: BufferMode, size?: number): boolean, string
 			tell: function(self: File): number
-			write: function(self: File, data: string, size: number): boolean, string
-			write: function(self: File, data: love.Data, size: number): boolean, string
+			write: function(self: File, data: string, size?: number): boolean, string
+			write: function(self: File, data: love.Data, size?: number): boolean, string
 		end
 
 		type FileData = record
@@ -342,8 +342,8 @@ global type love = record
 			modtime: number
 		end
 
-		append: function(name: string, data: string, size: number): boolean, string
-		append: function(name: string, data: love.Data, size: number): boolean, string
+		append: function(name: string, data: string, size?: number): boolean, string
+		append: function(name: string, data: love.Data, size?: number): boolean, string
 		areSymlinksEnabled: function(): boolean
 		createDirectory: function(name: string): boolean
 		getAppdataDirectory: function(): string
@@ -351,7 +351,7 @@ global type love = record
 		getDirectoryItems: function(dir: string): {string}
 		getDirectoryItems: function(dir: string, callback: function(filename: string)): {string}
 		getIdentity: function(): string
-		getInfo: function(path: string, filtertype: FileType): FileInfo
+		getInfo: function(path: string, filtertype?: FileType): FileInfo
 		getInfo: function(path: string, info: table): FileInfo
 		getInfo: function(path: string, filtertype: FileType, info: table): FileInfo
 		getRealDirectory: function(filepath: string): string
@@ -365,9 +365,9 @@ global type love = record
 		isFused: function(): boolean
 		lines: function(name: string): function(): string
 		load: function(name: string): function(...: any): any..., string
-		mount: function(archive: string, mountpoint: string, appendToPath: boolean): boolean
-		mount: function(filedata: FileData, mountpoint: string, appendToPath: boolean): boolean
-		mount: function(data: love.Data, archivename: string, mountpoint: string, appendToPath: boolean): boolean
+		mount: function(archive: string, mountpoint: string, appendToPath?: boolean): boolean
+		mount: function(filedata: FileData, mountpoint: string, appendToPath?: boolean): boolean
+		mount: function(data: love.Data, archivename: string, mountpoint: string, appendToPath?: boolean): boolean
 		newFile: function(filename: string): File
 		newFile: function(filename: string, mode: FileMode): File, string
 		newFileData: function(contents: string, name: string): FileData
@@ -383,8 +383,8 @@ global type love = record
 		setSource: function(path: string)
 		setSymlinksEnabled: function(enable: boolean)
 		unmount: function(archive: string): boolean
-		write: function(name: string, data: string, size: number): boolean, string
-		write: function(name: string, data: love.Data, size: number): boolean, string
+		write: function(name: string, data: string, size?: number): boolean, string
+		write: function(name: string, data: love.Data, size?: number): boolean, string
 
 	end
 	type font = record
@@ -419,20 +419,20 @@ global type love = record
 			hasGlyphs: function(self: Rasterizer, ...: number|string): boolean
 		end
 
-		newBMFontRasterizer: function(imageData: image.ImageData, glyphs: string, dpiscale: number): Rasterizer
-		newBMFontRasterizer: function(fileName: string, glyphs: string, dpiscale: number): Rasterizer
+		newBMFontRasterizer: function(imageData: image.ImageData, glyphs: string, dpiscale?: number): Rasterizer
+		newBMFontRasterizer: function(fileName: string, glyphs: string, dpiscale?: number): Rasterizer
 		newGlyphData: function(rasterizer: Rasterizer, glyph: number)
-		newImageRasterizer: function(imageData: image.ImageData, glyphs: string, extraSpacing: number, dpiscale: number): Rasterizer
+		newImageRasterizer: function(imageData: image.ImageData, glyphs: string, extraSpacing?: number, dpiscale?: number): Rasterizer
 		newRasterizer: function(filename: string): Rasterizer
 		newRasterizer: function(data: filesystem.FileData): Rasterizer
-		newRasterizer: function(size: number, hinting: HintingMode, dpiscale: number): Rasterizer
-		newRasterizer: function(fileName: string, size: number, hinting: HintingMode, dpiscale: number): Rasterizer
-		newRasterizer: function(fileData: filesystem.FileData, size: number, hinting: HintingMode, dpiscale: number): Rasterizer
-		newRasterizer: function(imageData: image.ImageData, glyphs: string, dpiscale: number): Rasterizer
-		newRasterizer: function(fileName: string, glyphs: string, dpiscale: number): Rasterizer
-		newTrueTypeRasterizer: function(size: number, hinting: HintingMode, dpiscale: number): Rasterizer
-		newTrueTypeRasterizer: function(fileName: string, size: number, hinting: HintingMode, dpiscale: number): Rasterizer
-		newTrueTypeRasterizer: function(fileData: filesystem.FileData, size: number, hinting: HintingMode, dpiscale: number): Rasterizer
+		newRasterizer: function(size?: number, hinting?: HintingMode, dpiscale?: number): Rasterizer
+		newRasterizer: function(fileName: string, size?: number, hinting?: HintingMode, dpiscale?: number): Rasterizer
+		newRasterizer: function(fileData: filesystem.FileData, size?: number, hinting?: HintingMode, dpiscale?: number): Rasterizer
+		newRasterizer: function(imageData: image.ImageData, glyphs: string, dpiscale?: number): Rasterizer
+		newRasterizer: function(fileName: string, glyphs: string, dpiscale?: number): Rasterizer
+		newTrueTypeRasterizer: function(size?: number, hinting?: HintingMode, dpiscale?: number): Rasterizer
+		newTrueTypeRasterizer: function(fileName: string, size?: number, hinting?: HintingMode, dpiscale?: number): Rasterizer
+		newTrueTypeRasterizer: function(fileData: filesystem.FileData, size?: number, hinting?: HintingMode, dpiscale?: number): Rasterizer
 
 	end
 	type graphics = record
@@ -611,7 +611,7 @@ global type love = record
 			getMSAA: function(self: Canvas): number
 			getMipmapMode: function(self: Canvas): MipmapMode
 			newImageData: function(self: Canvas): image.ImageData
-			newImageData: function(self: Canvas, slice: number, mipmap: number, x: number, y: number, width: number, height: number): image.ImageData
+			newImageData: function(self: Canvas, slice: number, mipmap?: number, x: number, y: number, width: number, height: number): image.ImageData
 			renderTo: function(func: function())
 		end
 
@@ -634,19 +634,19 @@ global type love = record
 			hasGlyphs: function(self: Font, character1: string, character2: string): boolean
 			hasGlyphs: function(self: Font, codepoint1: number, codepoint2: number): boolean
 			setFallbacks: function(self: Font, fallbackfont1: Font, ...: Font)
-			setFilter: function(self: Font, min: FilterMode, mag: FilterMode, anisotropy: number)
+			setFilter: function(self: Font, min: FilterMode, mag: FilterMode, anisotropy?: number)
 			setLineHeight: function(self: Font, height: number)
 		end
 
 		type Image = record
 			isCompressed: function(self: Image): boolean
 			isFormatLinear: function(self: Image): boolean
-			replacePixels: function(self: Image, data: image.ImageData, slice: number, mipmap: number, x: number, y: number, reloadmipmaps: boolean)
+			replacePixels: function(self: Image, data: image.ImageData, slice?: number, mipmap?: number, x?: number, y?: number, reloadmipmaps?: boolean)
 		end
 
 		type Mesh = record
 			attachAttribute: function(self: Mesh, name: string, mesh: Mesh)
-			attachAttribute: function(self: Mesh, name: string, mesh: Mesh, step: VertexAttributeStep, attachname: string)
+			attachAttribute: function(self: Mesh, name: string, mesh: Mesh, step?: VertexAttributeStep, attachname?: string)
 			detachAttribute: function(self: Mesh, name: string): boolean
 			flush: function(self: Mesh)
 			getDrawMode: function(self: Mesh): MeshDrawMode
@@ -667,14 +667,14 @@ global type love = record
 			setTexture: function(self: Mesh)
 			setVertex: function(self: Mesh, index: number, attributecomponent: number, ...: number)
 			setVertex: function(self: Mesh, index: number, vertex: {number})
-			setVertex: function(self: Mesh, index: number, x: number, y: number, u: number, v: number, r: number, g: number, b: number, a: number)
+			setVertex: function(self: Mesh, index: number, x: number, y: number, u: number, v: number, r?: number, g?: number, b?: number, a?: number)
 			setVertex: function(self: Mesh, index: number, vertex: {number})
 			setVertexAttribute: function(self: Mesh, vertexindex: number, attributeindex: number, value1: number, value2: number, ...: number)
 			setVertexMap: function(self: Mesh, map: {number})
 			setVertexMap: function(self: Mesh, ...: number)
 			setVertexMap: function(self: Mesh, data: love.Data, datatype: IndexDataType)
 			setVertices: function(self: Mesh, vertices: {{number}}, startvertex: number)
-			setVertices: function(self: Mesh, data: love.Data, startvertex: number)
+			setVertices: function(self: Mesh, data: love.Data, startvertex?: number)
 		end
 
 		type ParticleSystem = record
@@ -712,30 +712,30 @@ global type love = record
 			pause: function(self: ParticleSystem)
 			reset: function(self: ParticleSystem)
 			setBufferSize: function(self: ParticleSystem, size: number)
-			setColors: function(self: ParticleSystem, r1: number, g1: number, b1: number, a1: number, ...: number)
+			setColors: function(self: ParticleSystem, r1: number, g1: number, b1: number, a1?: number, ...: number)
 			setColors: function(self: ParticleSystem, rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})
 			setDirection: function(self: ParticleSystem, direction: number)
-			setEmissionArea: function(self: ParticleSystem, distribution: AreaSpreadDistribution, dx: number, dy: number, angle: number, directionRelativeToCenter: boolean)
+			setEmissionArea: function(self: ParticleSystem, distribution: AreaSpreadDistribution, dx: number, dy: number, angle?: number, directionRelativeToCenter?: boolean)
 			setEmissionRate: function(self: ParticleSystem, rate: number)
 			setEmitterLifetime: function(self: ParticleSystem, life: number)
 			setInsertMode: function(self: ParticleSystem, mode: ParticleInsertMode)
-			setLinearAcceleration: function(self: ParticleSystem, xmin: number, ymin: number, xmax: number, ymax: number)
-			setLinearDamping: function(self: ParticleSystem, min: number, max: number)
+			setLinearAcceleration: function(self: ParticleSystem, xmin: number, ymin: number, xmax?: number, ymax?: number)
+			setLinearDamping: function(self: ParticleSystem, min: number, max?: number)
 			setOffset: function(self: ParticleSystem, x: number, y: number)
-			setParticleLifetime: function(self: ParticleSystem, min: number, max: number)
+			setParticleLifetime: function(self: ParticleSystem, min: number, max?: number)
 			setPosition: function(self: ParticleSystem, x: number, y: number)
 			setQuads: function(self: ParticleSystem, ...: Quad)
 			setQuads: function(self: ParticleSystem, quads: {Quad})
-			setRadialAcceleration: function(self: ParticleSystem, min: number, max: number)
+			setRadialAcceleration: function(self: ParticleSystem, min: number, max?: number)
 			setRelativeRotation: function(self: ParticleSystem, enable: boolean)
-			setRotation: function(self: ParticleSystem, min: number, max: number)
+			setRotation: function(self: ParticleSystem, min: number, max?: number)
 			setSizeVariation: function(self: ParticleSystem, variation: number)
-			setSizes: function(self: ParticleSystem, size1: number, size2: number, size8: number)
-			setSpeed: function(self: ParticleSystem, min: number, max: number)
-			setSpin: function(self: ParticleSystem, min: number, max: number)
+			setSizes: function(self: ParticleSystem, size1: number, size2?: number, size8?: number)
+			setSpeed: function(self: ParticleSystem, min: number, max?: number)
+			setSpin: function(self: ParticleSystem, min: number, max?: number)
 			setSpinVariation: function(self: ParticleSystem, variation: number)
 			setSpread: function(self: ParticleSystem, spread: number)
-			setTangentialAcceleration: function(self: ParticleSystem, min: number, max: number)
+			setTangentialAcceleration: function(self: ParticleSystem, min: number, max?: number)
 			setTexture: function(self: ParticleSystem, texture: Texture)
 			start: function(self: ParticleSystem)
 			stop: function(self: ParticleSystem)
@@ -745,7 +745,7 @@ global type love = record
 		type Quad = record
 			getTextureDimensions: function(self: Quad): number, number
 			getViewport: function(self: Quad): number, number, number, number
-			setViewport: function(self: Quad, x: number, y: number, w: number, h: number, sw: number, sh: number)
+			setViewport: function(self: Quad, x: number, y: number, w: number, h: number, sw?: number, sh?: number)
 		end
 
 		type Shader = record
@@ -757,17 +757,17 @@ global type love = record
 			send: function(self: Shader, name: string, texture: Texture)
 			send: function(self: Shader, name: string, ...: boolean)
 			send: function(self: Shader, name: string, matrixLayout: math.MatrixLayout, ...: {{number}})
-			send: function(self: Shader, name: string, data: love.Data, offset: number, size: number)
-			send: function(self: Shader, name: string, data: love.Data, matrixlayout: math.MatrixLayout, offset: number, size: number)
-			send: function(self: Shader, name: string, matrixlayout: math.MatrixLayout, data: love.Data, offset: number, size: number)
+			send: function(self: Shader, name: string, data: love.Data, offset?: number, size?: number)
+			send: function(self: Shader, name: string, data: love.Data, matrixlayout: math.MatrixLayout, offset?: number, size?: number)
+			send: function(self: Shader, name: string, matrixlayout: math.MatrixLayout, data: love.Data, offset?: number, size?: number)
 			sendColor: function(self: Shader, name: string, ...: table)
 		end
 
 		type SpriteBatch = record
-			add: function(self: SpriteBatch, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
-			add: function(self: SpriteBatch, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
-			addLayer: function(self: SpriteBatch, layerindex: number, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
-			addLayer: function(self: SpriteBatch, layerindex: number, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
+			add: function(self: SpriteBatch, x: number, y: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
+			add: function(self: SpriteBatch, quad: Quad, x: number, y: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
+			addLayer: function(self: SpriteBatch, layerindex: number, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
+			addLayer: function(self: SpriteBatch, layerindex: number, quad: Quad, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
 			addLayer: function(self: SpriteBatch, layerindex: number, transform: math.Transform): number
 			addLayer: function(self: SpriteBatch, layerindex: number, quad: Quad, transform: math.Transform): number
 			attachAttribute: function(self: SpriteBatch, name: string, mesh: Mesh)
@@ -777,23 +777,23 @@ global type love = record
 			getColor: function(self: SpriteBatch): number, number, number, number
 			getCount: function(self: SpriteBatch): number
 			getTexture: function(self: SpriteBatch): Texture
-			set: function(self: SpriteBatch, spriteindex: number, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
-			set: function(self: SpriteBatch, spriteindex: number, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
-			setColor: function(self: SpriteBatch, r: number, g: number, b: number, a: number)
+			set: function(self: SpriteBatch, spriteindex: number, x: number, y: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
+			set: function(self: SpriteBatch, spriteindex: number, quad: Quad, x: number, y: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
+			setColor: function(self: SpriteBatch, r: number, g: number, b: number, a?: number)
 			setColor: function(self: SpriteBatch)
 			setDrawRange: function(self: SpriteBatch, start: number, count: number)
 			setDrawRange: function(self: SpriteBatch)
-			setLayer: function(self: SpriteBatch, spriteindex: number, layerindex: number, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
-			setLayer: function(self: SpriteBatch, spriteindex: number, layerindex: number, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
+			setLayer: function(self: SpriteBatch, spriteindex: number, layerindex: number, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
+			setLayer: function(self: SpriteBatch, spriteindex: number, layerindex: number, quad: Quad, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
 			setLayer: function(self: SpriteBatch, spriteindex: number, layerindex: number, transform: math.Transform)
 			setLayer: function(self: SpriteBatch, spriteindex: number, layerindex: number, quad: Quad, transform: math.Transform)
 			setTexture: function(self: SpriteBatch, texture: Texture)
 		end
 
 		type Text = record
-			add: function(self: Text, textstring: string, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
+			add: function(self: Text, textstring: string, x?: number, y?: number, angle?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
 			add: function(self: Text, coloredtext: {table|string}, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
-			addf: function(self: Text, textstring: string, wraplimit: number, align: AlignMode, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
+			addf: function(self: Text, textstring: string, wraplimit: number, align: AlignMode, x: number, y: number, angle?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
 			addf: function(self: Text, coloredtext: {table|string}, wraplimit: number, align: AlignMode, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
 			clear: function(self: Text)
 			getDimensions: function(self: Text): number, number
@@ -829,10 +829,10 @@ global type love = record
 			getWrap: function(self: Texture): WrapMode, WrapMode, WrapMode
 			isReadable: function(self: Texture): boolean
 			setDepthSampleMode: function(self: Texture, compare: CompareMode)
-			setFilter: function(self: Texture, min: FilterMode, mag: FilterMode, anisotropy: number)
-			setMipmapFilter: function(self: Texture, filtermode: FilterMode, sharpness: number)
+			setFilter: function(self: Texture, min: FilterMode, mag?: FilterMode, anisotropy?: number)
+			setMipmapFilter: function(self: Texture, filtermode: FilterMode, sharpness?: number)
 			setMipmapFilter: function(self: Texture)
-			setWrap: function(self: Texture, horiz: WrapMode, vert: WrapMode, depth: WrapMode)
+			setWrap: function(self: Texture, horiz: WrapMode, vert?: WrapMode, depth?: WrapMode)
 		end
 
 		type Video = record
@@ -847,8 +847,8 @@ global type love = record
 			play: function(self: Video)
 			rewind: function(self: Video)
 			seek: function(self: Video, offset: number)
-			setFilter: function(self: Video, min: FilterMode, mag: FilterMode, anisotropy: number)
-			setSource: function(self: Video, source: audio.Source)
+			setFilter: function(self: Video, min: FilterMode, mag: FilterMode, anisotropy?: number)
+			setSource: function(self: Video, source?: audio.Source)
 			tell: function(self: Video): number
 		end
 
@@ -898,27 +898,27 @@ global type love = record
 		end
 
 		applyTransform: function(transform: math.Transform)
-		arc: function(drawmode: DrawMode, x: number, y: number, radius: number, angle1: number, angle2: number, segments: number)
-		arc: function(drawmode: DrawMode, arctype: ArcType, x: number, y: number, radius: number, angle1: number, angle2: number, segments: number)
+		arc: function(drawmode: DrawMode, x: number, y: number, radius: number, angle1: number, angle2: number, segments?: number)
+		arc: function(drawmode: DrawMode, arctype: ArcType, x: number, y: number, radius: number, angle1: number, angle2: number, segments?: number)
 		captureScreenshot: function(filename: string)
 		captureScreenshot: function(callback: function(image: image.ImageData))
 		captureScreenshot: function(channel: love.thread.Channel)
 		circle: function(mode: DrawMode, x: number, y: number, radius: number)
 		circle: function(mode: DrawMode, x: number, y: number, radius: number, segments: number)
 		clear: function()
-		clear: function(r: number, g: number, b: number, a: number, clearstencil: boolean, cleardepth: boolean)
+		clear: function(r: number, g: number, b: number, a?: number, clearstencil?: boolean, cleardepth?: boolean)
 		clear: function(...: {number}|boolean)
 		clear: function(clearcolor: boolean, clearstencil: boolean, cleardepth: boolean)
-		discard: function(discardcolor: boolean, discardstencil: boolean)
-		discard: function(discardcolors: {boolean}, discardstencil: boolean)
-		draw: function(drawable: Drawable, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
-		draw: function(texture: Texture, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
+		discard: function(discardcolor?: boolean, discardstencil?: boolean)
+		discard: function(discardcolors: {boolean}, discardstencil?: boolean)
+		draw: function(drawable: Drawable, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
+		draw: function(texture: Texture, quad: Quad, x: number, y: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
 		draw: function(drawable: Drawable, transform: math.Transform)
 		draw: function(texture: Texture, quad: Quad, transform: math.Transform)
-		drawInstanced: function(mesh: Mesh, instancecount: number, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
+		drawInstanced: function(mesh: Mesh, instancecount: number, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
 		drawInstanced: function(mesh: Mesh, instancecount: number, transform: math.Transform)
-		drawLayer: function(texture: Texture, layerindex: number, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
-		drawLayer: function(texture: Texture, layerindex: number, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
+		drawLayer: function(texture: Texture, layerindex: number, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
+		drawLayer: function(texture: Texture, layerindex: number, quad: Quad, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
 		drawLayer: function(texture: Texture, layerindex: number, transform: math.Transform)
 		drawLayer: function(texture: Texture, layerindex: number, quad: Quad, transform: math.Transform)
 		ellipse: function(mode: DrawMode, x: number, y: number, radiusx: number, radiusy: number)
@@ -965,46 +965,46 @@ global type love = record
 		isWireframe: function(): boolean
 		line: function(...: number)
 		line: function(points: {number})
-		newArrayImage: function(slices: table, settings: ImageSetting): Image
+		newArrayImage: function(slices: table, settings?: ImageSetting): Image
 		newCanvas: function(): Canvas
 		newCanvas: function(width: number, height: number): Canvas
 		newCanvas: function(width: number, height: number, settings: CanvasSetting): Canvas
 		newCanvas: function(width: number, height: number, layers: number, settings: CanvasSetting): Canvas
-		newCubeImage: function(filename: string, settings: ImageSetting): Image
-		newCubeImage: function(faces: table, settings: ImageSetting): Image
+		newCubeImage: function(filename: string, settings?: ImageSetting): Image
+		newCubeImage: function(faces: table, settings?: ImageSetting): Image
 		newFont: function(filename: string): Font
-		newFont: function(filename: string, size: number, hinting: font.HintingMode, dpiscale: number): Font
+		newFont: function(filename: string, size: number, hinting?: font.HintingMode, dpiscale?: number): Font
 		newFont: function(filename: string, imagefilename: string): Font
-		newFont: function(size: number, hinting: font.HintingMode, dpiscale: number): Font
-		newImage: function(filename: string, settings: ImageSetting): Image
-		newImage: function(fileData: filesystem.FileData, settings: ImageSetting): Image
-		newImage: function(imageData: image.ImageData, settings: ImageSetting): Image
-		newImage: function(compressedImageData: image.CompressedImageData, settings: ImageSetting): Image
+		newFont: function(size?: number, hinting?: font.HintingMode, dpiscale?: number): Font
+		newImage: function(filename: string, settings?: ImageSetting): Image
+		newImage: function(fileData: filesystem.FileData, settings?: ImageSetting): Image
+		newImage: function(imageData: image.ImageData, settings?: ImageSetting): Image
+		newImage: function(compressedImageData: image.CompressedImageData, settings?: ImageSetting): Image
 		newImageFont: function(filename: string, glyphs: string): Font
 		newImageFont: function(imageData: image.ImageData, glyphs: string): Font
 		newImageFont: function(filename: string, glyphs: string, extraspacing: number): Font
 		newMesh: function(vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
-		newMesh: function(vertexcount: number, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
+		newMesh: function(vertexcount: number, mode?: MeshDrawMode, usage?: SpriteBatchUsage): Mesh
 		newMesh: function(vertexformat: {{number|string}}, vertices: {{number}}, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
 		newMesh: function(vertexformat: {{number|string}}, vertexcount: number, mode: MeshDrawMode, usage: SpriteBatchUsage): Mesh
-		newMesh: function(vertexcount: number, texture: Texture, mode: MeshDrawMode): Mesh
-		newParticleSystem: function(image: Image, buffer: number): ParticleSystem
-		newParticleSystem: function(texture: Texture, buffer: number): ParticleSystem
+		newMesh: function(vertexcount: number, texture?: Texture, mode?: MeshDrawMode): Mesh
+		newParticleSystem: function(image: Image, buffer?: number): ParticleSystem
+		newParticleSystem: function(texture: Texture, buffer?: number): ParticleSystem
 		newQuad: function(x: number, y: number, width: number, height: number, sw: number, sh: number): Quad
 		newQuad: function(x: number, y: number, width: number, height: number, texture: Texture): Quad
 		newShader: function(code: string): Shader
 		newShader: function(pixelcode: string, vertexcode: string): Shader
-		newSpriteBatch: function(image: Image, maxsprites: number): SpriteBatch
-		newSpriteBatch: function(image: Image, maxsprites: number, usage: SpriteBatchUsage): SpriteBatch
-		newSpriteBatch: function(texture: Texture, maxsprites: number, usage: SpriteBatchUsage): SpriteBatch
-		newText: function(font: Font, textstring: string): Text
+		newSpriteBatch: function(image: Image, maxsprites?: number): SpriteBatch
+		newSpriteBatch: function(image: Image, maxsprites?: number, usage?: SpriteBatchUsage): SpriteBatch
+		newSpriteBatch: function(texture: Texture, maxsprites?: number, usage?: SpriteBatchUsage): SpriteBatch
+		newText: function(font: Font, textstring?: string): Text
 		newText: function(font: Font, coloredtext: table): Text
 		newVideo: function(filename: string): Video
 		newVideo: function(videostream: video.VideoStream): Video
-		newVideo: function(filename: string, settings: VideoSetting): Video
-		newVideo: function(filename: string, loadaudio: boolean): Video
-		newVideo: function(videostream: video.VideoStream, loadaudio: boolean): Video
-		newVolumeImage: function(layers: table, settings: ImageSetting): Image
+		newVideo: function(filename: string, settings?: VideoSetting): Video
+		newVideo: function(filename: string, loadaudio?: boolean): Video
+		newVideo: function(videostream: video.VideoStream, loadaudio?: boolean): Video
+		newVolumeImage: function(layers: table, settings?: ImageSetting): Image
 		origin: function()
 		points: function(...: number)
 		points: function(points: {number})
@@ -1013,17 +1013,17 @@ global type love = record
 		polygon: function(mode: DrawMode, vertices: {number})
 		pop: function()
 		present: function()
-		print: function(text: string, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
+		print: function(text: string, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
 		print: function(coloredtext: {table|string}, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
 		print: function(text: string, transform: math.Transform)
 		print: function(coloredtext: {table|string}, transform: math.Transform)
 		print: function(text: string, font: Font, transform: math.Transform)
 		print: function(coloredtext: {table|string}, font: Font, transform: math.Transform)
-		print: function(text: string, font: Font, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
-		printf: function(text: string, x: number, y: number, limit: number, align: AlignMode, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
-		printf: function(text: string, font: Font, x: number, y: number, limit: number, align: AlignMode, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
-		printf: function(text: string, transform: math.Transform, limit: number, align: AlignMode)
-		printf: function(text: string, font: Font, transform: math.Transform, limit: number, align: AlignMode)
+		print: function(text: string, font: Font, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
+		printf: function(text: string, x: number, y: number, limit: number, align?: AlignMode, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
+		printf: function(text: string, font: Font, x: number, y: number, limit: number, align?: AlignMode, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number)
+		printf: function(text: string, transform: math.Transform, limit: number, align?: AlignMode)
+		printf: function(text: string, font: Font, transform: math.Transform, limit: number, align?: AlignMode)
 		printf: function(coloredtext: {table|string}, x: number, y: number, limit: number, align: AlignMode, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
 		printf: function(coloredtext: {table|string}, font: Font, x: number, y: number, limit: number, align: AlignMode, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
 		printf: function(coloredtext: {table|string}, transform: math.Transform, limit: number, align: AlignMode)
@@ -1031,25 +1031,25 @@ global type love = record
 		push: function()
 		push: function(stack: StackType)
 		rectangle: function(mode: DrawMode, x: number, y: number, width: number, height: number)
-		rectangle: function(mode: DrawMode, x: number, y: number, width: number, height: number, rx: number, ry: number, segments: number)
+		rectangle: function(mode: DrawMode, x: number, y: number, width: number, height: number, rx: number, ry?: number, segments?: number)
 		replaceTransform: function(transform: math.Transform)
 		reset: function()
 		rotate: function(angle: number)
-		scale: function(sx: number, sy: number)
-		setBackgroundColor: function(red: number, green: number, blue: number, alpha: number)
+		scale: function(sx: number, sy?: number)
+		setBackgroundColor: function(red: number, green: number, blue: number, alpha?: number)
 		setBackgroundColor: function(rgba1: {{number}}, rgba2: {{number}}, rgba8: {{number}})
 		setBlendMode: function(mode: BlendMode)
-		setBlendMode: function(mode: BlendMode, alphamode: BlendAlphaMode)
-		setCanvas: function(canvas: Canvas, mipmap: number)
+		setBlendMode: function(mode: BlendMode, alphamode?: BlendAlphaMode)
+		setCanvas: function(canvas: Canvas, mipmap?: number)
 		setCanvas: function()
 		setCanvas: function(canvas1: Canvas, canvas2: Canvas, ...: Canvas)
-		setCanvas: function(canvas: Canvas, slice: number, mipmap: number)
-		setCanvas: function(setup: CanvasSetup)
-		setColor: function(red: number, green: number, blue: number, alpha: number)
+		setCanvas: function(canvas: Canvas, slice: number, mipmap?: number)
+		setCanvas: function(setup?: CanvasSetup)
+		setColor: function(red: number, green: number, blue: number, alpha?: number)
 		setColor: function(rgba: {number})
 		setColorMask: function(red: boolean, green: boolean, blue: boolean, alpha: boolean)
 		setColorMask: function()
-		setDefaultFilter: function(min: FilterMode, mag: FilterMode, anisotropy: number)
+		setDefaultFilter: function(min: FilterMode, mag?: FilterMode, anisotropy?: number)
 		setDepthMode: function(comparemode: CompareMode, write: boolean)
 		setDepthMode: function()
 		setFont: function(font: Font)
@@ -1058,10 +1058,10 @@ global type love = record
 		setLineStyle: function(style: LineStyle)
 		setLineWidth: function(width: number)
 		setMeshCullMode: function(mode: CullMode)
-		setNewFont: function(size: number): Font
-		setNewFont: function(filename: string, size: number): Font
-		setNewFont: function(file: filesystem.File, size: number): Font
-		setNewFont: function(data: love.Data, size: number): Font
+		setNewFont: function(size?: number): Font
+		setNewFont: function(filename: string, size?: number): Font
+		setNewFont: function(file: filesystem.File, size?: number): Font
+		setNewFont: function(data: love.Data, size?: number): Font
 		setNewFont: function(rasterizer: font.Rasterizer): Font
 		setPointSize: function(size: number)
 		setScissor: function(x: number, y: number, width: number, height: number)
@@ -1205,7 +1205,7 @@ global type love = record
 		end
 
 		type ImageData = record
-			encode: function(self: ImageData, format: ImageFormat, filename: string): filesystem.FileData
+			encode: function(self: ImageData, format: ImageFormat, filename?: string): filesystem.FileData
 			encode: function(self: ImageData, outFile: string)
 			encode: function(self: ImageData, outFile: string, format: ImageFormat)
 			getDimensions: function(self: ImageData): number, number
@@ -1224,7 +1224,7 @@ global type love = record
 		newCompressedData: function(filename: string): CompressedImageData
 		newCompressedData: function(fileData: filesystem.FileData): CompressedImageData
 		newImageData: function(width: number, height: number): ImageData
-		newImageData: function(width: number, height: number, format: PixelFormat, data: string): ImageData
+		newImageData: function(width: number, height: number, format?: PixelFormat, data?: string): ImageData
 		newImageData: function(width: number, height: number, data: string): ImageData
 		newImageData: function(filename: string): ImageData
 		newImageData: function(filedata: filesystem.FileData): ImageData
@@ -1299,7 +1299,7 @@ global type love = record
 			isVibrationSupported: function(self: Joystick): boolean
 			setVibration: function(self: Joystick, left: number, right: number): boolean
 			setVibration: function(self: Joystick): boolean
-			setVibration: function(self: Joystick, left: number, right: number, duration: number): boolean
+			setVibration: function(self: Joystick, left: number, right: number, duration?: number): boolean
 		end
 
 		getGamepadMappingString: function(guid: string): string
@@ -1309,8 +1309,8 @@ global type love = record
 		loadGamepadMappings: function(mappings: string)
 		saveGamepadMappings: function(filename: string): string
 		saveGamepadMappings: function(): string
-		setGamepadMapping: function(guid: string, button: GamepadButton, inputtype: JoystickInputType, inputindex: number, hatdir: JoystickHat): boolean
-		setGamepadMapping: function(guid: string, axis: GamepadAxis, inputtype: JoystickInputType, inputindex: number, hatdir: JoystickHat): boolean
+		setGamepadMapping: function(guid: string, button: GamepadButton, inputtype: JoystickInputType, inputindex: number, hatdir?: JoystickHat): boolean
+		setGamepadMapping: function(guid: string, axis: GamepadAxis, inputtype: JoystickInputType, inputindex: number, hatdir?: JoystickHat): boolean
 
 	end
 	type keyboard = record
@@ -1684,12 +1684,12 @@ global type love = record
 			getDegree: function(self: BezierCurve): number
 			getDerivative: function(self: BezierCurve): BezierCurve
 			getSegment: function(self: BezierCurve, startpoint: number, endpoint: number): BezierCurve
-			insertControlPoint: function(self: BezierCurve, x: number, y: number, i: number)
+			insertControlPoint: function(self: BezierCurve, x: number, y: number, i?: number)
 			removeControlPoint: function(self: BezierCurve, index: number)
-			render: function(self: BezierCurve, depth: number): {number}
-			renderSegment: function(self: BezierCurve, startpoint: number, endpoint: number, depth: number): {number}
-			rotate: function(self: BezierCurve, angle: number, ox: number, oy: number)
-			scale: function(self: BezierCurve, s: number, ox: number, oy: number)
+			render: function(self: BezierCurve, depth?: number): {number}
+			renderSegment: function(self: BezierCurve, startpoint: number, endpoint: number, depth?: number): {number}
+			rotate: function(self: BezierCurve, angle: number, ox?: number, oy?: number)
+			scale: function(self: BezierCurve, s: number, ox?: number, oy?: number)
 			setControlPoint: function(self: BezierCurve, i: number, x: number, y: number)
 			translate: function(self: BezierCurve, dx: number, dy: number)
 		end
@@ -1700,7 +1700,7 @@ global type love = record
 			random: function(self: RandomGenerator): number
 			random: function(self: RandomGenerator, max: number): number
 			random: function(self: RandomGenerator, min: number, max: number): number
-			randomNormal: function(self: RandomGenerator, stddev: number, mean: number): number
+			randomNormal: function(self: RandomGenerator, stddev?: number, mean?: number): number
 			setSeed: function(self: RandomGenerator, seed: number)
 			setSeed: function(self: RandomGenerator, low: number, high: number)
 			setState: function(self: RandomGenerator, state: string)
@@ -1715,19 +1715,19 @@ global type love = record
 			isAffine2DTransform: function(self: Transform): boolean
 			reset: function(self: Transform): Transform
 			rotate: function(self: Transform, angle: number): Transform
-			scale: function(self: Transform, sx: number, sy: number): Transform
+			scale: function(self: Transform, sx: number, sy?: number): Transform
 			setMatrix: function(self: Transform, ...: number): Transform
 			setMatrix: function(self: Transform, layout: MatrixLayout, ...: number): Transform
 			setMatrix: function(self: Transform, layout: MatrixLayout, matrix: {number}): Transform
 			setMatrix: function(self: Transform, layout: MatrixLayout, matrix: {{number}}): Transform
-			setTransformation: function(self: Transform, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): Transform
+			setTransformation: function(self: Transform, x: number, y: number, angle?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): Transform
 			shear: function(self: Transform, kx: number, ky: number): Transform
 			transformPoint: function(self: Transform, globalX: number, globalY: number): number, number
 			translate: function(self: Transform, dx: number, dy: number): Transform
 		end
 
-		colorFromBytes: function(rb: number, gb: number, bb: number, ab: number): number, number, number, number
-		colorToBytes: function(r: number, g: number, b: number, a: number): number, number, number, number
+		colorFromBytes: function(rb: number, gb: number, bb: number, ab?: number): number, number, number, number
+		colorToBytes: function(r: number, g: number, b: number, a?: number): number, number, number, number
 		gammaToLinear: function(r: number, g: number, b: number): number, number, number
 		gammaToLinear: function(color: {number}): number, number, number
 		gammaToLinear: function(c: number): number
@@ -1744,7 +1744,7 @@ global type love = record
 		newRandomGenerator: function(seed: number): RandomGenerator
 		newRandomGenerator: function(low: number, high: number): RandomGenerator
 		newTransform: function(): Transform
-		newTransform: function(x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): Transform
+		newTransform: function(x: number, y: number, angle?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): Transform
 		noise: function(x: number): number
 		noise: function(x: number, y: number): number
 		noise: function(x: number, y: number, z: number): number
@@ -1752,7 +1752,7 @@ global type love = record
 		random: function(): number
 		random: function(max: number): number
 		random: function(min: number, max: number): number
-		randomNormal: function(stddev: number, mean: number): number
+		randomNormal: function(stddev?: number, mean?: number): number
 		setRandomSeed: function(seed: number)
 		setRandomSeed: function(low: number, high: number)
 		setRandomState: function(state: string)
@@ -1791,9 +1791,9 @@ global type love = record
 		isDown: function(...: number): boolean
 		isGrabbed: function(): boolean
 		isVisible: function(): boolean
-		newCursor: function(imageData: image.ImageData, hotx: number, hoty: number): Cursor
-		newCursor: function(filename: string, hotx: number, hoty: number): Cursor
-		newCursor: function(fileData: filesystem.FileData, hotx: number, hoty: number): Cursor
+		newCursor: function(imageData: image.ImageData, hotx?: number, hoty?: number): Cursor
+		newCursor: function(filename: string, hotx?: number, hoty?: number): Cursor
+		newCursor: function(fileData: filesystem.FileData, hotx?: number, hoty?: number): Cursor
 		setCursor: function(cursor: Cursor)
 		setCursor: function()
 		setGrabbed: function(grab: boolean)
@@ -1951,7 +1951,7 @@ global type love = record
 		type Fixture = record
 			destroy: function(self: Fixture)
 			getBody: function(self: Fixture): Body
-			getBoundingBox: function(self: Fixture, index: number): number, number, number, number
+			getBoundingBox: function(self: Fixture, index?: number): number, number, number, number
 			getCategory: function(self: Fixture): number...
 			getDensity: function(self: Fixture): number
 			getFilterData: function(self: Fixture): number, number, number
@@ -1964,7 +1964,7 @@ global type love = record
 			getUserData: function(self: Fixture): any
 			isDestroyed: function(self: Fixture): boolean
 			isSensor: function(self: Fixture): boolean
-			rayCast: function(self: Fixture, x1: number, y1: number, x2: number, y2: number, maxFraction: number, childIndex: number): number, number, number
+			rayCast: function(self: Fixture, x1: number, y1: number, x2: number, y2: number, maxFraction: number, childIndex?: number): number, number, number
 			setCategory: function(self: Fixture, ...: number)
 			setDensity: function(self: Fixture, density: number)
 			setFilterData: function(self: Fixture, categories: number, mask: number, group: number)
@@ -2087,12 +2087,12 @@ global type love = record
 		end
 
 		type Shape = record
-			computeAABB: function(self: Shape, tx: number, ty: number, tr: number, childIndex: number): number, number, number, number
+			computeAABB: function(self: Shape, tx: number, ty: number, tr: number, childIndex?: number): number, number, number, number
 			computeMass: function(self: Shape, density: number): number, number, number, number
 			getChildCount: function(self: Shape): number
 			getRadius: function(self: Shape): number
 			getType: function(self: Shape): ShapeType
-			rayCast: function(self: Shape, x1: number, y1: number, x2: number, y2: number, maxFraction: number, tx: number, ty: number, tr: number, childIndex: number): number, number, number
+			rayCast: function(self: Shape, x1: number, y1: number, x2: number, y2: number, maxFraction: number, tx: number, ty: number, tr: number, childIndex?: number): number, number, number
 			testPoint: function(self: Shape, tx: number, ty: number, tr: number, x: number, y: number): boolean
 		end
 
@@ -2138,42 +2138,42 @@ global type love = record
 			setGravity: function(self: World, x: number, y: number)
 			setSleepingAllowed: function(self: World, allow: boolean)
 			translateOrigin: function(self: World, x: number, y: number)
-			update: function(self: World, dt: number, velocityiterations: number, positioniterations: number)
+			update: function(self: World, dt: number, velocityiterations?: number, positioniterations?: number)
 		end
 
 		getDistance: function(fixture1: Fixture, fixture2: Fixture): number, number, number, number, number
 		getMeter: function(): number
-		newBody: function(world: World, x: number, y: number, type: BodyType): Body
+		newBody: function(world: World, x?: number, y?: number, type?: BodyType): Body
 		newChainShape: function(loop: boolean, ...: number): ChainShape
 		newChainShape: function(loop: boolean, points: {number}): ChainShape
 		newCircleShape: function(radius: number): CircleShape
 		newCircleShape: function(x: number, y: number, radius: number): CircleShape
-		newDistanceJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected: boolean): DistanceJoint
+		newDistanceJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected?: boolean): DistanceJoint
 		newEdgeShape: function(x1: number, y1: number, x2: number, y2: number): EdgeShape
-		newFixture: function(body: Body, shape: Shape, density: number): Fixture
-		newFrictionJoint: function(body1: Body, body2: Body, x: number, y: number, collideConnected: boolean): FrictionJoint
-		newFrictionJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected: boolean): FrictionJoint
-		newGearJoint: function(joint1: Joint, joint2: Joint, ratio: number, collideConnected: boolean): GearJoint
-		newMotorJoint: function(body1: Body, body2: Body, correctionFactor: number): MotorJoint
-		newMotorJoint: function(body1: Body, body2: Body, correctionFactor: number, collideConnected: boolean): MotorJoint
+		newFixture: function(body: Body, shape: Shape, density?: number): Fixture
+		newFrictionJoint: function(body1: Body, body2: Body, x: number, y: number, collideConnected?: boolean): FrictionJoint
+		newFrictionJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected?: boolean): FrictionJoint
+		newGearJoint: function(joint1: Joint, joint2: Joint, ratio?: number, collideConnected?: boolean): GearJoint
+		newMotorJoint: function(body1: Body, body2: Body, correctionFactor?: number): MotorJoint
+		newMotorJoint: function(body1: Body, body2: Body, correctionFactor?: number, collideConnected?: boolean): MotorJoint
 		newMouseJoint: function(body: Body, x: number, y: number): MouseJoint
 		newPolygonShape: function(...: number): PolygonShape
 		newPolygonShape: function(vertices: {number}): PolygonShape
-		newPrismaticJoint: function(body1: Body, body2: Body, x: number, y: number, ax: number, ay: number, collideConnected: boolean): PrismaticJoint
-		newPrismaticJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, ax: number, ay: number, collideConnected: boolean): PrismaticJoint
-		newPrismaticJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, ax: number, ay: number, collideConnected: boolean, referenceAngle: number): PrismaticJoint
-		newPulleyJoint: function(body1: Body, body2: Body, gx1: number, gy1: number, gx2: number, gy2: number, x1: number, y1: number, x2: number, y2: number, ratio: number, collideConnected: boolean): PulleyJoint
+		newPrismaticJoint: function(body1: Body, body2: Body, x: number, y: number, ax: number, ay: number, collideConnected?: boolean): PrismaticJoint
+		newPrismaticJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, ax: number, ay: number, collideConnected?: boolean): PrismaticJoint
+		newPrismaticJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, ax: number, ay: number, collideConnected?: boolean, referenceAngle?: number): PrismaticJoint
+		newPulleyJoint: function(body1: Body, body2: Body, gx1: number, gy1: number, gx2: number, gy2: number, x1: number, y1: number, x2: number, y2: number, ratio?: number, collideConnected?: boolean): PulleyJoint
 		newRectangleShape: function(width: number, height: number): PolygonShape
-		newRectangleShape: function(x: number, y: number, width: number, height: number, angle: number): PolygonShape
-		newRevoluteJoint: function(body1: Body, body2: Body, x: number, y: number, collideConnected: boolean): RevoluteJoint
-		newRevoluteJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected: boolean, referenceAngle: number): RevoluteJoint
-		newRopeJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, maxLength: number, collideConnected: boolean): RopeJoint
-		newWeldJoint: function(body1: Body, body2: Body, x: number, y: number, collideConnected: boolean): WeldJoint
-		newWeldJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected: boolean): WeldJoint
-		newWeldJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected: boolean, referenceAngle: number): WeldJoint
-		newWheelJoint: function(body1: Body, body2: Body, x: number, y: number, ax: number, ay: number, collideConnected: boolean): WheelJoint
-		newWheelJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, ax: number, ay: number, collideConnected: boolean): WheelJoint
-		newWorld: function(xg: number, yg: number, sleep: boolean): World
+		newRectangleShape: function(x: number, y: number, width: number, height: number, angle?: number): PolygonShape
+		newRevoluteJoint: function(body1: Body, body2: Body, x: number, y: number, collideConnected?: boolean): RevoluteJoint
+		newRevoluteJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected?: boolean, referenceAngle?: number): RevoluteJoint
+		newRopeJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, maxLength: number, collideConnected?: boolean): RopeJoint
+		newWeldJoint: function(body1: Body, body2: Body, x: number, y: number, collideConnected?: boolean): WeldJoint
+		newWeldJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected?: boolean): WeldJoint
+		newWeldJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, collideConnected?: boolean, referenceAngle?: number): WeldJoint
+		newWheelJoint: function(body1: Body, body2: Body, x: number, y: number, ax: number, ay: number, collideConnected?: boolean): WheelJoint
+		newWheelJoint: function(body1: Body, body2: Body, x1: number, y1: number, x2: number, y2: number, ax: number, ay: number, collideConnected?: boolean): WheelJoint
+		newWorld: function(xg?: number, yg?: number, sleep?: boolean): World
 		setMeter: function(scale: number)
 
 	end
@@ -2200,12 +2200,12 @@ global type love = record
 			setSample: function(self: SoundData, i: number, channel: number, sample: number)
 		end
 
-		newDecoder: function(file: filesystem.File, buffer: number): Decoder
-		newDecoder: function(filename: string, buffer: number): Decoder
+		newDecoder: function(file: filesystem.File, buffer?: number): Decoder
+		newDecoder: function(filename: string, buffer?: number): Decoder
 		newSoundData: function(filename: string): SoundData
 		newSoundData: function(file: filesystem.File): SoundData
 		newSoundData: function(decoder: Decoder): SoundData
-		newSoundData: function(samples: number, rate: number, bits: number, channels: number): SoundData
+		newSoundData: function(samples: number, rate?: number, bits?: number, channels?: number): SoundData
 
 	end
 	type system = record
@@ -2224,7 +2224,7 @@ global type love = record
 		hasBackgroundMusic: function(): boolean
 		openURL: function(url: string): boolean
 		setClipboardText: function(text: string)
-		vibrate: function(seconds: number)
+		vibrate: function(seconds?: number)
 
 	end
 	type thread = record
@@ -2337,10 +2337,10 @@ global type love = record
 		fromPixels: function(pixelvalue: number): number
 		fromPixels: function(px: number, py: number): number, number
 		getDPIScale: function(): number
-		getDesktopDimensions: function(displayindex: number): number, number
+		getDesktopDimensions: function(displayindex?: number): number, number
 		getDisplayCount: function(): number
-		getDisplayName: function(displayindex: number): string
-		getDisplayOrientation: function(displayindex: number): DisplayOrientation
+		getDisplayName: function(displayindex?: number): string
+		getDisplayOrientation: function(displayindex?: number): DisplayOrientation
 		getFullscreen: function(): boolean, FullscreenType
 		getFullscreenModes: function(displayindex: number): {FullscreenMode}
 		getIcon: function(): image.ImageData
@@ -2358,17 +2358,17 @@ global type love = record
 		isVisible: function(): boolean
 		maximize: function()
 		minimize: function()
-		requestAttention: function(continuous: boolean)
+		requestAttention: function(continuous?: boolean)
 		restore: function()
 		setDisplaySleepEnabled: function(enable: boolean)
 		setFullscreen: function(fullscreen: boolean): boolean
 		setFullscreen: function(fullscreen: boolean, fstype: FullscreenType): boolean
 		setIcon: function(imagedata: image.ImageData): boolean
-		setMode: function(width: number, height: number, flags: WindowSetting): boolean
-		setPosition: function(x: number, y: number, displayindex: number)
+		setMode: function(width: number, height: number, flags?: WindowSetting): boolean
+		setPosition: function(x: number, y: number, displayindex?: number)
 		setTitle: function(title: string)
 		setVSync: function(vsync: number)
-		showMessageBox: function(title: string, message: string, type: MessageBoxType, attachtowindow: boolean): boolean
+		showMessageBox: function(title: string, message: string, type?: MessageBoxType, attachtowindow?: boolean): boolean
 		toPixels: function(value: number): number
 		toPixels: function(x: number, y: number): number, number
 		updateMode: function(width: number, height: number, settings: WindowSetting): boolean
