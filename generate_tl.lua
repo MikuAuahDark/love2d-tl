@@ -979,10 +979,14 @@ local function writeNestedFields(t, level, module)
 	local tab = string.rep("\t", level)
 	local tab1 = string.rep("\t", level + 1)
 
-	io.write(tab, "type ", t.name, " = record\n")
+	io.write(tab, "type ", t.name, " = interface\n")
 
 	if t.arraytype then
 		io.write(tab1, "{", t.arraytype, "}\n")
+	end
+
+	if t.supertypes ~= nil then
+		io.write(string.rep("\t", level + 1), "is "..table.concat(t.supertypes, ", "), "\n")
 	end
 
 	for _, v in ipairs(t.fields) do
@@ -1031,7 +1035,11 @@ local function startLookup(name, data, level)
 			if t.fields then
 				writeNestedFields(t, level, name)
 			else
-				io.write(tab, "type ", t.name, " = record\n")
+				io.write(tab, "type ", t.name, " = interface\n")
+
+				if t.supertypes ~= nil then
+					io.write(string.rep("\t", level + 1), "is "..table.concat(t.supertypes, ", "), "\n")
+				end
 
 				if t.functions and #t.functions > 0 then
 					for _, f in ipairs(t.functions) do
