@@ -18,6 +18,7 @@
 ---@class LoveAPIFunctionVariable
 ---@field public name string
 ---@field public type string
+---@field public default? string
 ---@field public table? LoveAPIFunctionVariable[]
 ---@field package typename? string generate_tl.lua-specific
 ---@field package arraytype? string generate_tl.lua-specific
@@ -911,7 +912,24 @@ local function writeFunction(data, level, module, object)
 						type = getTypeName(arg.type, module)
 					end
 
-					args[#args + 1] = arg.name..": "..type
+					-- If a default value is specified, we mark the argument as optional 
+					local isOptional = arg.default ~= nil
+					-- If the argument value is a table and all values in the table have a default value, that implies the argument is optional
+					if not isOptional and arg.type == "table" and arg.table ~= nil then
+						isOptional = true
+						for _, argTableValue in pairs(arg.table) do
+							if argTableValue.default == nil then
+								isOptional = false
+								break
+							end
+						end
+					end
+
+					if isOptional then
+						args[#args + 1] = arg.name.."?: "..type
+					else
+						args[#args + 1] = arg.name..": "..type
+					end
 
 					-- Teal doesn't like additional arguments after ellipsis
 					if ellipsis then
