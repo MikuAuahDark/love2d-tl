@@ -2,7 +2,8 @@
 -- LÖVE 11.5
 
 global type love = record
-	type Data = record
+	type Data = interface
+		is Object
 		clone: function(self: Data): Data
 		getFFIPointer: function(self: Data): any
 		getPointer: function(self: Data): any
@@ -10,13 +11,13 @@ global type love = record
 		getString: function(self: Data): string
 	end
 
-	type Object = record
+	type Object = interface
 		release: function(self: Object): boolean
 		type: function(self: Object): string
 		typeOf: function(self: Object, name: string): boolean
 	end
 
-	type Configuration = record
+	type Configuration = interface
 		identity: string
 		appendidentity: boolean
 		version: string
@@ -119,7 +120,8 @@ global type love = record
 			"samples"
 		end
 
-		type RecordingDevice = record
+		type RecordingDevice = interface
+			is Object
 			getBitDepth: function(self: RecordingDevice): number
 			getChannelCount: function(self: RecordingDevice): number
 			getData: function(self: RecordingDevice): sound.SoundData
@@ -131,7 +133,8 @@ global type love = record
 			stop: function(self: RecordingDevice): sound.SoundData
 		end
 
-		type Source = record
+		type Source = interface
+			is Object
 			clone: function(self: Source): Source
 			getActiveEffects: function(self: Source): {string}
 			getAirAbsorption: function(self: Source): number
@@ -177,7 +180,7 @@ global type love = record
 			tell: function(self: Source, unit?: TimeUnit): number
 		end
 
-		type FilterSettings = record
+		type FilterSettings = interface
 			volume: number
 			highgain: number
 			lowgain: number
@@ -250,10 +253,12 @@ global type love = record
 			"sha512"
 		end
 
-		type ByteData = record
+		type ByteData = interface
+			is Object, Data
 		end
 
-		type CompressedData = record
+		type CompressedData = interface
+			is Data, Object
 			getFormat: function(self: CompressedData): CompressedDataFormat
 		end
 
@@ -308,10 +313,12 @@ global type love = record
 			"other"
 		end
 
-		type DroppedFile = record
+		type DroppedFile = interface
+			is File, Object
 		end
 
-		type File = record
+		type File = interface
+			is Object
 			close: function(self: File): boolean
 			flush: function(self: File): boolean, string
 			getBuffer: function(self: File): BufferMode, number
@@ -331,12 +338,13 @@ global type love = record
 			write: function(self: File, data: love.Data, size?: number): boolean, string
 		end
 
-		type FileData = record
+		type FileData = interface
+			is Data, Object
 			getExtension: function(self: FileData): string
 			getFilename: function(self: FileData): string
 		end
 
-		type FileInfo = record
+		type FileInfo = interface
 			type: FileType
 			size: number
 			modtime: number
@@ -395,7 +403,8 @@ global type love = record
 			"none"
 		end
 
-		type GlyphData = record
+		type GlyphData = interface
+			is Data, Object
 			getAdvance: function(self: GlyphData): number
 			getBearing: function(self: GlyphData): number, number
 			getBoundingBox: function(self: GlyphData): number, number, number, number
@@ -407,7 +416,8 @@ global type love = record
 			getWidth: function(self: GlyphData): number
 		end
 
-		type Rasterizer = record
+		type Rasterizer = interface
+			is Object
 			getAdvance: function(self: Rasterizer): number
 			getAscent: function(self: Rasterizer): number
 			getDescent: function(self: Rasterizer): number
@@ -606,7 +616,8 @@ global type love = record
 			"clampzero"
 		end
 
-		type Canvas = record
+		type Canvas = interface
+			is Texture, Drawable, Object
 			generateMipmaps: function(self: Canvas)
 			getMSAA: function(self: Canvas): number
 			getMipmapMode: function(self: Canvas): MipmapMode
@@ -615,10 +626,12 @@ global type love = record
 			renderTo: function(func: function())
 		end
 
-		type Drawable = record
+		type Drawable = interface
+			is Object
 		end
 
-		type Font = record
+		type Font = interface
+			is Object
 			getAscent: function(self: Font): number
 			getBaseline: function(self: Font): number
 			getDPIScale: function(self: Font): number
@@ -638,13 +651,15 @@ global type love = record
 			setLineHeight: function(self: Font, height: number)
 		end
 
-		type Image = record
+		type Image = interface
+			is Texture, Drawable, Object
 			isCompressed: function(self: Image): boolean
 			isFormatLinear: function(self: Image): boolean
 			replacePixels: function(self: Image, data: image.ImageData, slice?: number, mipmap?: number, x?: number, y?: number, reloadmipmaps?: boolean)
 		end
 
-		type Mesh = record
+		type Mesh = interface
+			is Drawable, Object
 			attachAttribute: function(self: Mesh, name: string, mesh: Mesh)
 			attachAttribute: function(self: Mesh, name: string, mesh: Mesh, step?: VertexAttributeStep, attachname?: string)
 			detachAttribute: function(self: Mesh, name: string): boolean
@@ -677,7 +692,8 @@ global type love = record
 			setVertices: function(self: Mesh, data: love.Data, startvertex?: number)
 		end
 
-		type ParticleSystem = record
+		type ParticleSystem = interface
+			is Drawable, Object
 			clone: function(self: ParticleSystem): ParticleSystem
 			emit: function(self: ParticleSystem, numparticles: number)
 			getBufferSize: function(self: ParticleSystem): number
@@ -742,13 +758,15 @@ global type love = record
 			update: function(self: ParticleSystem, dt: number)
 		end
 
-		type Quad = record
+		type Quad = interface
+			is Object
 			getTextureDimensions: function(self: Quad): number, number
 			getViewport: function(self: Quad): number, number, number, number
 			setViewport: function(self: Quad, x: number, y: number, w: number, h: number, sw?: number, sh?: number)
 		end
 
-		type Shader = record
+		type Shader = interface
+			is Object
 			getWarnings: function(self: Shader): string
 			hasUniform: function(self: Shader, name: string): boolean
 			send: function(self: Shader, name: string, ...: number)
@@ -763,7 +781,8 @@ global type love = record
 			sendColor: function(self: Shader, name: string, ...: table)
 		end
 
-		type SpriteBatch = record
+		type SpriteBatch = interface
+			is Drawable, Object
 			add: function(self: SpriteBatch, x: number, y: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
 			add: function(self: SpriteBatch, quad: Quad, x: number, y: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
 			addLayer: function(self: SpriteBatch, layerindex: number, x?: number, y?: number, r?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
@@ -790,7 +809,8 @@ global type love = record
 			setTexture: function(self: SpriteBatch, texture: Texture)
 		end
 
-		type Text = record
+		type Text = interface
+			is Drawable, Object
 			add: function(self: Text, textstring: string, x?: number, y?: number, angle?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
 			add: function(self: Text, coloredtext: {table|string}, x: number, y: number, angle: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number): number
 			addf: function(self: Text, textstring: string, wraplimit: number, align: AlignMode, x: number, y: number, angle?: number, sx?: number, sy?: number, ox?: number, oy?: number, kx?: number, ky?: number): number
@@ -810,7 +830,8 @@ global type love = record
 			setf: function(self: Text, coloredtext: {table|string}, wraplimit: number, alignmode: AlignMode)
 		end
 
-		type Texture = record
+		type Texture = interface
+			is Drawable, Object
 			getDPIScale: function(self: Texture): number
 			getDepth: function(self: Texture): number
 			getDepthSampleMode: function(self: Texture): CompareMode
@@ -835,7 +856,8 @@ global type love = record
 			setWrap: function(self: Texture, horiz: WrapMode, vert?: WrapMode, depth?: WrapMode)
 		end
 
-		type Video = record
+		type Video = interface
+			is Drawable, Object
 			getDimensions: function(self: Video): number, number
 			getFilter: function(self: Video): FilterMode, FilterMode, number
 			getHeight: function(self: Video): number
@@ -852,21 +874,21 @@ global type love = record
 			tell: function(self: Video): number
 		end
 
-		type RenderTargetSetup = record
+		type RenderTargetSetup = interface
 			{Canvas}
 			mipmap: number
 			layer: number
 			face: number
 		end
 
-		type CanvasSetup = record
+		type CanvasSetup = interface
 			{RenderTargetSetup}
 			stencil: boolean
 			depth: boolean
 			depthstencil: RenderTargetSetup
 		end
 
-		type Stats = record
+		type Stats = interface
 			drawcalls: number
 			canvasswitches: number
 			texturememory: number
@@ -877,13 +899,13 @@ global type love = record
 			drawcallsbatched: number
 		end
 
-		type ImageSetting = record
+		type ImageSetting = interface
 			mipmaps: boolean
 			linear: boolean
 			dpiscale: number
 		end
 
-		type CanvasSetting = record
+		type CanvasSetting = interface
 			type: TextureType
 			format: image.PixelFormat
 			readable: boolean
@@ -892,7 +914,7 @@ global type love = record
 			mipmaps: MipmapMode
 		end
 
-		type VideoSetting = record
+		type VideoSetting = interface
 			audio: boolean
 			dpiscale: number
 		end
@@ -1193,7 +1215,8 @@ global type love = record
 			"ASTC12x12"
 		end
 
-		type CompressedImageData = record
+		type CompressedImageData = interface
+			is Data, Object
 			getDimensions: function(self: CompressedImageData): number, number
 			getDimensions: function(self: CompressedImageData, level: number): number, number
 			getFormat: function(self: CompressedImageData): CompressedImageFormat
@@ -1204,7 +1227,8 @@ global type love = record
 			getWidth: function(self: CompressedImageData, level: number): number
 		end
 
-		type ImageData = record
+		type ImageData = interface
+			is Data, Object
 			encode: function(self: ImageData, format: ImageFormat, filename?: string): filesystem.FileData
 			encode: function(self: ImageData, outFile: string)
 			encode: function(self: ImageData, outFile: string, format: ImageFormat)
@@ -1276,7 +1300,8 @@ global type love = record
 			"hat"
 		end
 
-		type Joystick = record
+		type Joystick = interface
+			is Object
 			getAxes: function(self: Joystick): number, number, number
 			getAxis: function(self: Joystick, axis: number): number
 			getAxisCount: function(self: Joystick): number
@@ -1677,7 +1702,8 @@ global type love = record
 			"column"
 		end
 
-		type BezierCurve = record
+		type BezierCurve = interface
+			is Object
 			evaluate: function(self: BezierCurve, t: number): number, number
 			getControlPoint: function(self: BezierCurve, i: number): number, number
 			getControlPointCount: function(self: BezierCurve): number
@@ -1694,7 +1720,8 @@ global type love = record
 			translate: function(self: BezierCurve, dx: number, dy: number)
 		end
 
-		type RandomGenerator = record
+		type RandomGenerator = interface
+			is Object
 			getSeed: function(self: RandomGenerator): number, number
 			getState: function(self: RandomGenerator): string
 			random: function(self: RandomGenerator): number
@@ -1706,7 +1733,8 @@ global type love = record
 			setState: function(self: RandomGenerator, state: string)
 		end
 
-		type Transform = record
+		type Transform = interface
+			is Object
 			apply: function(self: Transform, other: Transform): Transform
 			clone: function(self: Transform): Transform
 			getMatrix: function(self: Transform): number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number
@@ -1777,7 +1805,8 @@ global type love = record
 			"hand"
 		end
 
-		type Cursor = record
+		type Cursor = interface
+			is Object
 			getType: function(self: Cursor): CursorType
 		end
 
@@ -1830,7 +1859,8 @@ global type love = record
 			"chain"
 		end
 
-		type Body = record
+		type Body = interface
+			is Object
 			applyAngularImpulse: function(self: Body, impulse: number)
 			applyForce: function(self: Body, fx: number, fy: number)
 			applyForce: function(self: Body, fx: number, fy: number, x: number, y: number)
@@ -1897,7 +1927,8 @@ global type love = record
 			setY: function(self: Body, y: number)
 		end
 
-		type ChainShape = record
+		type ChainShape = interface
+			is Shape, Object
 			getChildEdge: function(self: ChainShape, index: number): EdgeShape
 			getNextVertex: function(self: ChainShape): number, number
 			getPoint: function(self: ChainShape, index: number): number, number
@@ -1908,14 +1939,16 @@ global type love = record
 			setPreviousVertex: function(self: ChainShape, x: number, y: number)
 		end
 
-		type CircleShape = record
+		type CircleShape = interface
+			is Shape, Object
 			getPoint: function(self: CircleShape): number, number
 			getRadius: function(self: CircleShape): number
 			setPoint: function(self: CircleShape, x: number, y: number)
 			setRadius: function(self: CircleShape, radius: number)
 		end
 
-		type Contact = record
+		type Contact = interface
+			is Object
 			getChildren: function(self: Contact): number, number
 			getFixtures: function(self: Contact): Fixture, Fixture
 			getFriction: function(self: Contact): number
@@ -1931,7 +1964,8 @@ global type love = record
 			setRestitution: function(self: Contact, restitution: number)
 		end
 
-		type DistanceJoint = record
+		type DistanceJoint = interface
+			is Joint, Object
 			getDampingRatio: function(self: DistanceJoint): number
 			getFrequency: function(self: DistanceJoint): number
 			getLength: function(self: DistanceJoint): number
@@ -1940,7 +1974,8 @@ global type love = record
 			setLength: function(self: DistanceJoint, l: number)
 		end
 
-		type EdgeShape = record
+		type EdgeShape = interface
+			is Shape, Object
 			getNextVertex: function(self: EdgeShape): number, number
 			getPoints: function(self: EdgeShape): number, number, number, number
 			getPreviousVertex: function(self: EdgeShape): number, number
@@ -1948,7 +1983,8 @@ global type love = record
 			setPreviousVertex: function(self: EdgeShape, x: number, y: number)
 		end
 
-		type Fixture = record
+		type Fixture = interface
+			is Object
 			destroy: function(self: Fixture)
 			getBody: function(self: Fixture): Body
 			getBoundingBox: function(self: Fixture, index?: number): number, number, number, number
@@ -1977,20 +2013,23 @@ global type love = record
 			testPoint: function(self: Fixture, x: number, y: number): boolean
 		end
 
-		type FrictionJoint = record
+		type FrictionJoint = interface
+			is Joint, Object
 			getMaxForce: function(self: FrictionJoint): number
 			getMaxTorque: function(self: FrictionJoint): number
 			setMaxForce: function(self: FrictionJoint, maxForce: number)
 			setMaxTorque: function(self: FrictionJoint, torque: number)
 		end
 
-		type GearJoint = record
+		type GearJoint = interface
+			is Joint, Object
 			getJoints: function(self: GearJoint): Joint, Joint
 			getRatio: function(self: GearJoint): number
 			setRatio: function(self: GearJoint, ratio: number)
 		end
 
-		type Joint = record
+		type Joint = interface
+			is Object
 			destroy: function(self: Joint)
 			getAnchors: function(self: Joint): number, number, number, number
 			getBodies: function(self: Joint): Body, Body
@@ -2003,14 +2042,16 @@ global type love = record
 			setUserData: function(self: Joint, value: any)
 		end
 
-		type MotorJoint = record
+		type MotorJoint = interface
+			is Joint, Object
 			getAngularOffset: function(self: MotorJoint): number
 			getLinearOffset: function(self: MotorJoint): number, number
 			setAngularOffset: function(self: MotorJoint, angleoffset: number)
 			setLinearOffset: function(self: MotorJoint, x: number, y: number)
 		end
 
-		type MouseJoint = record
+		type MouseJoint = interface
+			is Joint, Object
 			getDampingRatio: function(self: MouseJoint): number
 			getFrequency: function(self: MouseJoint): number
 			getMaxForce: function(self: MouseJoint): number
@@ -2021,11 +2062,13 @@ global type love = record
 			setTarget: function(self: MouseJoint, x: number, y: number)
 		end
 
-		type PolygonShape = record
+		type PolygonShape = interface
+			is Shape, Object
 			getPoints: function(self: PolygonShape): number, number, number, number
 		end
 
-		type PrismaticJoint = record
+		type PrismaticJoint = interface
+			is Joint, Object
 			areLimitsEnabled: function(self: PrismaticJoint): boolean
 			getAxis: function(self: PrismaticJoint): number, number
 			getJointSpeed: function(self: PrismaticJoint): number
@@ -2047,7 +2090,8 @@ global type love = record
 			setUpperLimit: function(self: PrismaticJoint, upper: number)
 		end
 
-		type PulleyJoint = record
+		type PulleyJoint = interface
+			is Joint, Object
 			getConstant: function(self: PulleyJoint): number
 			getGroundAnchors: function(self: PulleyJoint): number, number, number, number
 			getLengthA: function(self: PulleyJoint): number
@@ -2059,7 +2103,8 @@ global type love = record
 			setRatio: function(self: PulleyJoint, ratio: number)
 		end
 
-		type RevoluteJoint = record
+		type RevoluteJoint = interface
+			is Joint, Object
 			areLimitsEnabled: function(self: RevoluteJoint): boolean
 			getJointAngle: function(self: RevoluteJoint): number
 			getJointSpeed: function(self: RevoluteJoint): number
@@ -2081,12 +2126,14 @@ global type love = record
 			setUpperLimit: function(self: RevoluteJoint, upper: number)
 		end
 
-		type RopeJoint = record
+		type RopeJoint = interface
+			is Joint, Object
 			getMaxLength: function(self: RopeJoint): number
 			setMaxLength: function(self: RopeJoint, maxLength: number)
 		end
 
-		type Shape = record
+		type Shape = interface
+			is Object
 			computeAABB: function(self: Shape, tx: number, ty: number, tr: number, childIndex?: number): number, number, number, number
 			computeMass: function(self: Shape, density: number): number, number, number, number
 			getChildCount: function(self: Shape): number
@@ -2096,7 +2143,8 @@ global type love = record
 			testPoint: function(self: Shape, tx: number, ty: number, tr: number, x: number, y: number): boolean
 		end
 
-		type WeldJoint = record
+		type WeldJoint = interface
+			is Joint, Object
 			getDampingRatio: function(self: WeldJoint): number
 			getFrequency: function(self: WeldJoint): number
 			getReferenceAngle: function(self: WeldJoint): number
@@ -2104,7 +2152,8 @@ global type love = record
 			setFrequency: function(self: WeldJoint, freq: number)
 		end
 
-		type WheelJoint = record
+		type WheelJoint = interface
+			is Joint, Object
 			getAxis: function(self: WheelJoint): number, number
 			getJointSpeed: function(self: WheelJoint): number
 			getJointTranslation: function(self: WheelJoint): number
@@ -2121,7 +2170,8 @@ global type love = record
 			setSpringFrequency: function(self: WheelJoint, freq: number)
 		end
 
-		type World = record
+		type World = interface
+			is Object
 			destroy: function(self: World)
 			getBodies: function(self: World): {Body}
 			getBodyCount: function(self: World): number
@@ -2178,7 +2228,8 @@ global type love = record
 
 	end
 	type sound = record
-		type Decoder = record
+		type Decoder = interface
+			is Object
 			clone: function(self: Decoder): Decoder
 			decode: function(self: Decoder): SoundData
 			getBitDepth: function(self: Decoder): number
@@ -2188,7 +2239,8 @@ global type love = record
 			seek: function(self: Decoder, offset: number)
 		end
 
-		type SoundData = record
+		type SoundData = interface
+			is Data, Object
 			getBitDepth: function(self: SoundData): number
 			getChannelCount: function(self: SoundData): number
 			getDuration: function(self: SoundData): number
@@ -2228,7 +2280,8 @@ global type love = record
 
 	end
 	type thread = record
-		type Channel = record
+		type Channel = interface
+			is Object
 			clear: function(self: Channel)
 			demand: function(self: Channel, timeout: number): any
 			getCount: function(self: Channel): number
@@ -2241,7 +2294,8 @@ global type love = record
 			supply: function(self: Channel, value: any, timeout: number): boolean
 		end
 
-		type Thread = record
+		type Thread = interface
+			is Object
 			getError: function(self: Thread): string
 			isRunning: function(self: Thread): boolean
 			start: function(self: Thread)
@@ -2272,7 +2326,8 @@ global type love = record
 
 	end
 	type video = record
-		type VideoStream = record
+		type VideoStream = interface
+			is Object
 			getFilename: function(self: VideoStream): string
 			isPlaying: function(self: VideoStream): boolean
 			pause: function(self: VideoStream)
@@ -2307,12 +2362,12 @@ global type love = record
 			"error"
 		end
 
-		type FullscreenMode = record
+		type FullscreenMode = interface
 			width: number
 			height: number
 		end
 
-		type WindowSetting = record
+		type WindowSetting = interface
 			fullscreen: boolean
 			fullscreentype: FullscreenType
 			vsync: boolean
